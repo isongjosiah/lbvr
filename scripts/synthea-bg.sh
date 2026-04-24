@@ -27,29 +27,33 @@ if [ -f "$pidfile" ] && kill -0 "$(cat "$pidfile")" 2>/dev/null; then
 fi
 rm -f "$pidfile"
 
-# Archive any prior log so we don't confuse status tooling.
+# Archive any prior log so post-mortem status is unambiguous.
 if [ -s "$log" ]; then
   mv "$log" "${log%.log}-$(date -u +%Y%m%dT%H%M%SZ).log"
 fi
+mkdir -p "$synthea_dir"
 
-# `setsid --fork` forks a child that becomes a new session leader. The child
-# records its own PID, runs the make target, then clears the pidfile on exit.
-# stdin </dev/null, stdout+stderr > log keep the detached child from holding
-# any of our file descriptors.
-setsid --fork bash <<EOS >/dev/null 2>&1 </dev/null
-  echo \$\$ > "$pidfile"
-  {
-    echo "start: \$(date -u +%FT%TZ) pid=\$\$ size=${size}"
-    make synthea-${size}
-    rc=\$?
-    echo "end: \$(date -u +%FT%TZ) rc=\$rc"
-    exit \$rc
-  } > "$log" 2>&1
-  rm -f "$pidfile"
-EOS
+# Build the inner command. Single quotes around outer vars to protect them
+# from the inner bash's own expansion; \$ escapes for variables that must
+# be evaluated inside the detached shell.
+inner_cmd="
+exec > '$log' 2>&1
+echo \$\$ > '$pidfile'
+echo \"start: \$(date -u +%FT%TZ) pid=\$\$ size=${size}\"
+make synthea-${size}
+rc=\$?
+echo \"end: \$(date -u +%FT%TZ) rc=\$rc\"
+rm -f '$pidfile'
+exit \$rc
+"
 
-# Wait briefly for pidfile to appear, then confirm.
-for _ in 1 2 3 4 5 6 7 8 9 10; do
+# `setsid --fork` forks a child that becomes its own session leader, so it
+# is immune to the parent's SIGHUP on exit. Redirecting stdin/out/err on
+# the setsid process itself avoids the child holding any of our fds.
+setsid --fork bash -c "$inner_cmd" </dev/null >/dev/null 2>&1
+
+# Wait briefly for the child to write its pidfile.
+for _ in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
   [ -s "$pidfile" ] && break
   sleep 0.2
 done
