@@ -17,7 +17,9 @@ RESULTS_DIR := eval/results
 VENV_DIR    := eval/.venv
 VENV_PY     := $(VENV_DIR)/bin/python
 
-.PHONY: help test test-go test-sol fmt lint hooks eval-deps validate-synthea-% plot-synthea-% \
+.PHONY: help test test-go test-sol fmt lint hooks eval-deps \
+        synthea-1k-bg synthea-10k-bg synthea-100k-bg synthea-status-% \
+        validate-synthea-% plot-synthea-% \
         bench-E1 bench-E2 bench-E3 bench-E4 bench-E5 bench-E6 bench-E6b \
         bench-E7 bench-E8 bench-E9 bench-E9-multi bench-E10 bench-E-PROV
 
@@ -26,7 +28,9 @@ help:
 	@echo "  make test                   — go test ./... + forge test"
 	@echo "  make synthea-1k             — generate 1K patient FHIR corpus"
 	@echo "  make synthea-10k            — 10K corpus"
-	@echo "  make synthea-100k           — 100K corpus (overnight)"
+	@echo "  make synthea-100k           — 100K corpus (foreground, ~3h)"
+	@echo "  make synthea-100k-bg        — 100K corpus, detached (survives shell exit)"
+	@echo "  make synthea-status-100k    — check status of a detached run"
 	@echo "  make validate-synthea-1k    — validate + size-stats on 1K corpus"
 	@echo "  make validate-synthea-100k  — validate + size-stats on 100K corpus"
 	@echo "  make plot-synthea-1k        — plot size-distribution PDF for 1K corpus"
@@ -111,6 +115,14 @@ validate-synthea-1k validate-synthea-10k validate-synthea-100k:
 	  $(SYNTHEA_DIR)/output-$(NUM)/fhir/ \
 	  --stats-out $(RESULTS_DIR)/synthea-$(NUM)/validation.json \
 	  --corpus-size $(NUM)
+
+synthea-1k-bg:   ; ./scripts/synthea-bg.sh 1k
+synthea-10k-bg:  ; ./scripts/synthea-bg.sh 10k
+synthea-100k-bg: ; ./scripts/synthea-bg.sh 100k
+
+synthea-status-1k:   ; ./scripts/synthea-bg-status.sh 1k
+synthea-status-10k:  ; ./scripts/synthea-bg-status.sh 10k
+synthea-status-100k: ; ./scripts/synthea-bg-status.sh 100k
 
 plot-synthea-1k plot-synthea-10k plot-synthea-100k: $(VENV_PY)
 	@mkdir -p $(RESULTS_DIR)/synthea-$(NUM)
