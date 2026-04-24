@@ -36,7 +36,7 @@ Everything in the paper serves these four contributions. If a feature doesn't su
 
 | Decision | Value | Rationale |
 |---|---|---|
-| Workload | **Synthea FHIR R4 bundles, 100K patients (~80 GB)** | Write-heavy exposes IPFS PUT weakness; clean narrative; no credentialing; trivial to scale the eval matrix |
+| Workload | **Synthea FHIR R4 bundles, 100K patients (~380 GiB measured)** | Write-heavy exposes IPFS PUT weakness; clean narrative; no credentialing; trivial to scale the eval matrix. D2 measurement on Synthea 3.3 / US Core 6.1.0 (1K sample, `eval/results/synthea-1000/`): mean ≈ 3.5 MB/bundle, P50 ≈ 2.2 MB, P95 ≈ 12 MB. Initial "~80 GB" scoping estimate was ~5× low. |
 | Tiers benchmarked | **3: Pinata (hot) → Filebase (warm) → Arweave/Irys (cold)** | All three available via simple API keys; no 24h Filecoin deal-sealing on critical path |
 | Orchestrator language | **Go** | Matches Josiah's backend stack; single-binary deploy; concurrency model fits parallel fetch + quorum PoR |
 | Smart contract stack | **Solidity 0.8.24 on Polygon zkEVM Cardona testnet** | 192-byte Groth16 verifier, cheap gas, stable testnet. Foundry for deployment |
@@ -153,9 +153,9 @@ For the journal version, upgrade to full Fang et al. 2024 vector-commitment sche
 **Library:** `github.com/klauspost/reedsolomon` v1.12+. Battle-tested, used in production by Minio, Storj, and others. Go-native, no CGO dependencies.
 
 **Shard size considerations:**
-- FHIR bundles range from ~200KB (simple encounter) to ~5MB (full patient history with imaging refs). Encode at bundle granularity, not chunk granularity — this matches the Merkle tree boundary.
-- For a 1MB bundle: 2 data shards of 512KB each + 1 parity shard of 512KB = 1.5MB total cross-tier, vs 1MB of duplicated storage (3MB naive 3x replication). Erasure wins on storage cost at 2x.
-- Minimum viable shard size: 64KB. Bundles smaller than 128KB should be padded or batched — single-shard overhead dominates below this threshold.
+- **Measured** FHIR bundle sizes on Synthea 3.3 / US Core 6.1.0 (1K pilot, `eval/results/synthea-1000/size_stats.json`): min ≈ 67 KB, P50 ≈ 2.2 MB, P95 ≈ 12 MB, P99 ≈ 34 MB, max ≈ 65 MB. Distribution against §4.5 bands: 0.4% below 128 KB floor, 89.9% in 128 KB – 5 MB, 9.7% above 5 MB. Encode at bundle granularity, not chunk granularity — this matches the Merkle tree boundary.
+- Worked example at 1 MB (below measured P50; used for clean arithmetic): 2 data shards of 512 KB each + 1 parity shard of 512 KB = 1.5 MB total cross-tier, vs 3 MB for naive 3× replication. Erasure wins on storage cost at 2×. At the measured P50 (2.2 MB) the ratio is unchanged: 3.3 MB cross-tier vs 6.6 MB replicated.
+- Minimum viable shard size: 64 KB. Bundles smaller than 128 KB should be padded or batched — single-shard overhead dominates below this threshold. Measured: 0.4% of Synthea 3.3 bundles fall below this floor (4 of 1121 in the 1K pilot).
 
 **Alignment with Merkle tree:**
 - Each shard is itself Merkle-hashed independently → `shard_root_i`.
@@ -206,7 +206,7 @@ For the journal version, upgrade to full Fang et al. 2024 vector-commitment sche
 
 **Experiment E9 — erasure recovery (the core new measurement):**
 
-Input: 100 bundles from the 100K corpus, spanning size distribution (10 small <500KB, 60 medium 500KB–2MB, 30 large 2–5MB).
+Input: 100 bundles sampled from the 100K corpus. The initial scoping plan said "10 small < 500 KB, 60 medium 500 KB – 2 MB, 30 large 2 – 5 MB" — but the measured 1K distribution is skewed larger (P50 ≈ 2.2 MB, 9.7% exceed 5 MB). Before D9 picks the sample, reconcile: either (a) stratified-sample to the original bands (deliberately bounds the workload to §4.5 illustrative arithmetic) or (b) sample proportional to the measured distribution, which includes the ≥ 5 MB tail up to ~65 MB. Decision + rationale lands in `docs/eval-protocol.md` before D13.
 
 For each bundle, measure:
 - `t_baseline`: fetch time with all three shards available (fast path)
