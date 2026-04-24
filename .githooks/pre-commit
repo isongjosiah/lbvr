@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# LBVR-Med pre-commit hook — enforces CLAUDE.md §13 "Run go vet, golangci-lint run,
+# and forge test before every commit." Skips steps whose targets don't exist yet
+# (e.g., no .go files on D1, no .sol files before D5).
+
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+fail=0
+
+# --- Go: vet + golangci-lint ---
+if find . -type f -name '*.go' -not -path './contracts/lib/*' | grep -q .; then
+    echo "→ go vet ./..."
+    if ! go vet ./...; then
+        echo "✗ go vet failed" >&2
+        fail=1
+    fi
+
+    if command -v golangci-lint >/dev/null 2>&1; then
+        echo "→ golangci-lint run"
+        if ! golangci-lint run ./...; then
+            echo "✗ golangci-lint failed" >&2
+            fail=1
+        fi
+    else
+        echo "⚠ golangci-lint not installed, skipping (install: brew install golangci-lint)" >&2
+    fi
+else
+    echo "→ no Go files yet, skipping go vet + golangci-lint"
+fi
+
+# --- Solidity: forge test ---
+if find contracts/src contracts/test -maxdepth 2 -name '*.sol' 2>/dev/null | grep -q .; then
+    echo "→ forge test (contracts/)"
+    if ! forge test --root contracts; then
+        echo "✗ forge test failed" >&2
+        fail=1
+    fi
+else
+    echo "→ no Solidity files yet, skipping forge test"
+fi
+
+# --- Secret scan (cheap belt-and-suspenders) ---
+if git diff --cached --name-only | grep -qE '^\.env$|\.env\.local$|_key\.json$'; then
+    echo "✗ refusing to commit .env or key files" >&2
+    fail=1
+fi
+
+exit "$fail"
