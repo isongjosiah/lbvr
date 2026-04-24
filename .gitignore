@@ -43,6 +43,7 @@ eval/synthea/output-*/
 # Benchmark outputs (raw data kept, intermediates ignored)
 eval/results/**/*.tmp
 eval/results/**/*.partial
+eval/results/**/*.partial.json
 
 # Paper build artifacts
 paper/*.aux

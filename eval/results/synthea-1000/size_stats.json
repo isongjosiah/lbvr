@@ -1,0 +1,20 @@
+{
+  "bundle_count": 1121,
+  "erasure_fit": {
+    "above_5mb": 109,
+    "below_128kb": 4,
+    "in_128kb_to_5mb": 1008
+  },
+  "generated_at": "2026-04-24T02:44:55.011119Z",
+  "intended_corpus_size": 1000,
+  "size_bytes": {
+    "max": 66449038,
+    "mean": 3692699,
+    "min": 68380,
+    "p05": 765873,
+    "p50": 2246519,
+    "p95": 12510839,
+    "p99": 34329772,
+    "total": 4139516111
+  }
+}

@@ -4,22 +4,36 @@
 SHELL := /usr/bin/env bash
 .SHELLFLAGS := -euo pipefail -c
 
-JAVA_BIN ?= /opt/homebrew/opt/openjdk@17/bin
+# JAVA_HOME must point at a JDK (with javac), not a JRE. Synthea's Gradle build
+# rejects JRE-only installs. Resolution order: user override > ~/.local/opt/jdk-21
+# (portable install) > system default > empty. See README for install instructions.
+#
+# macOS Homebrew example: JAVA_HOME=/opt/homebrew/opt/openjdk@17 make synthea-1k
+LOCAL_JDK_DIR := $(HOME)/.local/opt/jdk-21
+JAVA_HOME ?= $(if $(wildcard $(LOCAL_JDK_DIR)/bin/javac),$(LOCAL_JDK_DIR),$(if $(wildcard /usr/lib/jvm/default-java/bin/javac),/usr/lib/jvm/default-java,))
+JAVA_BIN  ?= $(if $(JAVA_HOME),$(JAVA_HOME)/bin,)
 SYNTHEA_DIR := eval/synthea/upstream
 RESULTS_DIR := eval/results
+VENV_DIR    := eval/.venv
+VENV_PY     := $(VENV_DIR)/bin/python
 
-.PHONY: help test test-go test-sol fmt lint hooks synthea synthea-% \
+.PHONY: help test test-go test-sol fmt lint hooks eval-deps validate-synthea-% plot-synthea-% \
         bench-E1 bench-E2 bench-E3 bench-E4 bench-E5 bench-E6 bench-E6b \
         bench-E7 bench-E8 bench-E9 bench-E9-multi bench-E10 bench-E-PROV
 
 help:
 	@echo "LBVR-Med targets"
-	@echo "  make test              — go test ./... + forge test"
-	@echo "  make synthea-1k        — generate 1K patient FHIR corpus"
-	@echo "  make synthea-10k       — 10K corpus"
-	@echo "  make synthea-100k      — 100K corpus (overnight)"
-	@echo "  make bench-E{n}        — run experiment En (see CLAUDE.md §8)"
-	@echo "  make hooks             — install git pre-commit hook"
+	@echo "  make test                   — go test ./... + forge test"
+	@echo "  make synthea-1k             — generate 1K patient FHIR corpus"
+	@echo "  make synthea-10k            — 10K corpus"
+	@echo "  make synthea-100k           — 100K corpus (overnight)"
+	@echo "  make validate-synthea-1k    — validate + size-stats on 1K corpus"
+	@echo "  make validate-synthea-100k  — validate + size-stats on 100K corpus"
+	@echo "  make plot-synthea-1k        — plot size-distribution PDF for 1K corpus"
+	@echo "  make plot-synthea-100k      — plot size-distribution PDF for 100K corpus"
+	@echo "  make eval-deps              — set up eval/.venv with matplotlib + numpy"
+	@echo "  make bench-E{n}             — run experiment En (see CLAUDE.md §8)"
+	@echo "  make hooks                  — install git pre-commit hook"
 
 hooks:
 	./scripts/install-hooks.sh
@@ -58,13 +72,52 @@ synthea-10k:  NUM = 10000
 synthea-100k: NUM = 100000
 
 synthea-1k synthea-10k synthea-100k: $(SYNTHEA_DIR)
+	@if [ -z "$(JAVA_HOME)" ] || [ ! -x "$(JAVA_HOME)/bin/javac" ]; then \
+	  echo "✗ No JDK found. Install one or set JAVA_HOME. See README §Prerequisites."; \
+	  echo "  Linux quick path:  curl -L adoptium.net Temurin 21 to $(LOCAL_JDK_DIR)"; \
+	  exit 1; \
+	fi
 	@mkdir -p $(SYNTHEA_DIR)/output-$(NUM)
-	cd $(SYNTHEA_DIR) && PATH="$(JAVA_BIN):$$PATH" ./run_synthea -p $(NUM) \
+	@cd $(SYNTHEA_DIR) && \
+	  export JAVA_HOME="$(JAVA_HOME)" PATH="$(JAVA_BIN):$$PATH" && \
+	  ./run_synthea -p $(NUM) \
 	    --exporter.fhir.export true \
 	    --exporter.hospital.fhir.export false \
 	    --exporter.practitioner.fhir.export false \
+	    --exporter.pretty_print false \
 	    --exporter.baseDirectory ./output-$(NUM)
 	@echo "✓ Synthea $(NUM) patients → $(SYNTHEA_DIR)/output-$(NUM)/fhir/"
+
+# --- Corpus validation + size-distribution artifacts ---
+
+$(VENV_PY):
+	python3 -m venv $(VENV_DIR)
+	$(VENV_PY) -m pip install --quiet --upgrade pip
+	$(VENV_PY) -m pip install --quiet matplotlib numpy
+
+eval-deps: $(VENV_PY)
+	@echo "✓ eval venv ready at $(VENV_DIR)"
+
+validate-synthea-1k:   NUM = 1000
+validate-synthea-10k:  NUM = 10000
+validate-synthea-100k: NUM = 100000
+plot-synthea-1k:       NUM = 1000
+plot-synthea-10k:      NUM = 10000
+plot-synthea-100k:     NUM = 100000
+
+validate-synthea-1k validate-synthea-10k validate-synthea-100k:
+	@mkdir -p $(RESULTS_DIR)/synthea-$(NUM)
+	python3 eval/scripts/validate_synthea.py \
+	  $(SYNTHEA_DIR)/output-$(NUM)/fhir/ \
+	  --stats-out $(RESULTS_DIR)/synthea-$(NUM)/validation.json \
+	  --corpus-size $(NUM)
+
+plot-synthea-1k plot-synthea-10k plot-synthea-100k: $(VENV_PY)
+	@mkdir -p $(RESULTS_DIR)/synthea-$(NUM)
+	$(VENV_PY) eval/scripts/plot_size_distribution.py \
+	  $(SYNTHEA_DIR)/output-$(NUM)/fhir/ \
+	  --out-dir $(RESULTS_DIR)/synthea-$(NUM) \
+	  --corpus-size $(NUM)
 
 # --- Experiment targets (stubs until D12) ---
 
