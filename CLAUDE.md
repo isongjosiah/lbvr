@@ -118,12 +118,12 @@ Everything in the paper serves these four contributions. If a feature doesn't su
 
 ### 4.2 Data flow — ingest with erasure coding
 
-1. Client reads FHIR bundle (JSON), chunks into 16 KB segments, computes SHA-256 of each.
-2. Builds Merkle tree over all chunks; root hash = `M_root`.
+1. Client reads FHIR bundle (JSON), chunks into 16 KB segments, computes SHA-256 of each. Records `N` = chunk count.
+2. Builds Merkle tree over all chunks; root hash = `M_root`. Odd-width levels duplicate the last node ("Bitcoin-style"); see `docs/architecture.md` §4 for the integrity note — `N` must be bound to the bundle on-chain to prevent CVE-2012-2459-class second-preimage attacks.
 3. Encrypts chunks with AES-256-GCM (random nonce per chunk; key wrapped with a consortium-held KMS key — stub for conference).
 4. **NEW:** Applies Reed-Solomon RS(2,3) encoding to the encrypted chunk set, producing 2 data shards (D0, D1) and 1 parity shard (P0). Each shard is an independently addressable blob.
 5. **NEW:** Placement orchestrator distributes the three shards across the three tiers: D0 → Pinata (hot), D1 → Filebase (warm), P0 → Arweave (cold).
-6. Emits on-chain `RegisterBundle(bundleId, M_root, shardLayout, tier_config, owner, policyId)` on the CID Registry contract. The `shardLayout` is a struct mapping shard index → (CID, tier).
+6. Emits on-chain `registerBundle(bundleId, M_root, N, shardLayout, policyId)` on the `CIDRegistry` contract. `shardLayout` is a `ShardPlacement[3]` array mapping index → (CID, TierClass). Owner is recorded as `msg.sender`. `N` (`numChunks`) is stored so Merkle proof verification is bound to the declared tree width.
 7. Placement Orchestrator schedules a PoR challenge for T+30 days (on a sampled shard).
 
 ### 4.3 Data flow — retrieve with erasure recovery
