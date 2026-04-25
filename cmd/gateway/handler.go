@@ -24,6 +24,7 @@ import (
 	"time"
 
 	"github.com/isongjosiah/lbvr-med/internal/crypto"
+	"github.com/isongjosiah/lbvr-med/internal/gateway"
 	"github.com/isongjosiah/lbvr-med/internal/merkle"
 	"github.com/isongjosiah/lbvr-med/internal/registry"
 	"github.com/isongjosiah/lbvr-med/internal/tiers"
@@ -163,7 +164,7 @@ func (g *Gateway) serveBundle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cids := [3]string{rec.Shards[0].CID, rec.Shards[1].CID, rec.Shards[2].CID}
-	encrypted, stats, err := Recover(ctx, g.tiers, cids, int(entry.PaddedLen), g.sloBudget)
+	encrypted, stats, err := gateway.Recover(ctx, g.tiers, cids, int(entry.PaddedLen), g.sloBudget)
 	if err != nil {
 		g.logger.Warn("recovery failed",
 			slog.String("bundleId", raw),
@@ -296,7 +297,7 @@ func decryptBundle(key [32]byte, encrypted []byte, numChunks, lastChunkBytes, pa
 func shardLatHeader(lats [3]time.Duration) string {
 	parts := make([]string, 3)
 	for i, l := range lats {
-		if l == notReturned {
+		if l == gateway.NotReturned {
 			parts[i] = "-1"
 		} else {
 			parts[i] = strconv.FormatInt(l.Microseconds(), 10)

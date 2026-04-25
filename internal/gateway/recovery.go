@@ -12,7 +12,10 @@
 // connection in production. Every per-shard context is cancelled on every
 // exit path; the parent ctx still bounds total runtime.
 
-package main
+// Package gateway holds the retrieval-path recovery state machine
+// extracted from cmd/gateway so the bench harness can import it without
+// duplicating the logic it intends to measure.
+package gateway
 
 import (
 	"context"
@@ -51,10 +54,10 @@ func (m RecoveryMode) String() string {
 	}
 }
 
-// notReturned sentinel for ShardLatencies entries that never produced a
+// NotReturned sentinel for ShardLatencies entries that never produced a
 // final state (parent ctx died first). We use -1 instead of zero so the
 // distinction between "instant return" and "no return" is unambiguous.
-const notReturned time.Duration = -1
+const NotReturned time.Duration = -1
 
 // RecoveryStats reports per-shard outcome. Decode timing is zero when the
 // fast path skipped reconstruction.
@@ -101,7 +104,7 @@ func Recover(
 	sloBudget time.Duration,
 ) (encrypted []byte, stats RecoveryStats, err error) {
 	stats = RecoveryStats{
-		ShardLatencies: [3]time.Duration{notReturned, notReturned, notReturned},
+		ShardLatencies: [3]time.Duration{NotReturned, NotReturned, NotReturned},
 	}
 	if paddedLen <= 0 {
 		return nil, stats, fmt.Errorf("gateway: invalid paddedLen %d", paddedLen)

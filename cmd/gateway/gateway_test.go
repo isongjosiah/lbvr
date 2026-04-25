@@ -16,6 +16,7 @@ import (
 
 	"github.com/isongjosiah/lbvr-med/internal/crypto"
 	"github.com/isongjosiah/lbvr-med/internal/erasure"
+	"github.com/isongjosiah/lbvr-med/internal/gateway"
 	"github.com/isongjosiah/lbvr-med/internal/merkle"
 	"github.com/isongjosiah/lbvr-med/internal/registry"
 	"github.com/isongjosiah/lbvr-med/internal/tiers"
@@ -416,7 +417,7 @@ func TestRecover_StatsReportLatencies(t *testing.T) {
 	// two return successfully.
 	f.hot.failGet = func(string) error { return errors.New("404 hot") }
 
-	encrypted, stats, err := Recover(
+	encrypted, stats, err := gateway.Recover(
 		context.Background(),
 		[3]tiers.Client{f.hot, f.warm, f.cold},
 		f.cids,
@@ -426,7 +427,7 @@ func TestRecover_StatsReportLatencies(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Recover: %v", err)
 	}
-	if stats.Mode != RecoverySlowPath {
+	if stats.Mode != gateway.RecoverySlowPath {
 		t.Fatalf("mode: got %v want slow", stats.Mode)
 	}
 	if stats.ShardErrors[0] == nil {
