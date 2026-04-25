@@ -8,6 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.58.2
 	github.com/aws/smithy-go v1.20.4
 	github.com/joho/godotenv v1.5.1
+	github.com/klauspost/reedsolomon v1.12.4
 )
 
 require (
@@ -19,4 +20,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.3.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.11.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.17.15 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 )
