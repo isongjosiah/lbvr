@@ -17,7 +17,8 @@ RESULTS_DIR := eval/results
 VENV_DIR    := eval/.venv
 VENV_PY     := $(VENV_DIR)/bin/python
 
-.PHONY: help test test-go test-sol fmt lint hooks eval-deps \
+.PHONY: help test test-go test-merkle test-crypto test-tiers test-tiers-integration \
+        test-sol fmt lint hooks eval-deps \
         synthea-1k-bg synthea-10k-bg synthea-100k-bg synthea-status-% \
         validate-synthea-% plot-synthea-% \
         bench-E1 bench-E2 bench-E3 bench-E4 bench-E5 bench-E6 bench-E6b \
@@ -26,6 +27,11 @@ VENV_PY     := $(VENV_DIR)/bin/python
 help:
 	@echo "LBVR-Med targets"
 	@echo "  make test                   — go test ./... + forge test"
+	@echo "  make test-go                — go test -race ./..."
+	@echo "  make test-merkle            — go test -race ./internal/merkle/..."
+	@echo "  make test-crypto            — go test -race ./internal/crypto/..."
+	@echo "  make test-tiers             — go test -race ./internal/tiers/... (no network)"
+	@echo "  make test-tiers-integration — go test -tags=integration ./internal/tiers/... (real keys)"
 	@echo "  make synthea-1k             — generate 1K patient FHIR corpus"
 	@echo "  make synthea-10k            — 10K corpus"
 	@echo "  make synthea-100k           — 100K corpus (foreground, ~3h)"
@@ -46,10 +52,25 @@ test: test-go test-sol
 
 test-go:
 	@if find . -name '*.go' -not -path './contracts/lib/*' | grep -q .; then \
-	  go test ./... ; \
+	  go test -race ./... ; \
 	else \
 	  echo "no Go files yet" ; \
 	fi
+
+test-merkle:
+	go test -race ./internal/merkle/...
+
+test-crypto:
+	go test -race ./internal/crypto/...
+
+# tier clients use httptest mocks only — never hits real Pinata/Filebase/Irys.
+test-tiers:
+	go test -race -count=1 ./internal/tiers/...
+
+# integration tier tests hit live APIs; requires .env with real keys.
+# Kept out of the default `test-go` target so CI stays offline.
+test-tiers-integration:
+	go test -race -count=1 -tags=integration ./internal/tiers/...
 
 test-sol:
 	@if find contracts/src contracts/test -name '*.sol' 2>/dev/null | grep -q .; then \
