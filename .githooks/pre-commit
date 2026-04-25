@@ -33,10 +33,14 @@ fi
 
 # --- Solidity: forge test ---
 if find contracts/src contracts/test -maxdepth 2 -name '*.sol' 2>/dev/null | grep -q .; then
-    echo "→ forge test (contracts/)"
-    if ! forge test --root contracts; then
-        echo "✗ forge test failed" >&2
-        fail=1
+    if command -v forge >/dev/null 2>&1; then
+        echo "→ forge test (contracts/)"
+        if ! forge test --root contracts; then
+            echo "✗ forge test failed" >&2
+            fail=1
+        fi
+    else
+        echo "⚠ forge not installed, skipping (install: curl -L https://foundry.paradigm.xyz | bash && foundryup)" >&2
     fi
 else
     echo "→ no Solidity files yet, skipping forge test"
