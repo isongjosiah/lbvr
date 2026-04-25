@@ -134,9 +134,14 @@ func NewIngester(opts IngesterOpts) (*Ingester, error) {
 // IngestResult is the per-bundle output. The fields cover everything a
 // downstream tool (manifest writer, metrics emitter) might want.
 type IngestResult struct {
-	BundleID   [32]byte                   `json:"bundleId"`
-	MerkleRoot [32]byte                   `json:"merkleRoot"`
-	NumChunks  uint32                     `json:"numChunks"`
+	BundleID   [32]byte `json:"bundleId"`
+	MerkleRoot [32]byte `json:"merkleRoot"`
+	NumChunks  uint32   `json:"numChunks"`
+	// PaddedLen is the original encrypted-bundle length (Encoder input size).
+	// Persisted in the manifest so the retrieval gateway can trim trailing
+	// zero padding after erasure.Decode. Not yet stored on-chain — the
+	// CIDRegistry schema bump for D8 will move this into BundleRecord.
+	PaddedLen  uint32                     `json:"paddedLen"`
 	Shards     [3]registry.ShardPlacement `json:"shards"`
 	PolicyID   [32]byte                   `json:"policyId"`
 	BundlePath string                     `json:"bundlePath"`
@@ -192,7 +197,6 @@ func (ing *Ingester) Ingest(ctx context.Context, req IngestRequest) (*IngestResu
 	if err != nil {
 		return nil, fmt.Errorf("ingest: encode: %w", err)
 	}
-	_ = paddedLen // recorded by gateway-side metadata; not part of D6 registry write
 	tEncode := ing.now().Sub(tEncodeStart)
 
 	// 5) Parallel Put to {hot, warm, cold}. Ordering convention (CLAUDE.md
@@ -244,6 +248,7 @@ func (ing *Ingester) Ingest(ctx context.Context, req IngestRequest) (*IngestResu
 		BundleID:   bundleID,
 		MerkleRoot: root,
 		NumChunks:  numChunks,
+		PaddedLen:  uint32(paddedLen),
 		Shards:     placement,
 		PolicyID:   req.PolicyID,
 		BundlePath: req.Path,

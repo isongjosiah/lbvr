@@ -12,6 +12,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/isongjosiah/lbvr-med/internal/erasure"
 	"github.com/isongjosiah/lbvr-med/internal/merkle"
 	"github.com/isongjosiah/lbvr-med/internal/registry"
 	"github.com/isongjosiah/lbvr-med/internal/tiers"
@@ -371,5 +372,102 @@ func TestReplicaEncoder_RejectsEmpty(t *testing.T) {
 	t.Parallel()
 	if _, _, err := (replicaEncoder{}).Encode(nil); err == nil {
 		t.Fatal("expected error on empty input")
+	}
+}
+
+// TestIngest_WithErasureEncoder_RoundTrip exercises the production wiring:
+// the real RS(2,3) encoder fans out across three in-memory tiers, then we
+// reconstruct via internal/erasure.Decode from every (any-2-of-3) shard
+// combination. This is the D7 milestone — the gateway's recovery path
+// will make exactly these calls in D8.
+func TestIngest_WithErasureEncoder_RoundTrip(t *testing.T) {
+	t.Parallel()
+	bundlePath, _ := makeBundle(t)
+
+	hot := newInMemTier("pinata-mem", tiers.TierHot)
+	warm := newInMemTier("filebase-mem", tiers.TierWarm)
+	cold := newInMemTier("arweave-mem", tiers.TierCold)
+	reg := registry.NewMock()
+
+	ing, err := NewIngester(IngesterOpts{
+		Hot:        hot,
+		Warm:       warm,
+		Cold:       cold,
+		Registry:   reg,
+		Encoder:    erasureEncoder{},
+		ClientAddr: defaultClientAddr,
+		Logger:     quietLogger(),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	res, err := ing.Ingest(context.Background(), IngestRequest{
+		Path:     bundlePath,
+		PolicyID: registry.Keccak256([]byte("lbvr://policy/test")),
+	})
+	if err != nil {
+		t.Fatalf("ingest: %v", err)
+	}
+	if res.PaddedLen == 0 {
+		t.Fatal("PaddedLen must be set when erasureEncoder is used")
+	}
+
+	// Pull every shard back from its tier.
+	getShard := func(c *inMemTier, cid string) []byte {
+		t.Helper()
+		b, err := c.Get(context.Background(), cid)
+		if err != nil {
+			t.Fatalf("tier %s missing CID %q: %v", c.Name(), cid, err)
+		}
+		return b
+	}
+	d0 := getShard(hot, res.Shards[0].CID)
+	d1 := getShard(warm, res.Shards[1].CID)
+	p0 := getShard(cold, res.Shards[2].CID)
+
+	// All three shards must be the same length post-RS.
+	if len(d0) != len(d1) || len(d1) != len(p0) {
+		t.Fatalf("RS(2,3) shards must be equal-sized: d0=%d d1=%d p0=%d",
+			len(d0), len(d1), len(p0))
+	}
+
+	// Baseline: all 3 shards present → reconstruct.
+	full, err := erasure.Decode([3][]byte{d0, d1, p0}, int(res.PaddedLen))
+	if err != nil {
+		t.Fatalf("decode all-3: %v", err)
+	}
+	if len(full) != int(res.PaddedLen) {
+		t.Fatalf("decoded length = %d, want %d", len(full), res.PaddedLen)
+	}
+
+	// Any-2-of-3 reconstruction must produce identical bytes.
+	for _, missing := range []int{0, 1, 2} {
+		in := [3][]byte{d0, d1, p0}
+		in[missing] = nil
+		got, err := erasure.Decode(in, int(res.PaddedLen))
+		if err != nil {
+			t.Fatalf("decode with shard %d missing: %v", missing, err)
+		}
+		if !bytes.Equal(got, full) {
+			t.Fatalf("decode with shard %d missing produced different bytes", missing)
+		}
+	}
+
+	// Two missing → must fail with ErrInsufficientShards.
+	for _, in := range [][3][]byte{
+		{nil, nil, p0},
+		{nil, d1, nil},
+		{d0, nil, nil},
+	} {
+		if _, err := erasure.Decode(in, int(res.PaddedLen)); !errors.Is(err, erasure.ErrInsufficientShards) {
+			t.Fatalf("expected ErrInsufficientShards, got %v", err)
+		}
+	}
+
+	// Cross-check with the on-tier shard NOT being byte-identical to its
+	// siblings — that would mean we accidentally fell back to replicaEncoder.
+	if bytes.Equal(d0, d1) && bytes.Equal(d1, p0) {
+		t.Fatal("shards are identical; erasureEncoder did not run (replicaEncoder fallback?)")
 	}
 }

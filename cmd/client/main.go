@@ -215,7 +215,7 @@ func runIngest(args []string) int {
 		Warm:        warm,
 		Cold:        cold,
 		Registry:    reg,
-		Encoder:     replicaEncoder{}, // TODO(integration): swap for internal/erasure
+		Encoder:     erasureEncoder{}, // RS(2,3) via internal/erasure
 		ClientAddr:  addr,
 		ManifestDir: manifestDir,
 		Logger:      logger,
