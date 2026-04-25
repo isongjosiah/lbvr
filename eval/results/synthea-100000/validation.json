@@ -1,0 +1,56 @@
+{
+  "bundle_count": 114693,
+  "elapsed_seconds": 273.28,
+  "erasure_fit": {
+    "above_5mb": 12959,
+    "below_128kb": 277,
+    "in_128kb_to_5mb": 101457
+  },
+  "errors": [],
+  "fhir_dir": "eval/synthea/upstream/output-100000/fhir",
+  "intended_corpus_size": 100000,
+  "metadata_file_count": 0,
+  "sample": {
+    "bundle_types": {
+      "transaction": 500
+    },
+    "patients_alive": 454,
+    "patients_deceased": 46,
+    "resource_type_histogram": {
+      "AllergyIntolerance": 409,
+      "CarePlan": 1553,
+      "CareTeam": 1553,
+      "Claim": 42886,
+      "Condition": 15834,
+      "Device": 2607,
+      "DiagnosticReport": 47994,
+      "DocumentReference": 26594,
+      "Encounter": 26594,
+      "ExplanationOfBenefit": 42886,
+      "ImagingStudy": 1765,
+      "Immunization": 7454,
+      "Medication": 5297,
+      "MedicationAdministration": 5297,
+      "MedicationRequest": 16292,
+      "Observation": 192258,
+      "Patient": 500,
+      "Procedure": 67822,
+      "Provenance": 500,
+      "SupplyDelivery": 11443
+    },
+    "size": 500,
+    "unknown_resource_types": {}
+  },
+  "schema_version": 1,
+  "size_bytes": {
+    "max": 100475212,
+    "mean": 4027915,
+    "min": 68265,
+    "p50": 2282199,
+    "p95": 15305298,
+    "p99": 38799769,
+    "total": 461973661006
+  },
+  "synthea_git_sha": "aa0772fb5e92e48a776c51508c00eddc0d9d27ff",
+  "validated_at": "2026-04-25T01:42:46.607542Z"
+}

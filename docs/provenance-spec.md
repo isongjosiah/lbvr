@@ -514,7 +514,7 @@ All six must be caught by the verifier. Unit tests for each in `internal/provena
 
 ### 8.2 Experiment design
 
-**Sample size:** 1000 retrievals across the measured Synthea 3.3 size range (min ≈ 67 KB, P50 ≈ 2.2 MB, P95 ≈ 12 MB, max ≈ 65 MB; see `eval/results/synthea-1000/size_stats.json`). Size bucketing for Fig. 12 should follow the §8.3 small/medium/large/xlarge split, calibrated to percentiles rather than the stale "10 KB – 5 MB" range used in initial scoping.
+**Sample size:** 1000 retrievals across the measured Synthea 3.3 size range (min ≈ 67 KB, P50 ≈ 2.23 MB, P95 ≈ 14.9 MB, P99 ≈ 37.9 MB, max ≈ 98 MB; full 100K corpus, see `eval/results/synthea-100000/validation.json`). Size bucketing for Fig. 12 should follow the §8.3 small/medium/large/xlarge split, calibrated to percentiles rather than the stale "10 KB – 5 MB" range used in initial scoping.
 
 **Measurements per retrieval:**
 - `t_gen_ms`: time to build PROV-JSON document from retrieval events
