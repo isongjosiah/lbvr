@@ -18,6 +18,7 @@ VENV_DIR    := eval/.venv
 VENV_PY     := $(VENV_DIR)/bin/python
 
 .PHONY: help test test-go test-merkle test-crypto test-tiers test-tiers-integration \
+        test-registry test-client \
         test-sol fmt lint hooks eval-deps \
         synthea-1k-bg synthea-10k-bg synthea-100k-bg synthea-status-% \
         validate-synthea-% plot-synthea-% \
@@ -32,6 +33,8 @@ help:
 	@echo "  make test-crypto            — go test -race ./internal/crypto/..."
 	@echo "  make test-tiers             — go test -race ./internal/tiers/... (no network)"
 	@echo "  make test-tiers-integration — go test -tags=integration ./internal/tiers/... (real keys)"
+	@echo "  make test-registry          — go test -race ./internal/registry/..."
+	@echo "  make test-client            — go test -race ./cmd/client/... (D6 ingest CLI)"
 	@echo "  make synthea-1k             — generate 1K patient FHIR corpus"
 	@echo "  make synthea-10k            — 10K corpus"
 	@echo "  make synthea-100k           — 100K corpus (foreground, ~3h)"
@@ -71,6 +74,13 @@ test-tiers:
 # Kept out of the default `test-go` target so CI stays offline.
 test-tiers-integration:
 	go test -race -count=1 -tags=integration ./internal/tiers/...
+
+test-registry:
+	go test -race -count=1 ./internal/registry/...
+
+# D6 ingest CLI end-to-end (in-memory tiers + Mock registry, no network).
+test-client:
+	go test -race -count=1 ./cmd/client/...
 
 test-sol:
 	@if find contracts/src contracts/test -name '*.sol' 2>/dev/null | grep -q .; then \
