@@ -7,7 +7,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.27
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.58.2
 	github.com/aws/smithy-go v1.20.4
+	github.com/cyberphone/json-canonicalization v0.0.0-20241213102144-19d51d7fe467
 	github.com/joho/godotenv v1.5.1
+	github.com/kilic/bls12-381 v0.1.0
 	github.com/klauspost/reedsolomon v1.12.4
 )
 

@@ -18,7 +18,7 @@ VENV_DIR    := eval/.venv
 VENV_PY     := $(VENV_DIR)/bin/python
 
 .PHONY: help test test-go test-merkle test-crypto test-tiers test-tiers-integration \
-        test-registry test-client test-gateway \
+        test-registry test-client test-gateway test-provenance \
         test-sol fmt lint hooks eval-deps \
         synthea-1k-bg synthea-10k-bg synthea-100k-bg synthea-status-% \
         validate-synthea-% plot-synthea-% \
@@ -36,6 +36,7 @@ help:
 	@echo "  make test-registry          — go test -race ./internal/registry/..."
 	@echo "  make test-client            — go test -race ./cmd/client/... (D6 ingest CLI)"
 	@echo "  make test-gateway           — go test -race ./cmd/gateway/... (D8 retrieval gateway)"
+	@echo "  make test-provenance        — go test -race ./internal/provenance/... ./cmd/verifier/... (D10/D11)"
 	@echo "  make synthea-1k             — generate 1K patient FHIR corpus"
 	@echo "  make synthea-10k            — 10K corpus"
 	@echo "  make synthea-100k           — 100K corpus (foreground, ~3h)"
@@ -86,6 +87,10 @@ test-client:
 # D8 retrieval gateway (in-memory tiers + Mock registry + sidecar, no network).
 test-gateway:
 	go test -race -count=1 ./cmd/gateway/...
+
+# D10/D11 cryptographic provenance (PROV-JSON + JCS + BLS quorum + verifier CLI).
+test-provenance:
+	go test -race -count=1 ./internal/provenance/... ./cmd/verifier/...
 
 test-sol:
 	@if find contracts/src contracts/test -name '*.sol' 2>/dev/null | grep -q .; then \
