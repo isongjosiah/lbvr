@@ -1,0 +1,59 @@
+# Toxiproxy fault-injection spec for E9 erasure-recovery failure modes.
+# CLAUDE.md §4.5 + docs/erasure-design.md §8 — verbatim canonical config.
+#
+# NOTE: The D9 bench at cmd/bench/e9 does NOT use Toxiproxy. The four
+# failure modes (baseline, D0_lost, D1_lost, P0_lost) are implemented
+# in-process via the simTier in cmd/bench/e9/sim_tier.go, with calibrated
+# lognormal latency distributions, because the D4 cold-tier client
+# (Irys/Arweave) is still a documented stub pending .env keys (see
+# docs/eval-protocol.md §3 open decisions). The next E9 iteration —
+# scheduled after foundryup + .env load — will swap simTier for live
+# Pinata + Filebase + Irys clients fronted by these proxies, exposing
+# the same four failure modes against real network paths.
+#
+# Reviewer signal: this file ships in the repo for spec completeness so
+# §4.5 / §8 pointers resolve. Bench results in eval/results/E9/run-*.json
+# explicitly name "in-process simTier" in env.json.cold_tier_mechanism
+# so the figure cannot be misread as a live measurement.
+
+# Scenario 1: Pinata outage (D0 unreachable).
+- name: pinata-outage
+  listen: 0.0.0.0:8474
+  upstream: api.pinata.cloud:443
+  toxics:
+    - name: drop-all
+      type: timeout
+      attributes:
+        timeout: 0  # drop all connections immediately
+
+# Scenario 2: Filebase slow (D1 within-budget but degraded).
+- name: filebase-slow
+  listen: 0.0.0.0:8475
+  upstream: s3.filebase.com:443
+  toxics:
+    - name: add-latency
+      type: latency
+      attributes:
+        latency: 2000  # 2s injection
+        jitter: 500
+
+# Scenario 3: Arweave lossy (P0 partial failure / truncated payload).
+- name: arweave-lossy
+  listen: 0.0.0.0:8476
+  upstream: gateway.irys.xyz:443
+  toxics:
+    - name: cap-bytes
+      type: limit_data
+      attributes:
+        bytes: 1048576  # cap at 1MB, force partial failures
+
+# Scenario 4: Pinata bandwidth-throttled (tier-selective degradation;
+# couples with E6b adversary configurations once that bench lands).
+- name: pinata-throttled
+  listen: 0.0.0.0:8477
+  upstream: api.pinata.cloud:443
+  toxics:
+    - name: bandwidth-cap
+      type: bandwidth
+      attributes:
+        rate: 100  # 100 KB/s — far below normal but not zero
