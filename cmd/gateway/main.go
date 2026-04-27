@@ -28,7 +28,10 @@ import (
 	"syscall"
 	"time"
 
+	"encoding/hex"
+
 	"github.com/isongjosiah/lbvr-med/internal/config"
+	"github.com/isongjosiah/lbvr-med/internal/provenance"
 	"github.com/isongjosiah/lbvr-med/internal/registry"
 	"github.com/isongjosiah/lbvr-med/internal/tiers"
 	"github.com/isongjosiah/lbvr-med/internal/tiers/arweave"
@@ -168,15 +171,28 @@ func runServe(args []string) int {
 		logger.Info("sidecar ready", slog.String("dir", manifestDir))
 	}
 
+	provBundle, err := buildProvenance(logger)
+	if err != nil {
+		logger.Error("provenance setup failed", slog.String("err", err.Error()))
+		return 1
+	}
+
 	gw, err := NewGateway(GatewayOpts{
-		Hot:         hot,
-		Warm:        warm,
-		Cold:        cold,
-		Registry:    reg,
-		Sidecar:     sc,
-		Logger:      logger,
-		SLOBudget:   time.Duration(sloMs) * time.Millisecond,
-		GetDeadline: time.Duration(readTimeoutMs) * time.Millisecond,
+		Hot:             hot,
+		Warm:            warm,
+		Cold:            cold,
+		Registry:        reg,
+		Sidecar:         sc,
+		Logger:          logger,
+		SLOBudget:       time.Duration(sloMs) * time.Millisecond,
+		GetDeadline:     time.Duration(readTimeoutMs) * time.Millisecond,
+		SignerKeys:      provBundle.signerKeys,
+		SignerDIDs:      provBundle.signerDIDs,
+		GatewayAgents:   provBundle.gatewayAgents,
+		Requester:       provBundle.requester,
+		QuorumThreshold: provBundle.quorumThreshold,
+		Anchor:          provBundle.anchor,
+		AnchorContract:  provBundle.anchorContract,
 	})
 	if err != nil {
 		logger.Error("gateway construction failed", slog.String("err", err.Error()))
@@ -268,4 +284,63 @@ func installSignalHandler(ctx context.Context, cancel context.CancelFunc, logger
 		case <-ctx.Done():
 		}
 	}()
+}
+
+// provenanceBundle bundles the per-process provenance dependencies built
+// at gateway startup. Conference-scope keys are ephemeral (generated
+// fresh per process); production loads them from .env via configured
+// GATEWAY_BLS_SK_{1,2} (TODO when those env vars are wired up).
+type provenanceBundle struct {
+	signerKeys      [][32]byte
+	signerDIDs      []string
+	gatewayAgents   []provenance.GatewayAgent
+	requester       provenance.RequesterAgent
+	quorumThreshold int
+	anchor          AnchorClient
+	anchorContract  string
+}
+
+// buildProvenance generates 2 ephemeral BLS keypairs and constructs the
+// matching gateway agents + a mock anchor client. The on-chain anchor
+// path (chainAnchor against AuditorLog) is wired in D12 once forge
+// build + abigen have produced the contract bindings.
+func buildProvenance(logger *slog.Logger) (provenanceBundle, error) {
+	const numSigners = 2
+	keys := make([][32]byte, numSigners)
+	dids := make([]string, numSigners)
+	agents := make([]provenance.GatewayAgent, numSigners)
+	for i := 0; i < numSigners; i++ {
+		kp, err := provenance.GenerateKey()
+		if err != nil {
+			return provenanceBundle{}, fmt.Errorf("buildProvenance: keygen %d: %w", i, err)
+		}
+		keys[i] = kp.PrivateBytes
+		// DID convention: did:lbvr:gw- + first 8 hex chars of pubkey.
+		dids[i] = "did:lbvr:gw-" + hex.EncodeToString(kp.PublicBytes[:4])
+		agents[i] = provenance.GatewayAgent{
+			ProvType:  "prov:SoftwareAgent",
+			Role:      "retrieval_gateway",
+			Version:   "lbvr-gateway-0.1.0",
+			PublicKey: "0x" + hex.EncodeToString(kp.PublicBytes[:]),
+		}
+	}
+	logger.Info("provenance keys generated (ephemeral)",
+		slog.Int("signers", numSigners),
+		slog.String("did1", dids[0]),
+		slog.String("did2", dids[1]))
+
+	return provenanceBundle{
+		signerKeys:    keys,
+		signerDIDs:    dids,
+		gatewayAgents: agents,
+		requester: provenance.RequesterAgent{
+			ProvType:    "prov:Person",
+			Role:        "clinician",
+			Institution: "did:lbvr:hosp-default",
+			AuthzPolicy: "EHDS-Art44-primary-use",
+		},
+		quorumThreshold: 2,
+		anchor:          newMockAnchor(),
+		anchorContract:  "0xMockAuditorLog0000000000000000000000000000",
+	}, nil
 }

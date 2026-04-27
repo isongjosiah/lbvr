@@ -346,10 +346,34 @@ func VerifySignature(provNode []byte, sigBlock SignatureBlock, knownKeys map[str
 
 ### 6.1 Smart contract interface
 
+The deployed contract (`contracts/src/AuditorLog.sol`, landed in commit
+referencing the D11 deliverable) is sketched below. It uses OpenZeppelin
+5.x `AccessControlDefaultAdminRules` plus a single explicit role
+(`ANCHOR_ROLE`) instead of an earlier draft that derived the caller's
+DID from `msg.sender`. **Why the change:** the earlier draft sketched
+
+```solidity
+modifier onlyAuthorizedGateway() {
+    require(gatewayKeys[keccak256(abi.encodePacked("did:lbvr:", toHex(msg.sender)))].length > 0, "not a registered gateway");
+    _;
+}
+```
+
+This is a confused-deputy invitation: any contract that can be made to
+call `anchorProvenance` on behalf of a registered gateway address would
+pass the check regardless of whether the gateway authorised the anchor.
+It also couples the DID namespace to the eth address format. The
+deployed version replaces it with the role pattern that mirrors how
+`CIDRegistry.MIGRATOR_ROLE` works — decouples the DID/key registry
+from the authorisation surface, and lets the future PoRVerifier
+contract receive the role without inventing a synthetic DID.
+
 ```solidity
 // contracts/src/AuditorLog.sol
 
-contract AuditorLog is Ownable {
+contract AuditorLog is AccessControlDefaultAdminRules {
+    bytes32 public constant ANCHOR_ROLE = keccak256("ANCHOR_ROLE");
+
     struct ProvenanceAnchor {
         bytes32 provHash;
         uint256 blockNumber;
@@ -358,10 +382,10 @@ contract AuditorLog is Ownable {
     }
 
     // bundleId => retrievalId => anchor
-    mapping(bytes32 => mapping(bytes32 => ProvenanceAnchor)) public provenanceAnchors;
+    mapping(bytes32 => mapping(bytes32 => ProvenanceAnchor)) private _anchors;
 
-    // gateway DID hash => BLS public key
-    mapping(bytes32 => bytes) public gatewayKeys;
+    // gateway DID hash => BLS public key (G1 compressed, 48 bytes)
+    mapping(bytes32 => bytes) private _gatewayKeys;
 
     event ProvenanceAnchored(
         bytes32 indexed bundleId,
@@ -372,14 +396,28 @@ contract AuditorLog is Ownable {
 
     event GatewayKeyRegistered(bytes32 indexed didHash, bytes publicKey);
 
+    error AlreadyAnchored(bytes32 bundleId, bytes32 retrievalId);
+    error AnchorNotFound(bytes32 bundleId, bytes32 retrievalId);
+    error EmptyProvHash();
+    error EmptyDID();
+    error EmptyPublicKey();
+
+    constructor(address admin, uint48 adminTransferDelay)
+        AccessControlDefaultAdminRules(adminTransferDelay, admin)
+    {
+        _grantRole(ANCHOR_ROLE, admin);
+    }
+
     function anchorProvenance(
         bytes32 bundleId,
         bytes32 retrievalId,
         bytes32 provHash
-    ) external onlyAuthorizedGateway {
-        require(provenanceAnchors[bundleId][retrievalId].provHash == bytes32(0), "already anchored");
+    ) external onlyRole(ANCHOR_ROLE) {
+        if (provHash == bytes32(0)) revert EmptyProvHash();
+        if (_anchors[bundleId][retrievalId].provHash != bytes32(0))
+            revert AlreadyAnchored(bundleId, retrievalId);
 
-        provenanceAnchors[bundleId][retrievalId] = ProvenanceAnchor({
+        _anchors[bundleId][retrievalId] = ProvenanceAnchor({
             provHash: provHash,
             blockNumber: block.number,
             timestamp: block.timestamp,
@@ -389,30 +427,39 @@ contract AuditorLog is Ownable {
         emit ProvenanceAnchored(bundleId, retrievalId, provHash, msg.sender);
     }
 
-    function getProvenanceAnchor(
-        bytes32 bundleId,
-        bytes32 retrievalId
-    ) external view returns (ProvenanceAnchor memory) {
-        return provenanceAnchors[bundleId][retrievalId];
+    function getProvenanceAnchor(bytes32 bundleId, bytes32 retrievalId)
+        external view returns (ProvenanceAnchor memory)
+    {
+        ProvenanceAnchor memory a = _anchors[bundleId][retrievalId];
+        if (a.provHash == bytes32(0)) revert AnchorNotFound(bundleId, retrievalId);
+        return a;
     }
 
-    function registerGatewayKey(
-        string calldata did,
-        bytes calldata publicKey
-    ) external onlyOwner {
+    function registerGatewayKey(string calldata did, bytes calldata publicKey)
+        external onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        if (bytes(did).length == 0) revert EmptyDID();
+        if (publicKey.length == 0) revert EmptyPublicKey();
         bytes32 didHash = keccak256(bytes(did));
-        gatewayKeys[didHash] = publicKey;
+        _gatewayKeys[didHash] = publicKey;        // overwrite allowed → key rotation
         emit GatewayKeyRegistered(didHash, publicKey);
     }
 
-    modifier onlyAuthorizedGateway() {
-        // for conference: any registered gateway can anchor
-        // for journal: add threshold multisig
-        require(gatewayKeys[keccak256(abi.encodePacked("did:lbvr:", toHex(msg.sender)))].length > 0, "not a registered gateway");
-        _;
+    function getGatewayKey(string calldata did) external view returns (bytes memory) {
+        return _gatewayKeys[keccak256(bytes(did))];
     }
 }
 ```
+
+**Anchor immutability:** `_anchors[bid][rid].provHash == bytes32(0)`
+means "not anchored". Re-anchoring reverts (`AlreadyAnchored`) so a
+compromised gateway key cannot retroactively rewrite its own audit
+trail.
+
+**Key rotation:** `registerGatewayKey` overwrites the prior key for
+the same DID. Verifiers MUST resolve the key as-of an anchor's
+`blockNumber` by replaying `GatewayKeyRegistered` events; an explicit
+historical-lookup API is journal-scope (TODO).
 
 ### 6.2 Gas costs
 

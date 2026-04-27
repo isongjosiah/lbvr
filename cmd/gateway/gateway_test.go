@@ -18,6 +18,7 @@ import (
 	"github.com/isongjosiah/lbvr-med/internal/erasure"
 	"github.com/isongjosiah/lbvr-med/internal/gateway"
 	"github.com/isongjosiah/lbvr-med/internal/merkle"
+	"github.com/isongjosiah/lbvr-med/internal/provenance"
 	"github.com/isongjosiah/lbvr-med/internal/registry"
 	"github.com/isongjosiah/lbvr-med/internal/tiers"
 )
@@ -484,5 +485,185 @@ func TestHealthz(t *testing.T) {
 	gw.Routes().ServeHTTP(rr, req)
 	if rr.Code != http.StatusOK {
 		t.Fatalf("want 200, got %d", rr.Code)
+	}
+}
+
+// newGatewayWithProvenance wires the standard fixture with a freshly-
+// generated 2-key BLS quorum, a mock anchor, and the provenance config
+// that flips the gateway from retrieval-only to "emit a signed and
+// anchored PROV doc per retrieval." Returns the gateway, the mockAnchor
+// (so tests can read back what was anchored), and the matching
+// StaticKeyResolver / signer DIDs (so tests can construct a Verifier).
+func newGatewayWithProvenance(t *testing.T, f *fixture, slo time.Duration) (*Gateway, *mockAnchor, provenance.StaticKeyResolver, []string) {
+	t.Helper()
+
+	const numSigners = 2
+	keys := make([][32]byte, numSigners)
+	dids := make([]string, numSigners)
+	agents := make([]provenance.GatewayAgent, numSigners)
+	keyResolver := provenance.StaticKeyResolver{}
+	for i := 0; i < numSigners; i++ {
+		kp, err := provenance.GenerateKey()
+		if err != nil {
+			t.Fatalf("keygen %d: %v", i, err)
+		}
+		keys[i] = kp.PrivateBytes
+		dids[i] = "did:lbvr:gw-" + hex.EncodeToString(kp.PublicBytes[:4])
+		agents[i] = provenance.GatewayAgent{
+			ProvType:  "prov:SoftwareAgent",
+			Role:      "retrieval_gateway",
+			Version:   "test",
+			PublicKey: "0x" + hex.EncodeToString(kp.PublicBytes[:]),
+		}
+		keyResolver[dids[i]] = kp.PublicBytes
+	}
+
+	anchor := newMockAnchor()
+	gw, err := NewGateway(GatewayOpts{
+		Hot:           f.hot,
+		Warm:          f.warm,
+		Cold:          f.cold,
+		Registry:      f.reg,
+		Sidecar:       f.sidecar,
+		Logger:        quietLogger(),
+		SLOBudget:     slo,
+		GetDeadline:   5 * time.Second,
+		SignerKeys:    keys,
+		SignerDIDs:    dids,
+		GatewayAgents: agents,
+		Requester: provenance.RequesterAgent{
+			ProvType:    "prov:Person",
+			Role:        "clinician",
+			Institution: "did:lbvr:hosp-test",
+			AuthzPolicy: "EHDS-Art44-test",
+		},
+		QuorumThreshold: 2,
+		Anchor:          anchor,
+		AnchorContract:  "0xMock",
+	})
+	if err != nil {
+		t.Fatalf("NewGateway: %v", err)
+	}
+	return gw, anchor, keyResolver, dids
+}
+
+// truncateID returns a [32]byte where only the first 4 bytes are the
+// originals (rest zero). Mirrors verifier.extractIDs which keys the
+// AnchorResolver by truncated form (PROV node IDs only encode 4 bytes
+// per generator.shortID).
+func truncateID(full [32]byte) [32]byte {
+	var out [32]byte
+	copy(out[:4], full[:4])
+	return out
+}
+
+func TestServeBundle_EmitsValidProvenance(t *testing.T) {
+	f := newFixture(t)
+	gw, anchor, keyResolver, _ := newGatewayWithProvenance(t, f, 2*time.Second)
+
+	// 1) Drive a normal retrieval; expect 200 + retrievalID header.
+	rr := doGet(gw, f.bundleID)
+	if rr.Code != http.StatusOK {
+		t.Fatalf("want 200, got %d (body=%s)", rr.Code, rr.Body.String())
+	}
+	if !bytes.Equal(rr.Body.Bytes(), f.plaintext) {
+		t.Fatal("response body != plaintext")
+	}
+	retrievalIDHex := rr.Header().Get("X-LBVR-Retrieval-ID")
+	if retrievalIDHex == "" {
+		t.Fatal("X-LBVR-Retrieval-ID header missing")
+	}
+	if len(retrievalIDHex) != 64 {
+		t.Fatalf("retrievalID hex must be 64 chars, got %d", len(retrievalIDHex))
+	}
+	retrievalIDBytes, err := hex.DecodeString(retrievalIDHex)
+	if err != nil {
+		t.Fatalf("retrievalID hex: %v", err)
+	}
+	var retrievalID [32]byte
+	copy(retrievalID[:], retrievalIDBytes)
+
+	// 2) Fetch the PROV doc via the side endpoint.
+	provReq := httptest.NewRequest(http.MethodGet, "/prov/"+retrievalIDHex, nil)
+	provRR := httptest.NewRecorder()
+	gw.Routes().ServeHTTP(provRR, provReq)
+	if provRR.Code != http.StatusOK {
+		t.Fatalf("prov fetch want 200, got %d (body=%s)", provRR.Code, provRR.Body.String())
+	}
+	if provRR.Header().Get("Content-Type") != "application/json" {
+		t.Fatalf("prov content-type = %q, want application/json", provRR.Header().Get("Content-Type"))
+	}
+	provBytes := provRR.Body.Bytes()
+	if len(provBytes) == 0 {
+		t.Fatal("prov body is empty")
+	}
+
+	// 3) Look up the anchor the gateway recorded; rekey it for the
+	//    verifier (which uses truncated IDs per extractIDs).
+	rec, err := anchor.Get(context.Background(), f.bundleID, retrievalID)
+	if err != nil {
+		t.Fatalf("anchor lookup: %v", err)
+	}
+	anchors := provenance.StaticAnchorResolver{}
+	anchors.SetAnchor(truncateID(f.bundleID), truncateID(retrievalID), rec.ProvHash, rec.BlockNumber)
+
+	// 4) Verify.
+	v := &provenance.Verifier{Keys: keyResolver, Anchors: anchors}
+	res, err := v.Verify(provBytes)
+	if err != nil {
+		t.Fatalf("Verify err: %v", err)
+	}
+	if !res.Valid {
+		t.Fatalf("Verify Valid=false: %s; checks=%+v", res.FailureReason, res.SignatureChecks)
+	}
+	if res.AnchoredBlock != rec.BlockNumber {
+		t.Fatalf("AnchoredBlock = %d, want %d", res.AnchoredBlock, rec.BlockNumber)
+	}
+	if len(res.SignatureChecks) < 2 {
+		t.Fatalf("want ≥2 signature checks (entity + activity), got %d", len(res.SignatureChecks))
+	}
+	for _, ck := range res.SignatureChecks {
+		if !ck.Valid {
+			t.Fatalf("signature check %q failed: %s", ck.NodeID, ck.Reason)
+		}
+	}
+}
+
+func TestServeBundle_ProvenanceTamperingDetected(t *testing.T) {
+	f := newFixture(t)
+	gw, anchor, keyResolver, _ := newGatewayWithProvenance(t, f, 2*time.Second)
+
+	rr := doGet(gw, f.bundleID)
+	if rr.Code != http.StatusOK {
+		t.Fatalf("want 200, got %d", rr.Code)
+	}
+	retrievalIDHex := rr.Header().Get("X-LBVR-Retrieval-ID")
+	retrievalIDBytes, _ := hex.DecodeString(retrievalIDHex)
+	var retrievalID [32]byte
+	copy(retrievalID[:], retrievalIDBytes)
+
+	provReq := httptest.NewRequest(http.MethodGet, "/prov/"+retrievalIDHex, nil)
+	provRR := httptest.NewRecorder()
+	gw.Routes().ServeHTTP(provRR, provReq)
+	provBytes := provRR.Body.Bytes()
+
+	// Tamper: flip a byte inside the canonical doc.
+	tampered := append([]byte(nil), provBytes...)
+	for i, b := range tampered {
+		if b == '"' && i+1 < len(tampered) && tampered[i+1] != '@' {
+			// flip a non-control byte well inside the content
+			tampered[i+10] ^= 0x01
+			break
+		}
+	}
+
+	rec, _ := anchor.Get(context.Background(), f.bundleID, retrievalID)
+	anchors := provenance.StaticAnchorResolver{}
+	anchors.SetAnchor(truncateID(f.bundleID), truncateID(retrievalID), rec.ProvHash, rec.BlockNumber)
+
+	v := &provenance.Verifier{Keys: keyResolver, Anchors: anchors}
+	res, err := v.Verify(tampered)
+	if err == nil && res.Valid {
+		t.Fatal("expected Verify to reject tampered doc")
 	}
 }

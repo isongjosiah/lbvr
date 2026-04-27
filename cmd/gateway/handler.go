@@ -26,6 +26,7 @@ import (
 	"github.com/isongjosiah/lbvr-med/internal/crypto"
 	"github.com/isongjosiah/lbvr-med/internal/gateway"
 	"github.com/isongjosiah/lbvr-med/internal/merkle"
+	"github.com/isongjosiah/lbvr-med/internal/provenance"
 	"github.com/isongjosiah/lbvr-med/internal/registry"
 	"github.com/isongjosiah/lbvr-med/internal/tiers"
 )
@@ -37,7 +38,11 @@ const sealOverhead = crypto.NonceSize + 16
 // fullSealedChunkSize is the on-wire size of a fully-populated chunk.
 const fullSealedChunkSize = merkle.ChunkSize + sealOverhead
 
-// Gateway holds the per-process retrieval dependencies.
+// Gateway holds the per-process retrieval dependencies. Provenance
+// fields (signerKeys/signerDIDs/anchor/...) are optional: when
+// signerKeys is empty the gateway runs in retrieval-only mode and
+// skips PROV-JSON emission. Production always configures them; some
+// unit tests opt out to isolate recovery-logic assertions.
 type Gateway struct {
 	tiers       [3]tiers.Client
 	registry    registry.Client
@@ -45,6 +50,15 @@ type Gateway struct {
 	logger      *slog.Logger
 	sloBudget   time.Duration
 	getDeadline time.Duration // per-request total deadline (parent ctx)
+
+	signerKeys      [][32]byte
+	signerDIDs      []string
+	gatewayAgents   []provenance.GatewayAgent
+	requester       provenance.RequesterAgent
+	quorumThreshold int
+	anchor          AnchorClient
+	anchorContract  string
+	provCache       *provCache
 }
 
 // GatewayOpts is the constructor input.
@@ -57,6 +71,17 @@ type GatewayOpts struct {
 	Logger      *slog.Logger
 	SLOBudget   time.Duration
 	GetDeadline time.Duration
+
+	// Provenance (optional — see Gateway doc). When SignerKeys is empty
+	// the gateway emits no PROV doc and exposes no /prov/* route.
+	SignerKeys      [][32]byte
+	SignerDIDs      []string
+	GatewayAgents   []provenance.GatewayAgent
+	Requester       provenance.RequesterAgent
+	QuorumThreshold int
+	Anchor          AnchorClient
+	AnchorContract  string
+	ProvCacheSize   int
 }
 
 // NewGateway validates dependencies and returns a ready-to-serve gateway.
@@ -86,22 +111,50 @@ func NewGateway(opts GatewayOpts) (*Gateway, error) {
 	if logger == nil {
 		logger = slog.Default()
 	}
-	return &Gateway{
+	g := &Gateway{
 		tiers:       [3]tiers.Client{opts.Hot, opts.Warm, opts.Cold},
 		registry:    opts.Registry,
 		sidecar:     opts.Sidecar,
 		logger:      logger,
 		sloBudget:   opts.SLOBudget,
 		getDeadline: opts.GetDeadline,
-	}, nil
+	}
+	if len(opts.SignerKeys) > 0 {
+		if len(opts.SignerKeys) != len(opts.SignerDIDs) {
+			return nil, errors.New("gateway: SignerKeys and SignerDIDs must have equal length")
+		}
+		if len(opts.GatewayAgents) != len(opts.SignerKeys) {
+			return nil, errors.New("gateway: GatewayAgents must align 1:1 with SignerKeys")
+		}
+		if opts.QuorumThreshold <= 0 || opts.QuorumThreshold > len(opts.SignerKeys) {
+			return nil, fmt.Errorf("gateway: QuorumThreshold must be in [1, %d]", len(opts.SignerKeys))
+		}
+		if opts.Anchor == nil {
+			return nil, errors.New("gateway: Anchor required when SignerKeys configured")
+		}
+		g.signerKeys = opts.SignerKeys
+		g.signerDIDs = opts.SignerDIDs
+		g.gatewayAgents = opts.GatewayAgents
+		g.requester = opts.Requester
+		g.quorumThreshold = opts.QuorumThreshold
+		g.anchor = opts.Anchor
+		g.anchorContract = opts.AnchorContract
+		g.provCache = newProvCache(opts.ProvCacheSize)
+	}
+	return g, nil
 }
 
 // Routes returns the configured ServeMux. Health is registered here too
-// so main.go does not need to import this package's constants.
+// so main.go does not need to import this package's constants. The
+// /prov/{retrievalID} route is only registered when provenance is
+// configured (otherwise it would always 404 confusingly).
 func (g *Gateway) Routes() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", g.serveHealth)
 	mux.HandleFunc("GET /bundle/{bundleID}", g.serveBundle)
+	if g.provCache != nil {
+		mux.HandleFunc("GET /prov/{retrievalID}", g.serveProvenance)
+	}
 	return mux
 }
 
@@ -124,8 +177,31 @@ func writeJSONError(w http.ResponseWriter, status int, kind, detail string) {
 	_ = json.NewEncoder(w).Encode(errorBody{Error: kind, Detail: detail})
 }
 
+// serveProvenance is the GET /prov/{retrievalID} handler. Returns the
+// previously-emitted PROV-JSON document for the given retrieval, or 404
+// if the retrievalID is unknown (cache evicted, never emitted, or wrong
+// gateway). Only registered when provenance is configured.
+func (g *Gateway) serveProvenance(w http.ResponseWriter, r *http.Request) {
+	raw := r.PathValue("retrievalID")
+	retrievalID, err := parseRetrievalID(raw)
+	if err != nil {
+		writeJSONError(w, http.StatusBadRequest, "bad_retrieval_id", err.Error())
+		return
+	}
+	doc, ok := g.provCache.get(retrievalID)
+	if !ok {
+		writeJSONError(w, http.StatusNotFound, "prov_not_found",
+			"no provenance document for this retrievalID; cache may have evicted it")
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(doc)
+}
+
 // serveBundle is the GET /bundle/{bundleID} handler.
 func (g *Gateway) serveBundle(w http.ResponseWriter, r *http.Request) {
+	startedAt := time.Now().UTC()
 	raw := r.PathValue("bundleID")
 	bundleID, err := parseBundleID(raw)
 	if err != nil {
@@ -213,10 +289,42 @@ func (g *Gateway) serveBundle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	endedAt := time.Now().UTC()
+
+	// Provenance is fail-closed: if the gateway is configured to emit
+	// PROV docs and emission fails, the retrieval is not allowed to
+	// leak (a retrieval the auditor cannot account for is a worse
+	// outcome than a 500 to the caller). Skipped when provCache is nil.
+	var retrievalID [32]byte
+	var provEmitted bool
+	if g.provCache != nil {
+		_, rid, perr := g.emitProvenance(ctx, emitProvenanceInput{
+			BundleID:        bundleID,
+			Record:          rec,
+			BundleSizeBytes: int64(len(plaintext)),
+			Stats:           stats,
+			StartedAt:       startedAt,
+			EndedAt:         endedAt,
+		})
+		if perr != nil {
+			g.logger.Error("provenance emission failed",
+				slog.String("bundleId", raw),
+				slog.String("err", perr.Error()))
+			writeJSONError(w, http.StatusInternalServerError, "provenance_failed",
+				"retrieval succeeded but provenance emission failed; refusing to leak unaccounted bytes")
+			return
+		}
+		retrievalID = rid
+		provEmitted = true
+	}
+
 	w.Header().Set("Content-Type", "application/fhir+json")
 	w.Header().Set("X-LBVR-Recovery-Mode", stats.Mode.String())
 	w.Header().Set("X-LBVR-Decode-Latency-Us", strconv.FormatInt(stats.DecodeNanos/1000, 10))
 	w.Header().Set("X-LBVR-Shard-Latency-Us", shardLatHeader(stats.ShardLatencies))
+	if provEmitted {
+		w.Header().Set("X-LBVR-Retrieval-ID", hex.EncodeToString(retrievalID[:]))
+	}
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(plaintext)
 
@@ -224,6 +332,7 @@ func (g *Gateway) serveBundle(w http.ResponseWriter, r *http.Request) {
 		slog.String("bundleId", raw),
 		slog.String("recoveryMode", stats.Mode.String()),
 		slog.Int64("decodeUs", stats.DecodeNanos/1000),
+		slog.Bool("provEmitted", provEmitted),
 		slog.Int("plainBytes", len(plaintext)))
 }
 
