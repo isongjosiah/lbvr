@@ -1,0 +1,510 @@
+{
+  "schema_version": 1,
+  "run_id": "20260427-062807-tier-selective-2828557",
+  "started_at": "2026-04-27T06:28:07.202436925Z",
+  "completed_at": "2026-04-27T06:49:02.322009319Z",
+  "config": {
+    "mode": "tier_selective",
+    "num_bundles": 50,
+    "reps_per_fraction": 5,
+    "seed": 42,
+    "slo_budget_ms": 2000,
+    "adversary_fractions": [
+      0,
+      0.1,
+      0.33,
+      0.5,
+      0.67
+    ],
+    "tier_distributions": {
+      "cold": {
+        "family": "lognormal",
+        "mu": 20.0300718,
+        "sigma": 1.1919608,
+        "p50_ms": 500,
+        "p99_ms": 8000,
+        "calibration": "Irys/Arweave stand-in; chain-settled reads spike into the tail"
+      },
+      "hot": {
+        "family": "lognormal",
+        "mu": 18.1974681,
+        "sigma": 0.6919175,
+        "p50_ms": 80,
+        "p99_ms": 400,
+        "calibration": "Pinata dedicated-gateway stand-in; Trautwein INFOCOM 2024 + Pinata SLA range"
+      },
+      "warm": {
+        "family": "lognormal",
+        "mu": 18.6030495,
+        "sigma": 0.6919175,
+        "p50_ms": 120,
+        "p99_ms": 600,
+        "calibration": "Filebase S3 stand-in; AWS region-local typical"
+      }
+    },
+    "sampling_policy": "uniform-random over eval/results/synthea-100000/sizes.csv (proportional to measured 100K distribution)",
+    "cold_tier_mechanism": "in-process simTier (lognormal); Toxiproxy + live tiers deferred per docs/eval-protocol.md §3"
+  },
+  "fractions": [
+    {
+      "adversary_fraction": 0,
+      "mode": "tier_selective",
+      "n_retrievals": 250,
+      "n_retrieval_success": 250,
+      "retrieval_success_rate": 1,
+      "n_por_challenges": 250,
+      "n_por_success": 250,
+      "por_success_rate": 1,
+      "tier_breakdown": {
+        "cold": 0,
+        "hot": 0,
+        "warm": 0
+      },
+      "failure_breakdown": {
+        "decrypt_failed": 0,
+        "merkle_mismatch": 0,
+        "recovered_clean": 250,
+        "recovery_failed": 0
+      }
+    },
+    {
+      "adversary_fraction": 0.1,
+      "mode": "tier_selective",
+      "n_retrievals": 250,
+      "n_retrieval_success": 250,
+      "retrieval_success_rate": 1,
+      "n_por_challenges": 250,
+      "n_por_success": 249,
+      "por_success_rate": 0.996,
+      "detection_gap": -0.0040000000000000036,
+      "tier_breakdown": {
+        "cold": 0.3,
+        "hot": 0,
+        "warm": 0
+      },
+      "failure_breakdown": {
+        "decrypt_failed": 0,
+        "merkle_mismatch": 0,
+        "recovered_clean": 250,
+        "recovery_failed": 0
+      }
+    },
+    {
+      "adversary_fraction": 0.33,
+      "mode": "tier_selective",
+      "n_retrievals": 250,
+      "n_retrieval_success": 250,
+      "retrieval_success_rate": 1,
+      "n_por_challenges": 250,
+      "n_por_success": 250,
+      "por_success_rate": 1,
+      "tier_breakdown": {
+        "cold": 1,
+        "hot": 0,
+        "warm": 0
+      },
+      "failure_breakdown": {
+        "decrypt_failed": 0,
+        "merkle_mismatch": 0,
+        "recovered_clean": 250,
+        "recovery_failed": 0
+      }
+    },
+    {
+      "adversary_fraction": 0.5,
+      "mode": "tier_selective",
+      "n_retrievals": 250,
+      "n_retrieval_success": 125,
+      "retrieval_success_rate": 0.5,
+      "n_por_challenges": 250,
+      "n_por_success": 249,
+      "por_success_rate": 0.996,
+      "detection_gap": 0.496,
+      "tier_breakdown": {
+        "cold": 1,
+        "hot": 0,
+        "warm": 0.5
+      },
+      "failure_breakdown": {
+        "decrypt_failed": 125,
+        "merkle_mismatch": 0,
+        "recovered_clean": 125,
+        "recovery_failed": 0
+      }
+    },
+    {
+      "adversary_fraction": 0.67,
+      "mode": "tier_selective",
+      "n_retrievals": 250,
+      "n_retrieval_success": 0,
+      "retrieval_success_rate": 0,
+      "n_por_challenges": 250,
+      "n_por_success": 250,
+      "por_success_rate": 1,
+      "detection_gap": 1,
+      "tier_breakdown": {
+        "cold": 1,
+        "hot": 0.02,
+        "warm": 1
+      },
+      "failure_breakdown": {
+        "decrypt_failed": 250,
+        "merkle_mismatch": 0,
+        "recovered_clean": 0,
+        "recovery_failed": 0
+      }
+    }
+  ],
+  "bundles": [
+    {
+      "idx": 0,
+      "filename": "Elana101_Kassulke119_2695d68f-df9d-f8b7-a6de-700e2cbc294a.json",
+      "size_bytes": 1741472,
+      "padded_len": 1744468,
+      "shard_size": 872234
+    },
+    {
+      "idx": 1,
+      "filename": "Spencer878_Schuster709_e6186c22-f4e4-b6d0-b7d5-8aff061c586b.json",
+      "size_bytes": 7524974,
+      "padded_len": 7537854,
+      "shard_size": 3768927
+    },
+    {
+      "idx": 2,
+      "filename": "Broderick767_Borer986_e461b8c0-3a9c-fa80-13cf-c9e3409186b0.json",
+      "size_bytes": 1021508,
+      "padded_len": 1023272,
+      "shard_size": 511636
+    },
+    {
+      "idx": 3,
+      "filename": "Laure395_Wilda367_Boehm581_b4f74363-01a5-ef4d-a4c6-a440d2649d47.json",
+      "size_bytes": 1280259,
+      "padded_len": 1282471,
+      "shard_size": 641236
+    },
+    {
+      "idx": 4,
+      "filename": "Frances376_Zboncak558_0966cd41-a553-cbef-6015-8c0e1474f2e4.json",
+      "size_bytes": 1388300,
+      "padded_len": 1390680,
+      "shard_size": 695340
+    },
+    {
+      "idx": 5,
+      "filename": "Cecille691_Fritsch593_d49aa753-ffcf-37b0-5255-8bff64a33c99.json",
+      "size_bytes": 544937,
+      "padded_len": 545889,
+      "shard_size": 272945
+    },
+    {
+      "idx": 6,
+      "filename": "Andre610_Fisher429_d3c28613-0ce4-b089-9f8d-f4cb059965f4.json",
+      "size_bytes": 790608,
+      "padded_len": 791980,
+      "shard_size": 395990
+    },
+    {
+      "idx": 7,
+      "filename": "Emilio417_Aguirre875_d4b40d86-1e0a-9a93-649d-eeb60e4da31f.json",
+      "size_bytes": 5012803,
+      "padded_len": 5021371,
+      "shard_size": 2510686
+    },
+    {
+      "idx": 8,
+      "filename": "Vada440_Bogisich202_6a15842b-1b2e-a495-505b-687deab620bb.json",
+      "size_bytes": 2131069,
+      "padded_len": 2134737,
+      "shard_size": 1067369
+    },
+    {
+      "idx": 9,
+      "filename": "Claude750_Pacocha935_0841d9ce-8300-0dc5-a92a-fba022cd5074.json",
+      "size_bytes": 4189873,
+      "padded_len": 4197041,
+      "shard_size": 2098521
+    },
+    {
+      "idx": 10,
+      "filename": "Travis723_Herzog843_b4cfcb89-e7df-b755-7dca-2c0d6c3e32f2.json",
+      "size_bytes": 1869050,
+      "padded_len": 1872270,
+      "shard_size": 936135
+    },
+    {
+      "idx": 11,
+      "filename": "Leonor133_Scottie437_Cummings51_eac085c2-3446-620f-cc8d-f663beb86585.json",
+      "size_bytes": 5036055,
+      "padded_len": 5044679,
+      "shard_size": 2522340
+    },
+    {
+      "idx": 12,
+      "filename": "Miguel_Ángel46_Adame662_2c85e7a7-8f21-bc6a-29d4-97ca693944de.json",
+      "size_bytes": 1246162,
+      "padded_len": 1248318,
+      "shard_size": 624159
+    },
+    {
+      "idx": 13,
+      "filename": "Juan88_Piña753_c36f22ae-efe9-f3cb-b08b-23afcc6919c2.json",
+      "size_bytes": 928388,
+      "padded_len": 929984,
+      "shard_size": 464992
+    },
+    {
+      "idx": 14,
+      "filename": "Flo729_Boehm581_03035a01-e96c-3e46-3a43-d5d2bd638a97.json",
+      "size_bytes": 2655984,
+      "padded_len": 2660548,
+      "shard_size": 1330274
+    },
+    {
+      "idx": 15,
+      "filename": "Serafina151_Thresa531_Little434_e090dac7-40d8-3372-56b9-209ae4ac25f0.json",
+      "size_bytes": 1898480,
+      "padded_len": 1901728,
+      "shard_size": 950864
+    },
+    {
+      "idx": 16,
+      "filename": "Lynn917_Crist667_c0481452-0593-4a59-3af8-e6e61141549d.json",
+      "size_bytes": 1352319,
+      "padded_len": 1354643,
+      "shard_size": 677322
+    },
+    {
+      "idx": 17,
+      "filename": "Nicholas495_Lueilwitz711_96e477a8-0929-495d-1bb7-5993df374790.json",
+      "size_bytes": 22402837,
+      "padded_len": 22441141,
+      "shard_size": 11220571
+    },
+    {
+      "idx": 18,
+      "filename": "Danilo179_Rosenbaum794_c07f0799-0c3f-789b-0905-7cf802186b5c.json",
+      "size_bytes": 3168961,
+      "padded_len": 3174393,
+      "shard_size": 1587197
+    },
+    {
+      "idx": 19,
+      "filename": "Harriet337_Emmerich580_e7d71f7d-8158-329f-9686-a49f8c384d74.json",
+      "size_bytes": 1469070,
+      "padded_len": 1471590,
+      "shard_size": 735795
+    },
+    {
+      "idx": 20,
+      "filename": "Daniella68_Kunde533_5dddeb09-6d3d-7324-c2f1-8e776c54de43.json",
+      "size_bytes": 3123506,
+      "padded_len": 3128854,
+      "shard_size": 1564427
+    },
+    {
+      "idx": 21,
+      "filename": "Ruth999_Lueilwitz711_bd3b6c2a-f8bf-58b6-e63a-dec63d7f92e4.json",
+      "size_bytes": 2485140,
+      "padded_len": 2489396,
+      "shard_size": 1244698
+    },
+    {
+      "idx": 22,
+      "filename": "Seth414_Lueilwitz711_b9ac7f77-ddd2-7ee7-4f09-3be4b16c92fe.json",
+      "size_bytes": 3376707,
+      "padded_len": 3382503,
+      "shard_size": 1691252
+    },
+    {
+      "idx": 23,
+      "filename": "Clarence5_Effertz744_57b491c3-f557-ed14-c5f7-32e4096edc7a.json",
+      "size_bytes": 1722555,
+      "padded_len": 1725523,
+      "shard_size": 862762
+    },
+    {
+      "idx": 24,
+      "filename": "Jonah176_Hilpert278_f5ddae45-559d-016b-9eb6-70c269929fb4.json",
+      "size_bytes": 1561402,
+      "padded_len": 1564090,
+      "shard_size": 782045
+    },
+    {
+      "idx": 25,
+      "filename": "Cecelia952_Ruecker817_c96e6b99-0297-91d7-65ad-2c3a3d84ef7b.json",
+      "size_bytes": 1558823,
+      "padded_len": 1561511,
+      "shard_size": 780756
+    },
+    {
+      "idx": 26,
+      "filename": "Roderick835_Corwin846_19af6771-5d4a-eb33-73a5-26fabf9b2417.json",
+      "size_bytes": 310831,
+      "padded_len": 311363,
+      "shard_size": 155682
+    },
+    {
+      "idx": 27,
+      "filename": "Pierre431_Huel628_e7ea3662-0686-ae24-d1c8-779c631218ed.json",
+      "size_bytes": 5973907,
+      "padded_len": 5984127,
+      "shard_size": 2992064
+    },
+    {
+      "idx": 28,
+      "filename": "Alejandra902_Merilyn246_Collier206_c82c2a5b-2e24-4696-6e3c-e5793facc1fd.json",
+      "size_bytes": 37533246,
+      "padded_len": 37597394,
+      "shard_size": 18798697
+    },
+    {
+      "idx": 29,
+      "filename": "Gino587_Hoppe518_f674f294-cbad-90c9-a1d9-87516c0f9faf.json",
+      "size_bytes": 4853836,
+      "padded_len": 4862152,
+      "shard_size": 2431076
+    },
+    {
+      "idx": 30,
+      "filename": "Albertina684_Carolina179_Fay398_631ca84f-1bb7-6996-8738-e71d3ef41c4d.json",
+      "size_bytes": 16316829,
+      "padded_len": 16344717,
+      "shard_size": 8172359
+    },
+    {
+      "idx": 31,
+      "filename": "Viki353_Windler79_23ffc46d-99d2-cbe5-f111-c58e5d176788.json",
+      "size_bytes": 1803236,
+      "padded_len": 1806344,
+      "shard_size": 903172
+    },
+    {
+      "idx": 32,
+      "filename": "Nikita578_Kassulke119_95a19354-c7da-ca2e-1a33-1f51cd2db7df.json",
+      "size_bytes": 1394484,
+      "padded_len": 1396892,
+      "shard_size": 698446
+    },
+    {
+      "idx": 33,
+      "filename": "Susy776_Grimes165_88f6af99-2b8b-b251-dff3-aa8772d6043a.json",
+      "size_bytes": 888783,
+      "padded_len": 890323,
+      "shard_size": 445162
+    },
+    {
+      "idx": 34,
+      "filename": "Cherise743_Cara845_Simonis280_3fbe25df-1b22-8e89-62c4-077b6f6fed7e.json",
+      "size_bytes": 1719762,
+      "padded_len": 1722702,
+      "shard_size": 861351
+    },
+    {
+      "idx": 35,
+      "filename": "Michel472_Kris249_d8c78aee-e317-7b26-b999-800d5459a740.json",
+      "size_bytes": 1043209,
+      "padded_len": 1045001,
+      "shard_size": 522501
+    },
+    {
+      "idx": 36,
+      "filename": "Gregorio366_Mayert710_09453d14-7413-3a15-c4c7-feab5173a23d.json",
+      "size_bytes": 1082973,
+      "padded_len": 1084849,
+      "shard_size": 542425
+    },
+    {
+      "idx": 37,
+      "filename": "Trent525_Hilll811_17be080b-c922-c029-156b-cadd15c0d64f.json",
+      "size_bytes": 1118622,
+      "padded_len": 1120554,
+      "shard_size": 560277
+    },
+    {
+      "idx": 38,
+      "filename": "Danny396_Botsford977_be394385-9e54-b448-001c-0f461ac7c000.json",
+      "size_bytes": 1709502,
+      "padded_len": 1712442,
+      "shard_size": 856221
+    },
+    {
+      "idx": 39,
+      "filename": "Hildred696_Batz141_9b846903-4c6a-3f8b-c6a7-af901171210d.json",
+      "size_bytes": 1405741,
+      "padded_len": 1408149,
+      "shard_size": 704075
+    },
+    {
+      "idx": 40,
+      "filename": "Lance203_Bartoletti50_763839ac-c4f9-618a-0ac3-043d0d9348f5.json",
+      "size_bytes": 27251851,
+      "padded_len": 27298443,
+      "shard_size": 13649222
+    },
+    {
+      "idx": 41,
+      "filename": "Maryrose226_Sage164_Trantow673_aaac98f5-dd81-342e-57e7-3e2f8f621366.json",
+      "size_bytes": 2134619,
+      "padded_len": 2138287,
+      "shard_size": 1069144
+    },
+    {
+      "idx": 42,
+      "filename": "Hwa978_Feil794_f75f0070-2d28-0bc8-898c-86ba160f47c2.json",
+      "size_bytes": 3081851,
+      "padded_len": 3087143,
+      "shard_size": 1543572
+    },
+    {
+      "idx": 43,
+      "filename": "Marsha122_Karl184_Hayes766_cedec471-0830-806d-0b1e-b303bc460cf2.json",
+      "size_bytes": 3042636,
+      "padded_len": 3047844,
+      "shard_size": 1523922
+    },
+    {
+      "idx": 44,
+      "filename": "Eric487_Mayert710_087e3c84-6d47-527b-18ca-540d8bfaa4e2.json",
+      "size_bytes": 2002480,
+      "padded_len": 2005924,
+      "shard_size": 1002962
+    },
+    {
+      "idx": 45,
+      "filename": "Matt836_Zieme486_52c0be88-3baf-154a-8f04-3799971159fc.json",
+      "size_bytes": 3361609,
+      "padded_len": 3367377,
+      "shard_size": 1683689
+    },
+    {
+      "idx": 46,
+      "filename": "Norberto865_Keebler762_b080489e-1673-05a0-0f9c-9291005d866b.json",
+      "size_bytes": 2290692,
+      "padded_len": 2294612,
+      "shard_size": 1147306
+    },
+    {
+      "idx": 47,
+      "filename": "Sofia418_Tirado305_c05468fa-2523-d580-0346-a03f1c824a94.json",
+      "size_bytes": 2077301,
+      "padded_len": 2080857,
+      "shard_size": 1040429
+    },
+    {
+      "idx": 48,
+      "filename": "Sparkle906_Hudson301_f4228c37-4811-cff4-0720-7a2577e2b39c.json",
+      "size_bytes": 2006711,
+      "padded_len": 2010155,
+      "shard_size": 1005078
+    },
+    {
+      "idx": 49,
+      "filename": "Dan465_Bernier607_7006f663-7bb6-fe33-f370-80454d20487d.json",
+      "size_bytes": 1508218,
+      "padded_len": 1510822,
+      "shard_size": 755411
+    }
+  ]
+}

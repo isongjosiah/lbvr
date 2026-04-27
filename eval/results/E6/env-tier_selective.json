@@ -1,0 +1,40 @@
+{
+  "commit_hash": "2828557",
+  "go_version": "go1.22.2",
+  "os": "linux",
+  "kernel": "6.6.87.2-microsoft-standard-WSL2",
+  "cpu": "Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz",
+  "network_path": "in-process simTier (no network egress)",
+  "wall_start": "2026-04-27T06:28:07.202436925Z",
+  "wall_end": "2026-04-27T06:49:02.322009319Z",
+  "bench_id": "E6",
+  "mode": "tier_selective",
+  "sampling_policy": "uniform-random over eval/results/synthea-100000/sizes.csv (proportional to measured 100K distribution)",
+  "cold_tier_mechanism": "in-process simTier (lognormal); Toxiproxy + live tiers deferred per docs/eval-protocol.md §3",
+  "tier_distributions": {
+    "cold": {
+      "family": "lognormal",
+      "mu": 20.0300718,
+      "sigma": 1.1919608,
+      "p50_ms": 500,
+      "p99_ms": 8000,
+      "calibration": "Irys/Arweave stand-in; chain-settled reads spike into the tail"
+    },
+    "hot": {
+      "family": "lognormal",
+      "mu": 18.1974681,
+      "sigma": 0.6919175,
+      "p50_ms": 80,
+      "p99_ms": 400,
+      "calibration": "Pinata dedicated-gateway stand-in; Trautwein INFOCOM 2024 + Pinata SLA range"
+    },
+    "warm": {
+      "family": "lognormal",
+      "mu": 18.6030495,
+      "sigma": 0.6919175,
+      "p50_ms": 120,
+      "p99_ms": 600,
+      "calibration": "Filebase S3 stand-in; AWS region-local typical"
+    }
+  }
+}

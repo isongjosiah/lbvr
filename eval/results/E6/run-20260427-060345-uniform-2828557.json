@@ -1,0 +1,842 @@
+{
+  "schema_version": 1,
+  "run_id": "20260427-060345-uniform-2828557",
+  "started_at": "2026-04-27T06:03:45.752297366Z",
+  "completed_at": "2026-04-27T06:11:16.98691967Z",
+  "config": {
+    "mode": "uniform",
+    "num_bundles": 100,
+    "reps_per_fraction": 5,
+    "seed": 42,
+    "slo_budget_ms": 2000,
+    "adversary_fractions": [
+      0,
+      0.1,
+      0.33,
+      0.5,
+      0.67
+    ],
+    "tier_distributions": {
+      "cold": {
+        "family": "lognormal",
+        "mu": 20.0300718,
+        "sigma": 1.1919608,
+        "p50_ms": 500,
+        "p99_ms": 8000,
+        "calibration": "Irys/Arweave stand-in; chain-settled reads spike into the tail"
+      },
+      "hot": {
+        "family": "lognormal",
+        "mu": 18.1974681,
+        "sigma": 0.6919175,
+        "p50_ms": 80,
+        "p99_ms": 400,
+        "calibration": "Pinata dedicated-gateway stand-in; Trautwein INFOCOM 2024 + Pinata SLA range"
+      },
+      "warm": {
+        "family": "lognormal",
+        "mu": 18.6030495,
+        "sigma": 0.6919175,
+        "p50_ms": 120,
+        "p99_ms": 600,
+        "calibration": "Filebase S3 stand-in; AWS region-local typical"
+      }
+    },
+    "sampling_policy": "uniform-random over eval/results/synthea-100000/sizes.csv (proportional to measured 100K distribution)",
+    "cold_tier_mechanism": "in-process simTier (lognormal); Toxiproxy + live tiers deferred per docs/eval-protocol.md §3"
+  },
+  "fractions": [
+    {
+      "adversary_fraction": 0,
+      "mode": "uniform",
+      "n_retrievals": 500,
+      "n_retrieval_success": 500,
+      "retrieval_success_rate": 1,
+      "tier_breakdown": {
+        "cold": 0,
+        "hot": 0,
+        "warm": 0
+      },
+      "failure_breakdown": {
+        "decrypt_failed": 0,
+        "merkle_mismatch": 0,
+        "recovered_clean": 500,
+        "recovery_failed": 0
+      }
+    },
+    {
+      "adversary_fraction": 0.1,
+      "mode": "uniform",
+      "n_retrievals": 500,
+      "n_retrieval_success": 335,
+      "retrieval_success_rate": 0.67,
+      "tier_breakdown": {
+        "cold": 0.12,
+        "hot": 0.18,
+        "warm": 0.17
+      },
+      "failure_breakdown": {
+        "decrypt_failed": 165,
+        "merkle_mismatch": 0,
+        "recovered_clean": 335,
+        "recovery_failed": 0
+      }
+    },
+    {
+      "adversary_fraction": 0.33,
+      "mode": "uniform",
+      "n_retrievals": 500,
+      "n_retrieval_success": 240,
+      "retrieval_success_rate": 0.48,
+      "tier_breakdown": {
+        "cold": 0.35,
+        "hot": 0.3,
+        "warm": 0.35
+      },
+      "failure_breakdown": {
+        "decrypt_failed": 260,
+        "merkle_mismatch": 0,
+        "recovered_clean": 240,
+        "recovery_failed": 0
+      }
+    },
+    {
+      "adversary_fraction": 0.5,
+      "mode": "uniform",
+      "n_retrievals": 500,
+      "n_retrieval_success": 95,
+      "retrieval_success_rate": 0.19,
+      "tier_breakdown": {
+        "cold": 0.48,
+        "hot": 0.56,
+        "warm": 0.58
+      },
+      "failure_breakdown": {
+        "decrypt_failed": 405,
+        "merkle_mismatch": 0,
+        "recovered_clean": 95,
+        "recovery_failed": 0
+      }
+    },
+    {
+      "adversary_fraction": 0.67,
+      "mode": "uniform",
+      "n_retrievals": 500,
+      "n_retrieval_success": 80,
+      "retrieval_success_rate": 0.16,
+      "tier_breakdown": {
+        "cold": 0.73,
+        "hot": 0.56,
+        "warm": 0.7
+      },
+      "failure_breakdown": {
+        "decrypt_failed": 420,
+        "merkle_mismatch": 0,
+        "recovered_clean": 80,
+        "recovery_failed": 0
+      }
+    }
+  ],
+  "bundles": [
+    {
+      "idx": 0,
+      "filename": "Elana101_Kassulke119_2695d68f-df9d-f8b7-a6de-700e2cbc294a.json",
+      "size_bytes": 1741472,
+      "padded_len": 1744468,
+      "shard_size": 872234
+    },
+    {
+      "idx": 1,
+      "filename": "Spencer878_Schuster709_e6186c22-f4e4-b6d0-b7d5-8aff061c586b.json",
+      "size_bytes": 7524974,
+      "padded_len": 7537854,
+      "shard_size": 3768927
+    },
+    {
+      "idx": 2,
+      "filename": "Broderick767_Borer986_e461b8c0-3a9c-fa80-13cf-c9e3409186b0.json",
+      "size_bytes": 1021508,
+      "padded_len": 1023272,
+      "shard_size": 511636
+    },
+    {
+      "idx": 3,
+      "filename": "Laure395_Wilda367_Boehm581_b4f74363-01a5-ef4d-a4c6-a440d2649d47.json",
+      "size_bytes": 1280259,
+      "padded_len": 1282471,
+      "shard_size": 641236
+    },
+    {
+      "idx": 4,
+      "filename": "Frances376_Zboncak558_0966cd41-a553-cbef-6015-8c0e1474f2e4.json",
+      "size_bytes": 1388300,
+      "padded_len": 1390680,
+      "shard_size": 695340
+    },
+    {
+      "idx": 5,
+      "filename": "Cecille691_Fritsch593_d49aa753-ffcf-37b0-5255-8bff64a33c99.json",
+      "size_bytes": 544937,
+      "padded_len": 545889,
+      "shard_size": 272945
+    },
+    {
+      "idx": 6,
+      "filename": "Andre610_Fisher429_d3c28613-0ce4-b089-9f8d-f4cb059965f4.json",
+      "size_bytes": 790608,
+      "padded_len": 791980,
+      "shard_size": 395990
+    },
+    {
+      "idx": 7,
+      "filename": "Emilio417_Aguirre875_d4b40d86-1e0a-9a93-649d-eeb60e4da31f.json",
+      "size_bytes": 5012803,
+      "padded_len": 5021371,
+      "shard_size": 2510686
+    },
+    {
+      "idx": 8,
+      "filename": "Vada440_Bogisich202_6a15842b-1b2e-a495-505b-687deab620bb.json",
+      "size_bytes": 2131069,
+      "padded_len": 2134737,
+      "shard_size": 1067369
+    },
+    {
+      "idx": 9,
+      "filename": "Claude750_Pacocha935_0841d9ce-8300-0dc5-a92a-fba022cd5074.json",
+      "size_bytes": 4189873,
+      "padded_len": 4197041,
+      "shard_size": 2098521
+    },
+    {
+      "idx": 10,
+      "filename": "Travis723_Herzog843_b4cfcb89-e7df-b755-7dca-2c0d6c3e32f2.json",
+      "size_bytes": 1869050,
+      "padded_len": 1872270,
+      "shard_size": 936135
+    },
+    {
+      "idx": 11,
+      "filename": "Leonor133_Scottie437_Cummings51_eac085c2-3446-620f-cc8d-f663beb86585.json",
+      "size_bytes": 5036055,
+      "padded_len": 5044679,
+      "shard_size": 2522340
+    },
+    {
+      "idx": 12,
+      "filename": "Miguel_Ángel46_Adame662_2c85e7a7-8f21-bc6a-29d4-97ca693944de.json",
+      "size_bytes": 1246162,
+      "padded_len": 1248318,
+      "shard_size": 624159
+    },
+    {
+      "idx": 13,
+      "filename": "Juan88_Piña753_c36f22ae-efe9-f3cb-b08b-23afcc6919c2.json",
+      "size_bytes": 928388,
+      "padded_len": 929984,
+      "shard_size": 464992
+    },
+    {
+      "idx": 14,
+      "filename": "Flo729_Boehm581_03035a01-e96c-3e46-3a43-d5d2bd638a97.json",
+      "size_bytes": 2655984,
+      "padded_len": 2660548,
+      "shard_size": 1330274
+    },
+    {
+      "idx": 15,
+      "filename": "Serafina151_Thresa531_Little434_e090dac7-40d8-3372-56b9-209ae4ac25f0.json",
+      "size_bytes": 1898480,
+      "padded_len": 1901728,
+      "shard_size": 950864
+    },
+    {
+      "idx": 16,
+      "filename": "Lynn917_Crist667_c0481452-0593-4a59-3af8-e6e61141549d.json",
+      "size_bytes": 1352319,
+      "padded_len": 1354643,
+      "shard_size": 677322
+    },
+    {
+      "idx": 17,
+      "filename": "Nicholas495_Lueilwitz711_96e477a8-0929-495d-1bb7-5993df374790.json",
+      "size_bytes": 22402837,
+      "padded_len": 22441141,
+      "shard_size": 11220571
+    },
+    {
+      "idx": 18,
+      "filename": "Danilo179_Rosenbaum794_c07f0799-0c3f-789b-0905-7cf802186b5c.json",
+      "size_bytes": 3168961,
+      "padded_len": 3174393,
+      "shard_size": 1587197
+    },
+    {
+      "idx": 19,
+      "filename": "Harriet337_Emmerich580_e7d71f7d-8158-329f-9686-a49f8c384d74.json",
+      "size_bytes": 1469070,
+      "padded_len": 1471590,
+      "shard_size": 735795
+    },
+    {
+      "idx": 20,
+      "filename": "Daniella68_Kunde533_5dddeb09-6d3d-7324-c2f1-8e776c54de43.json",
+      "size_bytes": 3123506,
+      "padded_len": 3128854,
+      "shard_size": 1564427
+    },
+    {
+      "idx": 21,
+      "filename": "Ruth999_Lueilwitz711_bd3b6c2a-f8bf-58b6-e63a-dec63d7f92e4.json",
+      "size_bytes": 2485140,
+      "padded_len": 2489396,
+      "shard_size": 1244698
+    },
+    {
+      "idx": 22,
+      "filename": "Seth414_Lueilwitz711_b9ac7f77-ddd2-7ee7-4f09-3be4b16c92fe.json",
+      "size_bytes": 3376707,
+      "padded_len": 3382503,
+      "shard_size": 1691252
+    },
+    {
+      "idx": 23,
+      "filename": "Clarence5_Effertz744_57b491c3-f557-ed14-c5f7-32e4096edc7a.json",
+      "size_bytes": 1722555,
+      "padded_len": 1725523,
+      "shard_size": 862762
+    },
+    {
+      "idx": 24,
+      "filename": "Jonah176_Hilpert278_f5ddae45-559d-016b-9eb6-70c269929fb4.json",
+      "size_bytes": 1561402,
+      "padded_len": 1564090,
+      "shard_size": 782045
+    },
+    {
+      "idx": 25,
+      "filename": "Cecelia952_Ruecker817_c96e6b99-0297-91d7-65ad-2c3a3d84ef7b.json",
+      "size_bytes": 1558823,
+      "padded_len": 1561511,
+      "shard_size": 780756
+    },
+    {
+      "idx": 26,
+      "filename": "Roderick835_Corwin846_19af6771-5d4a-eb33-73a5-26fabf9b2417.json",
+      "size_bytes": 310831,
+      "padded_len": 311363,
+      "shard_size": 155682
+    },
+    {
+      "idx": 27,
+      "filename": "Pierre431_Huel628_e7ea3662-0686-ae24-d1c8-779c631218ed.json",
+      "size_bytes": 5973907,
+      "padded_len": 5984127,
+      "shard_size": 2992064
+    },
+    {
+      "idx": 28,
+      "filename": "Alejandra902_Merilyn246_Collier206_c82c2a5b-2e24-4696-6e3c-e5793facc1fd.json",
+      "size_bytes": 37533246,
+      "padded_len": 37597394,
+      "shard_size": 18798697
+    },
+    {
+      "idx": 29,
+      "filename": "Gino587_Hoppe518_f674f294-cbad-90c9-a1d9-87516c0f9faf.json",
+      "size_bytes": 4853836,
+      "padded_len": 4862152,
+      "shard_size": 2431076
+    },
+    {
+      "idx": 30,
+      "filename": "Albertina684_Carolina179_Fay398_631ca84f-1bb7-6996-8738-e71d3ef41c4d.json",
+      "size_bytes": 16316829,
+      "padded_len": 16344717,
+      "shard_size": 8172359
+    },
+    {
+      "idx": 31,
+      "filename": "Viki353_Windler79_23ffc46d-99d2-cbe5-f111-c58e5d176788.json",
+      "size_bytes": 1803236,
+      "padded_len": 1806344,
+      "shard_size": 903172
+    },
+    {
+      "idx": 32,
+      "filename": "Nikita578_Kassulke119_95a19354-c7da-ca2e-1a33-1f51cd2db7df.json",
+      "size_bytes": 1394484,
+      "padded_len": 1396892,
+      "shard_size": 698446
+    },
+    {
+      "idx": 33,
+      "filename": "Susy776_Grimes165_88f6af99-2b8b-b251-dff3-aa8772d6043a.json",
+      "size_bytes": 888783,
+      "padded_len": 890323,
+      "shard_size": 445162
+    },
+    {
+      "idx": 34,
+      "filename": "Cherise743_Cara845_Simonis280_3fbe25df-1b22-8e89-62c4-077b6f6fed7e.json",
+      "size_bytes": 1719762,
+      "padded_len": 1722702,
+      "shard_size": 861351
+    },
+    {
+      "idx": 35,
+      "filename": "Michel472_Kris249_d8c78aee-e317-7b26-b999-800d5459a740.json",
+      "size_bytes": 1043209,
+      "padded_len": 1045001,
+      "shard_size": 522501
+    },
+    {
+      "idx": 36,
+      "filename": "Gregorio366_Mayert710_09453d14-7413-3a15-c4c7-feab5173a23d.json",
+      "size_bytes": 1082973,
+      "padded_len": 1084849,
+      "shard_size": 542425
+    },
+    {
+      "idx": 37,
+      "filename": "Trent525_Hilll811_17be080b-c922-c029-156b-cadd15c0d64f.json",
+      "size_bytes": 1118622,
+      "padded_len": 1120554,
+      "shard_size": 560277
+    },
+    {
+      "idx": 38,
+      "filename": "Danny396_Botsford977_be394385-9e54-b448-001c-0f461ac7c000.json",
+      "size_bytes": 1709502,
+      "padded_len": 1712442,
+      "shard_size": 856221
+    },
+    {
+      "idx": 39,
+      "filename": "Hildred696_Batz141_9b846903-4c6a-3f8b-c6a7-af901171210d.json",
+      "size_bytes": 1405741,
+      "padded_len": 1408149,
+      "shard_size": 704075
+    },
+    {
+      "idx": 40,
+      "filename": "Lance203_Bartoletti50_763839ac-c4f9-618a-0ac3-043d0d9348f5.json",
+      "size_bytes": 27251851,
+      "padded_len": 27298443,
+      "shard_size": 13649222
+    },
+    {
+      "idx": 41,
+      "filename": "Maryrose226_Sage164_Trantow673_aaac98f5-dd81-342e-57e7-3e2f8f621366.json",
+      "size_bytes": 2134619,
+      "padded_len": 2138287,
+      "shard_size": 1069144
+    },
+    {
+      "idx": 42,
+      "filename": "Hwa978_Feil794_f75f0070-2d28-0bc8-898c-86ba160f47c2.json",
+      "size_bytes": 3081851,
+      "padded_len": 3087143,
+      "shard_size": 1543572
+    },
+    {
+      "idx": 43,
+      "filename": "Marsha122_Karl184_Hayes766_cedec471-0830-806d-0b1e-b303bc460cf2.json",
+      "size_bytes": 3042636,
+      "padded_len": 3047844,
+      "shard_size": 1523922
+    },
+    {
+      "idx": 44,
+      "filename": "Eric487_Mayert710_087e3c84-6d47-527b-18ca-540d8bfaa4e2.json",
+      "size_bytes": 2002480,
+      "padded_len": 2005924,
+      "shard_size": 1002962
+    },
+    {
+      "idx": 45,
+      "filename": "Matt836_Zieme486_52c0be88-3baf-154a-8f04-3799971159fc.json",
+      "size_bytes": 3361609,
+      "padded_len": 3367377,
+      "shard_size": 1683689
+    },
+    {
+      "idx": 46,
+      "filename": "Norberto865_Keebler762_b080489e-1673-05a0-0f9c-9291005d866b.json",
+      "size_bytes": 2290692,
+      "padded_len": 2294612,
+      "shard_size": 1147306
+    },
+    {
+      "idx": 47,
+      "filename": "Sofia418_Tirado305_c05468fa-2523-d580-0346-a03f1c824a94.json",
+      "size_bytes": 2077301,
+      "padded_len": 2080857,
+      "shard_size": 1040429
+    },
+    {
+      "idx": 48,
+      "filename": "Sparkle906_Hudson301_f4228c37-4811-cff4-0720-7a2577e2b39c.json",
+      "size_bytes": 2006711,
+      "padded_len": 2010155,
+      "shard_size": 1005078
+    },
+    {
+      "idx": 49,
+      "filename": "Dan465_Bernier607_7006f663-7bb6-fe33-f370-80454d20487d.json",
+      "size_bytes": 1508218,
+      "padded_len": 1510822,
+      "shard_size": 755411
+    },
+    {
+      "idx": 50,
+      "filename": "Yvone889_Welch179_bab48867-183a-6ecc-f2ff-02919933032d.json",
+      "size_bytes": 2313207,
+      "padded_len": 2317183,
+      "shard_size": 1158592
+    },
+    {
+      "idx": 51,
+      "filename": "Lyndia317_Baumbach677_1d3719e2-a62e-cb50-df21-6b4046c6a927.json",
+      "size_bytes": 2107105,
+      "padded_len": 2110717,
+      "shard_size": 1055359
+    },
+    {
+      "idx": 52,
+      "filename": "Voncile324_Rebbeca432_Gleason633_a0fe7055-4f7e-a697-3661-5272a30f225c.json",
+      "size_bytes": 4007431,
+      "padded_len": 4014291,
+      "shard_size": 2007146
+    },
+    {
+      "idx": 53,
+      "filename": "Chantay958_Davis923_1599ce25-087c-1146-8e5a-66276e69dddd.json",
+      "size_bytes": 1387585,
+      "padded_len": 1389965,
+      "shard_size": 694983
+    },
+    {
+      "idx": 54,
+      "filename": "Dino214_Spinka232_8cb49b6a-c09e-cf75-a3e5-2de1e2675c60.json",
+      "size_bytes": 1389211,
+      "padded_len": 1391591,
+      "shard_size": 695796
+    },
+    {
+      "idx": 55,
+      "filename": "Thomasina264_Dietrich576_3eed8bda-92cc-c390-07e5-51d792eae23f.json",
+      "size_bytes": 565425,
+      "padded_len": 566405,
+      "shard_size": 283203
+    },
+    {
+      "idx": 56,
+      "filename": "Randal152_Beer512_b893a3d3-e2b9-d19f-22f1-1a72d22f8097.json",
+      "size_bytes": 984940,
+      "padded_len": 986648,
+      "shard_size": 493324
+    },
+    {
+      "idx": 57,
+      "filename": "Claire652_Streich926_e5732e9c-3873-f570-7a0b-1863854c7435.json",
+      "size_bytes": 1207742,
+      "padded_len": 1209814,
+      "shard_size": 604907
+    },
+    {
+      "idx": 58,
+      "filename": "Clay913_Hintz995_94d207cd-425a-8719-5cb8-644035706959.json",
+      "size_bytes": 1654966,
+      "padded_len": 1657822,
+      "shard_size": 828911
+    },
+    {
+      "idx": 59,
+      "filename": "Sun500_Kris249_17e0bb24-7156-6adf-178c-f4a4631775d8.json",
+      "size_bytes": 5293041,
+      "padded_len": 5302113,
+      "shard_size": 2651057
+    },
+    {
+      "idx": 60,
+      "filename": "Lovetta319_Lorine399_Schuster709_f895549c-ef98-5045-6870-4a54c0116dfa.json",
+      "size_bytes": 4027623,
+      "padded_len": 4034511,
+      "shard_size": 2017256
+    },
+    {
+      "idx": 61,
+      "filename": "Danny396_Sawayn19_8a1b2fea-ec0d-84c9-b5e8-adf1e9c0db0b.json",
+      "size_bytes": 5042451,
+      "padded_len": 5051075,
+      "shard_size": 2525538
+    },
+    {
+      "idx": 62,
+      "filename": "Manie910_Myrna889_Pollich983_80d152ec-fa01-adba-268b-e3ec53f407f5.json",
+      "size_bytes": 1000194,
+      "padded_len": 1001930,
+      "shard_size": 500965
+    },
+    {
+      "idx": 63,
+      "filename": "Wilda367_Tracy345_Shanahan202_93a0516f-3e87-5fbd-5499-a7ed73922afa.json",
+      "size_bytes": 3743097,
+      "padded_len": 3749509,
+      "shard_size": 1874755
+    },
+    {
+      "idx": 64,
+      "filename": "Lita714_Bogan287_2b8bf6a8-056b-d13f-9d88-ce90a01a75a7.json",
+      "size_bytes": 2882822,
+      "padded_len": 2887750,
+      "shard_size": 1443875
+    },
+    {
+      "idx": 65,
+      "filename": "Brent147_Stark857_8d4e5bea-b1d5-493d-9f9f-52308fba8bde.json",
+      "size_bytes": 1108505,
+      "padded_len": 1110409,
+      "shard_size": 555205
+    },
+    {
+      "idx": 66,
+      "filename": "Norberto865_Hirthe744_c9ed25b2-5b5d-f0f3-6bc0-c3cd5b8785b8.json",
+      "size_bytes": 2526013,
+      "padded_len": 2530353,
+      "shard_size": 1265177
+    },
+    {
+      "idx": 67,
+      "filename": "Daryl568_Fritsch593_b5f45c61-85ba-8db2-ade0-815a739f9dda.json",
+      "size_bytes": 1527002,
+      "padded_len": 1529634,
+      "shard_size": 764817
+    },
+    {
+      "idx": 68,
+      "filename": "Modesto621_Wehner319_9e3589cd-e6a2-dc49-43d9-0dc341a677f9.json",
+      "size_bytes": 1223623,
+      "padded_len": 1225723,
+      "shard_size": 612862
+    },
+    {
+      "idx": 69,
+      "filename": "Cecil300_Tromp100_165e2c72-e06f-0496-3b92-f9b194e23875.json",
+      "size_bytes": 2515379,
+      "padded_len": 2519691,
+      "shard_size": 1259846
+    },
+    {
+      "idx": 70,
+      "filename": "Valentin929_Dach178_578c2d01-c616-359a-6150-1ab365a48426.json",
+      "size_bytes": 1243449,
+      "padded_len": 1245577,
+      "shard_size": 622789
+    },
+    {
+      "idx": 71,
+      "filename": "Thad495_Dibbert990_6fd61939-9eec-1790-ce08-c943fda8d606.json",
+      "size_bytes": 39192481,
+      "padded_len": 39259485,
+      "shard_size": 19629743
+    },
+    {
+      "idx": 72,
+      "filename": "Fabian647_Mante251_5e33e4b6-b190-68e5-3d83-194a2b0a0248.json",
+      "size_bytes": 2627523,
+      "padded_len": 2632031,
+      "shard_size": 1316016
+    },
+    {
+      "idx": 73,
+      "filename": "Rashad361_Gleichner915_61fbd217-43c0-0cc6-a80d-7a441270db8e.json",
+      "size_bytes": 728394,
+      "padded_len": 729654,
+      "shard_size": 364827
+    },
+    {
+      "idx": 74,
+      "filename": "Brandon214_Tromp100_926a516c-49d0-96d4-eebd-7f2a4483b882.json",
+      "size_bytes": 787059,
+      "padded_len": 788431,
+      "shard_size": 394216
+    },
+    {
+      "idx": 75,
+      "filename": "Maryetta775_Wilderman619_fd450441-ecfb-fd15-5399-1c1c86c028e0.json",
+      "size_bytes": 1481136,
+      "padded_len": 1483684,
+      "shard_size": 741842
+    },
+    {
+      "idx": 76,
+      "filename": "Elvin140_Quitzon246_fd9c4e2e-5adf-a774-0654-7748643d320e.json",
+      "size_bytes": 794873,
+      "padded_len": 796245,
+      "shard_size": 398123
+    },
+    {
+      "idx": 77,
+      "filename": "Ismael683_Wehner319_0587507c-3217-36bd-98a1-cd8ec835ad3e.json",
+      "size_bytes": 6504284,
+      "padded_len": 6515400,
+      "shard_size": 3257700
+    },
+    {
+      "idx": 78,
+      "filename": "Hassan290_Jacobs452_ba8e72a0-5950-eca3-49d2-bccccbcebab8.json",
+      "size_bytes": 1910843,
+      "padded_len": 1914119,
+      "shard_size": 957060
+    },
+    {
+      "idx": 79,
+      "filename": "Harlan808_Glover433_fa3b14d8-0ea5-f9e7-4fcc-7cce4d7ce7b1.json",
+      "size_bytes": 22374203,
+      "padded_len": 22412451,
+      "shard_size": 11206226
+    },
+    {
+      "idx": 80,
+      "filename": "Jeannie478_Mercedez75_Lueilwitz711_6d5ce61e-9e32-171a-6b6e-7c41bdd6f2c7.json",
+      "size_bytes": 2033194,
+      "padded_len": 2036694,
+      "shard_size": 1018347
+    },
+    {
+      "idx": 81,
+      "filename": "Lynetta635_Kiehn525_7fa32b28-99dc-eb88-9109-023dcc6a5777.json",
+      "size_bytes": 2923267,
+      "padded_len": 2928279,
+      "shard_size": 1464140
+    },
+    {
+      "idx": 82,
+      "filename": "Hayden835_Feil794_77be08cc-68ca-6896-419c-23bd5314ea58.json",
+      "size_bytes": 1390070,
+      "padded_len": 1392450,
+      "shard_size": 696225
+    },
+    {
+      "idx": 83,
+      "filename": "Natalia964_María_José279_Contreras711_246303e4-b356-d0a1-2782-80c7c92573ad.json",
+      "size_bytes": 3337962,
+      "padded_len": 3343674,
+      "shard_size": 1671837
+    },
+    {
+      "idx": 84,
+      "filename": "Jeffry142_Jerde200_71cef26f-807d-c305-1f9a-f8d20b5080cf.json",
+      "size_bytes": 2690067,
+      "padded_len": 2694687,
+      "shard_size": 1347344
+    },
+    {
+      "idx": 85,
+      "filename": "Sherwood961_Roberts511_822dd431-ce91-04fa-c391-8986b84b931d.json",
+      "size_bytes": 1736531,
+      "padded_len": 1739499,
+      "shard_size": 869750
+    },
+    {
+      "idx": 86,
+      "filename": "Millard193_Breitenberg711_5f5da020-73e1-597b-cb82-de1c8cd77196.json",
+      "size_bytes": 949252,
+      "padded_len": 950876,
+      "shard_size": 475438
+    },
+    {
+      "idx": 87,
+      "filename": "Ward668_Douglas31_99b478d1-81a6-4aa2-8087-f82d362988de.json",
+      "size_bytes": 4524130,
+      "padded_len": 4531886,
+      "shard_size": 2265943
+    },
+    {
+      "idx": 88,
+      "filename": "Andrea7_Boyle917_ce9da849-75d3-b3f8-cdc4-63425aff1723.json",
+      "size_bytes": 1346484,
+      "padded_len": 1348808,
+      "shard_size": 674404
+    },
+    {
+      "idx": 89,
+      "filename": "Norbert530_Little434_7cef5978-2dee-8cf3-ba70-56c5617ee689.json",
+      "size_bytes": 2193999,
+      "padded_len": 2197751,
+      "shard_size": 1098876
+    },
+    {
+      "idx": 90,
+      "filename": "Nigel915_Thompson596_a92e6992-b4d5-d5f1-d85e-f3fb7ff6c2e4.json",
+      "size_bytes": 2610466,
+      "padded_len": 2614946,
+      "shard_size": 1307473
+    },
+    {
+      "idx": 91,
+      "filename": "Isabella615_Pattie91_Barrows492_4f1a93d8-bf3b-67b5-b98e-fb2cc4da04e2.json",
+      "size_bytes": 3159820,
+      "padded_len": 3165224,
+      "shard_size": 1582612
+    },
+    {
+      "idx": 92,
+      "filename": "Sylvester827_Hamill307_4dfb02d5-ccc2-59f9-0600-0503d3bb48dd.json",
+      "size_bytes": 1896107,
+      "padded_len": 1899355,
+      "shard_size": 949678
+    },
+    {
+      "idx": 93,
+      "filename": "Morris740_Lueilwitz711_ad5060bf-731e-6a0e-d0ed-2b3758f84508.json",
+      "size_bytes": 1965204,
+      "padded_len": 1968564,
+      "shard_size": 984282
+    },
+    {
+      "idx": 94,
+      "filename": "Mollie266_Diane211_Jacobson885_1ffda033-f46d-db7e-8081-b1c025ec3266.json",
+      "size_bytes": 3307771,
+      "padded_len": 3313427,
+      "shard_size": 1656714
+    },
+    {
+      "idx": 95,
+      "filename": "Alejandro916_Mireles421_90c97cfb-c06b-3ded-8265-0fd2e1fdc83b.json",
+      "size_bytes": 567676,
+      "padded_len": 568656,
+      "shard_size": 284328
+    },
+    {
+      "idx": 96,
+      "filename": "José_María211_Valencia279_3306e198-9ee8-e5f3-4899-1ca34bdf6827.json",
+      "size_bytes": 1308589,
+      "padded_len": 1310829,
+      "shard_size": 655415
+    },
+    {
+      "idx": 97,
+      "filename": "Glenn0_Lindgren255_e0ce9183-53eb-ecec-dfb7-ce206598c4fc.json",
+      "size_bytes": 1130866,
+      "padded_len": 1132826,
+      "shard_size": 566413
+    },
+    {
+      "idx": 98,
+      "filename": "Les282_Turner526_35a840eb-8809-347d-6b85-9b38c3025a0d.json",
+      "size_bytes": 2377641,
+      "padded_len": 2381729,
+      "shard_size": 1190865
+    },
+    {
+      "idx": 99,
+      "filename": "Felipe97_Mitchell808_34bc1c53-2363-d222-6ad5-69bb51632614.json",
+      "size_bytes": 2009012,
+      "padded_len": 2012456,
+      "shard_size": 1006228
+    }
+  ]
+}
