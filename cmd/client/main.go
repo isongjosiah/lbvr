@@ -31,6 +31,7 @@ import (
 	"time"
 
 	"github.com/isongjosiah/lbvr-med/internal/config"
+	"github.com/isongjosiah/lbvr-med/internal/ingest"
 	"github.com/isongjosiah/lbvr-med/internal/registry"
 	"github.com/isongjosiah/lbvr-med/internal/tiers"
 	"github.com/isongjosiah/lbvr-med/internal/tiers/arweave"
@@ -210,7 +211,7 @@ func runIngest(args []string) int {
 
 	policyID := registry.Keccak256([]byte(policy))
 
-	ing, err := NewIngester(IngesterOpts{
+	ing, err := ingest.NewIngester(ingest.IngesterOpts{
 		Hot:         hot,
 		Warm:        warm,
 		Cold:        cold,
@@ -231,7 +232,7 @@ func runIngest(args []string) int {
 
 	switch {
 	case bundle != "":
-		_, err := ing.Ingest(ctx, IngestRequest{
+		_, err := ing.Ingest(ctx, ingest.IngestRequest{
 			Path:     bundle,
 			PolicyID: policyID,
 			DryRun:   dryRun,

@@ -1,4 +1,6 @@
-// Ingest pipeline for the LBVR-Med client (CLAUDE.md §4.2 steps 1–7).
+// Package ingest holds the LBVR-Med L1 ingest pipeline (CLAUDE.md §4.2
+// steps 1–7) extracted from cmd/client so the bench harness can drive
+// the same code path the production CLI uses without subprocessing.
 //
 // One Ingester serves many bundles; it is safe to share across goroutines.
 // The pipeline order mirrors the spec exactly:
@@ -13,8 +15,7 @@
 // one allocation. Bundles ≥ 64 MiB stream the seal pass via a tee buffer
 // (see ReadBundle for the threshold logic) — measured Synthea P99 is
 // ~38 MiB so the buffered path hits >99% of the corpus.
-
-package main
+package ingest
 
 import (
 	"bytes"
@@ -43,6 +44,20 @@ import (
 // host RAM. Streaming changes nothing semantically; it just runs the read
 // twice (once for Merkle, once for seal) instead of buffering.
 const streamThreshold = 64 * 1024 * 1024
+
+// Encoder is the abstraction the ingest pipeline uses to fan an encrypted
+// bundle out into the three on-tier shards (CLAUDE.md §4.2 step 4 / §4.5).
+//
+// Contract:
+//   - Encode receives the AES-GCM-sealed concatenated chunks.
+//   - It returns exactly 3 shards (RS(2,3) invariant — see CIDRegistry.sol's
+//     _SHARD_COUNT). paddedLen is the original input length the gateway
+//     needs to trim trailing padding off after Decode.
+//   - For deterministic content addressing, Encode must be a pure function
+//     of `data` — same input → same shards.
+type Encoder interface {
+	Encode(data []byte) (shards [3][]byte, paddedLen int, err error)
+}
 
 // Ingester wires together every dependency the per-bundle pipeline needs.
 type Ingester struct {
@@ -507,19 +522,19 @@ func writeManifest(manifestDir string, res *IngestResult) error {
 	name := hex.EncodeToString(res.BundleID[:]) + ".json"
 	out := filepath.Join(manifestDir, name)
 
-	view := manifestView{
+	view := ManifestView{
 		BundleID:   hex.EncodeToString(res.BundleID[:]),
 		MerkleRoot: hex.EncodeToString(res.MerkleRoot[:]),
 		NumChunks:  res.NumChunks,
 		PolicyID:   hex.EncodeToString(res.PolicyID[:]),
 		Owner:      res.Owner,
 		BundlePath: res.BundlePath,
-		Shards: []manifestShard{
+		Shards: []ManifestShard{
 			{CID: res.Shards[0].CID, Tier: res.Shards[0].Tier, TierName: "hot"},
 			{CID: res.Shards[1].CID, Tier: res.Shards[1].Tier, TierName: "warm"},
 			{CID: res.Shards[2].CID, Tier: res.Shards[2].Tier, TierName: "cold"},
 		},
-		Timings: manifestTimings{
+		Timings: ManifestTimings{
 			MerkleMs:   res.TMerkle.Milliseconds(),
 			SealMs:     res.TSeal.Milliseconds(),
 			EncodeMs:   res.TEncode.Milliseconds(),
@@ -536,28 +551,30 @@ func writeManifest(manifestDir string, res *IngestResult) error {
 	return os.WriteFile(out, b, 0o644)
 }
 
-// manifestView is the on-disk shape of the per-bundle manifest. Bytes are
+// ManifestView is the on-disk shape of the per-bundle manifest. Bytes are
 // hex-encoded for readability and so a downstream Python script (the eval
 // post-processing path) can consume the file without writing a custom
 // decoder for [N]byte arrays.
-type manifestView struct {
+type ManifestView struct {
 	BundleID   string          `json:"bundleId"`
 	MerkleRoot string          `json:"merkleRoot"`
 	NumChunks  uint32          `json:"numChunks"`
 	PolicyID   string          `json:"policyId"`
 	Owner      string          `json:"owner"`
 	BundlePath string          `json:"bundlePath"`
-	Shards     []manifestShard `json:"shards"`
-	Timings    manifestTimings `json:"timings"`
+	Shards     []ManifestShard `json:"shards"`
+	Timings    ManifestTimings `json:"timings"`
 }
 
-type manifestShard struct {
+// ManifestShard is one entry in ManifestView.Shards.
+type ManifestShard struct {
 	CID      string `json:"cid"`
 	Tier     uint8  `json:"tier"`
 	TierName string `json:"tierName"`
 }
 
-type manifestTimings struct {
+// ManifestTimings records per-stage durations in milliseconds.
+type ManifestTimings struct {
 	MerkleMs   int64 `json:"merkleMs"`
 	SealMs     int64 `json:"sealMs"`
 	EncodeMs   int64 `json:"encodeMs"`

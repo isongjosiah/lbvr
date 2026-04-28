@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/isongjosiah/lbvr-med/internal/erasure"
+	"github.com/isongjosiah/lbvr-med/internal/ingest"
 	"github.com/isongjosiah/lbvr-med/internal/merkle"
 	"github.com/isongjosiah/lbvr-med/internal/registry"
 	"github.com/isongjosiah/lbvr-med/internal/tiers"
@@ -49,14 +50,14 @@ func makeBundle(t *testing.T) (string, []byte) {
 
 // newTestIngester wires the in-memory tier clients, the Mock registry,
 // and the replicaEncoder into a ready-to-go Ingester.
-func newTestIngester(t *testing.T) (*Ingester, *inMemTier, *inMemTier, *inMemTier, *registry.Mock) {
+func newTestIngester(t *testing.T) (*ingest.Ingester, *inMemTier, *inMemTier, *inMemTier, *registry.Mock) {
 	t.Helper()
 	hot := newInMemTier("pinata-mem", tiers.TierHot)
 	warm := newInMemTier("filebase-mem", tiers.TierWarm)
 	cold := newInMemTier("arweave-mem", tiers.TierCold)
 	reg := registry.NewMock()
 
-	ing, err := NewIngester(IngesterOpts{
+	ing, err := ingest.NewIngester(ingest.IngesterOpts{
 		Hot:        hot,
 		Warm:       warm,
 		Cold:       cold,
@@ -76,7 +77,7 @@ func TestIngest_EndToEnd(t *testing.T) {
 	bundlePath, plain := makeBundle(t)
 	ing, hot, warm, cold, reg := newTestIngester(t)
 
-	res, err := ing.Ingest(context.Background(), IngestRequest{
+	res, err := ing.Ingest(context.Background(), ingest.IngestRequest{
 		Path:     bundlePath,
 		PolicyID: registry.Keccak256([]byte("lbvr://policy/test")),
 	})
@@ -179,7 +180,7 @@ func TestIngest_DryRunSkipsUploadAndRegister(t *testing.T) {
 	bundlePath, _ := makeBundle(t)
 	ing, hot, warm, cold, reg := newTestIngester(t)
 
-	res, err := ing.Ingest(context.Background(), IngestRequest{
+	res, err := ing.Ingest(context.Background(), ingest.IngestRequest{
 		Path:     bundlePath,
 		PolicyID: [32]byte{0xaa},
 		DryRun:   true,
@@ -208,7 +209,7 @@ func TestIngest_RejectsEmptyBundle(t *testing.T) {
 		t.Fatal(err)
 	}
 	ing, _, _, _, _ := newTestIngester(t)
-	_, err := ing.Ingest(context.Background(), IngestRequest{Path: p})
+	_, err := ing.Ingest(context.Background(), ingest.IngestRequest{Path: p})
 	if err == nil {
 		t.Fatal("expected error on empty bundle")
 	}
@@ -220,7 +221,7 @@ func TestIngest_TierUploadFailureBubblesUp(t *testing.T) {
 	ing, _, warm, _, reg := newTestIngester(t)
 	warm.failPut = func(_ []byte) error { return errors.New("filebase: 503") }
 
-	res, err := ing.Ingest(context.Background(), IngestRequest{Path: bundlePath})
+	res, err := ing.Ingest(context.Background(), ingest.IngestRequest{Path: bundlePath})
 	if err == nil {
 		t.Fatal("expected ingest to fail when warm tier rejects upload")
 	}
@@ -284,7 +285,7 @@ func TestIngest_ManifestEmitted(t *testing.T) {
 	warm := newInMemTier("filebase-mem", tiers.TierWarm)
 	cold := newInMemTier("arweave-mem", tiers.TierCold)
 	reg := registry.NewMock()
-	ing, err := NewIngester(IngesterOpts{
+	ing, err := ingest.NewIngester(ingest.IngesterOpts{
 		Hot:         hot,
 		Warm:        warm,
 		Cold:        cold,
@@ -298,7 +299,7 @@ func TestIngest_ManifestEmitted(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	res, err := ing.Ingest(context.Background(), IngestRequest{Path: bundlePath})
+	res, err := ing.Ingest(context.Background(), ingest.IngestRequest{Path: bundlePath})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -314,7 +315,7 @@ func TestIngest_ManifestEmitted(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	var view manifestView
+	var view ingest.ManifestView
 	if err := json.Unmarshal(body, &view); err != nil {
 		t.Fatalf("manifest JSON parse: %v", err)
 	}
@@ -389,7 +390,7 @@ func TestIngest_WithErasureEncoder_RoundTrip(t *testing.T) {
 	cold := newInMemTier("arweave-mem", tiers.TierCold)
 	reg := registry.NewMock()
 
-	ing, err := NewIngester(IngesterOpts{
+	ing, err := ingest.NewIngester(ingest.IngesterOpts{
 		Hot:        hot,
 		Warm:       warm,
 		Cold:       cold,
@@ -402,7 +403,7 @@ func TestIngest_WithErasureEncoder_RoundTrip(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	res, err := ing.Ingest(context.Background(), IngestRequest{
+	res, err := ing.Ingest(context.Background(), ingest.IngestRequest{
 		Path:     bundlePath,
 		PolicyID: registry.Keccak256([]byte("lbvr://policy/test")),
 	})
