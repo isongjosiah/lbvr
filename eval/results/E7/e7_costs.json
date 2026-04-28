@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "computed_at": "2026-04-28T02:12:31.544778Z",
+  "plaintext_gib": 430.25,
+  "rates_per_gib_per_month": {
+    "pinata": 0.2,
+    "filebase": 0.006,
+    "arweave": 0.029,
+    "s3": 0.023
+  },
+  "architectures": [
+    {
+      "label": "Pinata-only (no redundancy)",
+      "monthly_total_usd": 86.05,
+      "breakdown": [
+        {
+          "tier": "pinata",
+          "gib": 430.25,
+          "monthly_usd": 86.05
+        }
+      ]
+    },
+    {
+      "label": "S3 single-region",
+      "monthly_total_usd": 9.9,
+      "breakdown": [
+        {
+          "tier": "s3",
+          "gib": 430.25,
+          "monthly_usd": 9.9
+        }
+      ]
+    },
+    {
+      "label": "S3 3-region replication",
+      "monthly_total_usd": 29.69,
+      "breakdown": [
+        {
+          "tier": "s3",
+          "gib": 1290.75,
+          "monthly_usd": 29.69
+        }
+      ]
+    },
+    {
+      "label": "Naive 3\u00d7 hot replication (Pinata \u00d7 3)",
+      "monthly_total_usd": 258.15,
+      "breakdown": [
+        {
+          "tier": "pinata",
+          "gib": 1290.75,
+          "monthly_usd": 258.15
+        }
+      ]
+    },
+    {
+      "label": "LBVR-Med RS(2,3) (hot+warm+cold)",
+      "monthly_total_usd": 50.55,
+      "breakdown": [
+        {
+          "tier": "pinata",
+          "gib": 215.12,
+          "monthly_usd": 43.03
+        },
+        {
+          "tier": "filebase",
+          "gib": 215.12,
+          "monthly_usd": 1.29
+        },
+        {
+          "tier": "arweave",
+          "gib": 215.12,
+          "monthly_usd": 6.24
+        }
+      ]
+    }
+  ]
+}
