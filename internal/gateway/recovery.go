@@ -254,6 +254,21 @@ func Recover(
 				cancelOutstanding(scancels, got)
 				return finishSlowOrLateFast(shards, paddedLen, &stats)
 			}
+
+			// Early failure: if even with the still-outstanding shard
+			// succeeding we cannot reach 2 successes, fail immediately.
+			// Without this, a double-data-shard failure (D0+D1 both
+			// errored) would still wait the full cold-tier latency
+			// budget for P0 — measured P99 of 8s on the calibrated
+			// lognormal — before returning RecoveryFailure. This is
+			// what makes the §8 E9-multi "detection time" measurement
+			// useful: detection becomes max(error_time_D0, error_time_D1)
+			// rather than max(_, _, cold_tier_latency).
+			if okCount(gotOK)+(maxResults-received) < 2 {
+				cancelOutstanding(scancels, got)
+				stats.Mode = RecoveryFailure
+				return nil, stats, errors.New("gateway: insufficient shards (early detection)")
+			}
 		}
 	}
 

@@ -1,0 +1,3797 @@
+{
+  "schema_version": 1,
+  "run_id": "20260428-022109-b2946d1",
+  "started_at": "2026-04-28T02:21:09.16551819Z",
+  "completed_at": "2026-04-28T02:30:58.415892099Z",
+  "config": {
+    "num_bundles": 50,
+    "reps_per_mode": 5,
+    "seed": 42,
+    "slo_budget_ms": 2000,
+    "modes": [
+      "D0D1_lost",
+      "D0P0_lost",
+      "D1P0_lost"
+    ],
+    "tier_distributions": {
+      "cold": {
+        "family": "lognormal",
+        "mu": 20.0300718,
+        "sigma": 1.1919608,
+        "p50_ms": 500,
+        "p99_ms": 8000,
+        "calibration": "Irys/Arweave stand-in; chain-settled reads spike into the tail"
+      },
+      "hot": {
+        "family": "lognormal",
+        "mu": 18.1974681,
+        "sigma": 0.6919175,
+        "p50_ms": 80,
+        "p99_ms": 400,
+        "calibration": "Pinata dedicated-gateway stand-in; Trautwein INFOCOM 2024 + Pinata SLA range"
+      },
+      "warm": {
+        "family": "lognormal",
+        "mu": 18.6030495,
+        "sigma": 0.6919175,
+        "p50_ms": 120,
+        "p99_ms": 600,
+        "calibration": "Filebase S3 stand-in; AWS region-local typical"
+      }
+    },
+    "sampling_policy": "uniform-random over eval/results/synthea-100000/sizes.csv (proportional to measured 100K distribution)",
+    "cold_tier_mechanism": "in-process simTier (lognormal); Toxiproxy + live tiers deferred per docs/eval-protocol.md §3"
+  },
+  "samples": [
+    {
+      "bundle_idx": 0,
+      "filename": "Elana101_Kassulke119_2695d68f-df9d-f8b7-a6de-700e2cbc294a.json",
+      "size_bytes": 1741472,
+      "padded_len": 1744468,
+      "shard_size": 872234,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 89461637,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 90597048,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 262646395,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 181287814,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 152928651,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 299186361,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 129493095,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 538698876,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 290669187,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 410392919,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 978324572,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1695800642,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 205112525,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 390154158,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 409225774,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 1,
+      "filename": "Spencer878_Schuster709_e6186c22-f4e4-b6d0-b7d5-8aff061c586b.json",
+      "size_bytes": 7524974,
+      "padded_len": 7537854,
+      "shard_size": 3768927,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 412119306,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 62644914,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 138442278,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 125610724,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 121259879,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 640286660,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 215729505,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2380639908,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1804674425,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 66681740,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 184999958,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1167343429,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 841355931,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 10876973398,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 9020917597,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 2,
+      "filename": "Broderick767_Borer986_e461b8c0-3a9c-fa80-13cf-c9e3409186b0.json",
+      "size_bytes": 1021508,
+      "padded_len": 1023272,
+      "shard_size": 511636,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 66690317,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 71470182,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 94537969,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 104275084,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 70872580,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 300960894,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1701005569,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2864684829,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 310098924,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 190202942,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 881436123,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 537448660,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1370048729,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1584419946,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 690210480,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 3,
+      "filename": "Laure395_Wilda367_Boehm581_b4f74363-01a5-ef4d-a4c6-a440d2649d47.json",
+      "size_bytes": 1280259,
+      "padded_len": 1282471,
+      "shard_size": 641236,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 75609688,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 172187797,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 156599080,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 83683491,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 99516344,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 1298544862,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 344739514,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 277384474,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 216469258,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 210387092,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 624354664,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2584463357,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2999029522,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 912379950,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 219859378,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 4,
+      "filename": "Frances376_Zboncak558_0966cd41-a553-cbef-6015-8c0e1474f2e4.json",
+      "size_bytes": 1388300,
+      "padded_len": 1390680,
+      "shard_size": 695340,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 250920121,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 218009671,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 118052704,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 232100410,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 32257019,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 118630506,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1357834396,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 507955383,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 289688574,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1525503594,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 106505315,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 239259257,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 267146388,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 353802831,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 240396910,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 5,
+      "filename": "Cecille691_Fritsch593_d49aa753-ffcf-37b0-5255-8bff64a33c99.json",
+      "size_bytes": 544937,
+      "padded_len": 545889,
+      "shard_size": 272945,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 315527021,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 101725230,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 318371945,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 579204274,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 189778214,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 165028223,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2021984910,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 327470199,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 141252849,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 336447314,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 1033580766,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 199386397,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 107712120,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1071369171,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 852095150,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 6,
+      "filename": "Andre610_Fisher429_d3c28613-0ce4-b089-9f8d-f4cb059965f4.json",
+      "size_bytes": 790608,
+      "padded_len": 791980,
+      "shard_size": 395990,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 135976071,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 270457497,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 729853856,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 118957771,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 348997255,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 520021411,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 148981378,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 123096895,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 4193894603,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1204621206,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 710358588,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 535549481,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 459131442,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 340971730,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 483770589,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 7,
+      "filename": "Emilio417_Aguirre875_d4b40d86-1e0a-9a93-649d-eeb60e4da31f.json",
+      "size_bytes": 5012803,
+      "padded_len": 5021371,
+      "shard_size": 2510686,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 93802077,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 325221597,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 538930406,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 183014204,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 79920176,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 972316779,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1111767731,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 104625493,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 106608750,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 499195635,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 845549466,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 267280827,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 703461409,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 143832218,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 911953730,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 8,
+      "filename": "Vada440_Bogisich202_6a15842b-1b2e-a495-505b-687deab620bb.json",
+      "size_bytes": 2131069,
+      "padded_len": 2134737,
+      "shard_size": 1067369,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 119813570,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 253648878,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 79983112,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 179896262,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 177008012,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 73090661,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 652746570,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 207918901,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 620682179,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2967366744,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 1336594904,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 929726969,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 250015166,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 4085822751,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 504729198,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 9,
+      "filename": "Claude750_Pacocha935_0841d9ce-8300-0dc5-a92a-fba022cd5074.json",
+      "size_bytes": 4189873,
+      "padded_len": 4197041,
+      "shard_size": 2098521,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 133266022,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 431650210,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 165311210,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 241362029,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 79458186,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 709711704,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 496162461,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 903131036,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 198620312,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 177779326,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 905824099,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 651527531,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2251768712,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1302657796,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1793924872,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 10,
+      "filename": "Travis723_Herzog843_b4cfcb89-e7df-b755-7dca-2c0d6c3e32f2.json",
+      "size_bytes": 1869050,
+      "padded_len": 1872270,
+      "shard_size": 936135,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 77303410,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 128158865,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 409748270,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 126229375,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 140703946,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 57746794,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 570170507,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 719597259,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 551851383,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 706950547,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 113200329,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 915124696,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 172420127,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 404483651,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1715660822,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 11,
+      "filename": "Leonor133_Scottie437_Cummings51_eac085c2-3446-620f-cc8d-f663beb86585.json",
+      "size_bytes": 5036055,
+      "padded_len": 5044679,
+      "shard_size": 2522340,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 55977494,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 130372241,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 408426122,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 181723345,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 141897448,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 260916015,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 347370527,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2074439234,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1803729044,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 433730511,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 186242249,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1899443725,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 738285376,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 76735116,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 832367096,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 12,
+      "filename": "Miguel_Ángel46_Adame662_2c85e7a7-8f21-bc6a-29d4-97ca693944de.json",
+      "size_bytes": 1246162,
+      "padded_len": 1248318,
+      "shard_size": 624159,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 46838443,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 114899886,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 78273759,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 79260971,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 146194941,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 796715499,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 495712900,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 10305286893,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 725383311,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 171011044,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 266186926,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 40187708,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 827778397,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 723733796,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2609477430,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 13,
+      "filename": "Juan88_Piña753_c36f22ae-efe9-f3cb-b08b-23afcc6919c2.json",
+      "size_bytes": 928388,
+      "padded_len": 929984,
+      "shard_size": 464992,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 34423862,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 149110079,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 251832130,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 134056479,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 101490063,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 1738841589,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1044609607,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 193503939,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 504964132,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 238654481,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 292060007,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 244227135,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1230633006,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 509842280,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 843018071,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 14,
+      "filename": "Flo729_Boehm581_03035a01-e96c-3e46-3a43-d5d2bd638a97.json",
+      "size_bytes": 2655984,
+      "padded_len": 2660548,
+      "shard_size": 1330274,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 273185544,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 262804966,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 128835294,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 193612942,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 106627157,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 99697217,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 3623511797,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1151707541,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 85029953,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1160649593,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 116301272,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1751878623,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 490678093,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 191655099,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 165685201,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 15,
+      "filename": "Serafina151_Thresa531_Little434_e090dac7-40d8-3372-56b9-209ae4ac25f0.json",
+      "size_bytes": 1898480,
+      "padded_len": 1901728,
+      "shard_size": 950864,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 100252611,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 309641465,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 141403772,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 138957955,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 117517503,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 372853824,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 226913842,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 795603622,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1086794767,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 724722701,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 299064907,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1823673370,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 789250790,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 921509491,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 178677748,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 16,
+      "filename": "Lynn917_Crist667_c0481452-0593-4a59-3af8-e6e61141549d.json",
+      "size_bytes": 1352319,
+      "padded_len": 1354643,
+      "shard_size": 677322,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 289711126,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 202542430,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 80227270,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 327556952,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 91701941,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 86750492,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 237852381,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 191543086,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 754357410,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 6157290349,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 619548352,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 8446507169,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 351680124,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 906932666,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 581609746,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 17,
+      "filename": "Nicholas495_Lueilwitz711_96e477a8-0929-495d-1bb7-5993df374790.json",
+      "size_bytes": 22402837,
+      "padded_len": 22441141,
+      "shard_size": 11220571,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 98375169,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 66521161,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 173472115,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 61390266,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 55599906,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 226477431,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 182139406,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 912953955,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1186506177,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 233602904,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 247743832,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2449487257,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 397623650,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 191292144,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 626695166,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 18,
+      "filename": "Danilo179_Rosenbaum794_c07f0799-0c3f-789b-0905-7cf802186b5c.json",
+      "size_bytes": 3168961,
+      "padded_len": 3174393,
+      "shard_size": 1587197,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 128509354,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 317853473,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 140508030,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 133142051,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 130505551,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 166212188,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 280639099,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 90358508,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1808439865,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 725677057,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 346073525,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 652824450,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 636224949,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 627264193,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1570303534,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 19,
+      "filename": "Harriet337_Emmerich580_e7d71f7d-8158-329f-9686-a49f8c384d74.json",
+      "size_bytes": 1469070,
+      "padded_len": 1471590,
+      "shard_size": 735795,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 227316907,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 258729041,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 122546081,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 254843166,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 177477870,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 389461093,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 622040327,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2837841660,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 580376749,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1421179874,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 655560620,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2401516859,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1458776099,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 808931096,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1201788940,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 20,
+      "filename": "Daniella68_Kunde533_5dddeb09-6d3d-7324-c2f1-8e776c54de43.json",
+      "size_bytes": 3123506,
+      "padded_len": 3128854,
+      "shard_size": 1564427,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 91018126,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 178253051,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 325486052,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 116233926,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 212270191,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 720417379,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1070323750,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 790658426,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1717320682,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 962719631,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 173371952,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 230066008,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 129277549,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2192184990,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1038590258,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 21,
+      "filename": "Ruth999_Lueilwitz711_bd3b6c2a-f8bf-58b6-e63a-dec63d7f92e4.json",
+      "size_bytes": 2485140,
+      "padded_len": 2489396,
+      "shard_size": 1244698,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 407589538,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 101854353,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 183089278,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 121466426,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 172362374,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 1071183290,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 406629637,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 524009443,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 278054881,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 173557427,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 78521729,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 413061018,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 665029612,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 451178022,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 318365186,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 22,
+      "filename": "Seth414_Lueilwitz711_b9ac7f77-ddd2-7ee7-4f09-3be4b16c92fe.json",
+      "size_bytes": 3376707,
+      "padded_len": 3382503,
+      "shard_size": 1691252,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 137092383,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 225970776,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 113219895,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 142867976,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 111749976,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 828675598,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 527778023,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2375069234,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 143886299,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 4259136808,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 982444998,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 257536052,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 173945076,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 377565719,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1805829646,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 23,
+      "filename": "Clarence5_Effertz744_57b491c3-f557-ed14-c5f7-32e4096edc7a.json",
+      "size_bytes": 1722555,
+      "padded_len": 1725523,
+      "shard_size": 862762,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 131500419,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 188632019,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 201665152,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 245925171,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 310676282,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 592751274,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 428948032,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 822174898,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1345329682,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 273341966,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 498666632,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 254263823,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 352086912,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 182218349,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1780580377,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 24,
+      "filename": "Jonah176_Hilpert278_f5ddae45-559d-016b-9eb6-70c269929fb4.json",
+      "size_bytes": 1561402,
+      "padded_len": 1564090,
+      "shard_size": 782045,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 217177432,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 143098721,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 290411740,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 176239901,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 157136574,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 126754840,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 219751702,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2773994771,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1871830751,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1287894043,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 2531857294,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 531406859,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 3582826614,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 341405448,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 699661670,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 25,
+      "filename": "Cecelia952_Ruecker817_c96e6b99-0297-91d7-65ad-2c3a3d84ef7b.json",
+      "size_bytes": 1558823,
+      "padded_len": 1561511,
+      "shard_size": 780756,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 159356969,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 92076373,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 134666836,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 290042232,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 367269246,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 2426623078,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2093324758,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 182415227,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 437965185,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 248660482,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 208669759,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2590153851,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 340134998,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1119511173,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 404114107,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 26,
+      "filename": "Roderick835_Corwin846_19af6771-5d4a-eb33-73a5-26fabf9b2417.json",
+      "size_bytes": 310831,
+      "padded_len": 311363,
+      "shard_size": 155682,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 135766545,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 303175741,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 230605348,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 377979805,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 71874329,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 375666821,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 665383512,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 278556105,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 494479045,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 113418147,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 431411217,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 143614160,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 890066994,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 354830938,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 437800242,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 27,
+      "filename": "Pierre431_Huel628_e7ea3662-0686-ae24-d1c8-779c631218ed.json",
+      "size_bytes": 5973907,
+      "padded_len": 5984127,
+      "shard_size": 2992064,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 131868777,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 121950158,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 123897685,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 174348164,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 83128947,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 77029204,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 135564144,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1194100905,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 6310328549,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1137251195,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 1375764765,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1262243449,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1206337407,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1198819220,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 4917040359,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 28,
+      "filename": "Alejandra902_Merilyn246_Collier206_c82c2a5b-2e24-4696-6e3c-e5793facc1fd.json",
+      "size_bytes": 37533246,
+      "padded_len": 37597394,
+      "shard_size": 18798697,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 260340592,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 111766826,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 95186586,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 95076818,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 219935145,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 797592808,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 209855022,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 9231043322,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 221495538,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1139014632,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 543122273,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 326519749,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 163106896,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 891596692,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 864945785,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 29,
+      "filename": "Gino587_Hoppe518_f674f294-cbad-90c9-a1d9-87516c0f9faf.json",
+      "size_bytes": 4853836,
+      "padded_len": 4862152,
+      "shard_size": 2431076,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 281254226,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 61361375,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 121270185,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 254533814,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 89768688,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 806384062,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1635951072,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1773587318,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 846238234,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 74683435,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 459927187,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1711726143,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 301937114,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1546782123,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 7530507096,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 30,
+      "filename": "Albertina684_Carolina179_Fay398_631ca84f-1bb7-6996-8738-e71d3ef41c4d.json",
+      "size_bytes": 16316829,
+      "padded_len": 16344717,
+      "shard_size": 8172359,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 138464277,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 103509797,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 391869482,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 197146100,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 74238832,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 2203883277,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 307816161,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 139305278,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 282461544,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 397194169,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 486618606,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 186207196,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 371078471,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2965492704,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 555925683,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 31,
+      "filename": "Viki353_Windler79_23ffc46d-99d2-cbe5-f111-c58e5d176788.json",
+      "size_bytes": 1803236,
+      "padded_len": 1806344,
+      "shard_size": 903172,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 87367926,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 185509821,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 129032160,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 53943513,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 135502520,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 367382455,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 158086503,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 3351640610,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2717871055,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 207681432,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 2009095446,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 656165723,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1380613460,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 110288459,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 792188767,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 32,
+      "filename": "Nikita578_Kassulke119_95a19354-c7da-ca2e-1a33-1f51cd2db7df.json",
+      "size_bytes": 1394484,
+      "padded_len": 1396892,
+      "shard_size": 698446,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 61303472,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 77869540,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 136421448,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 167435351,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 121981453,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 99276380,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1049996719,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 924653254,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 834515455,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 114957186,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 184047612,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 4671925908,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 403027295,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 337866828,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2520591420,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 33,
+      "filename": "Susy776_Grimes165_88f6af99-2b8b-b251-dff3-aa8772d6043a.json",
+      "size_bytes": 888783,
+      "padded_len": 890323,
+      "shard_size": 445162,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 51203621,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 136001937,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 44793670,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 161972048,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 67036670,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 2203714806,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1653962554,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1153154427,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 3854449255,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1018125560,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 541681918,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 664553550,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1529908730,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 459511681,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 144250889,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 34,
+      "filename": "Cherise743_Cara845_Simonis280_3fbe25df-1b22-8e89-62c4-077b6f6fed7e.json",
+      "size_bytes": 1719762,
+      "padded_len": 1722702,
+      "shard_size": 861351,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 132837352,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 55619733,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 68136829,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 233660368,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 194539626,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 480904985,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 285931639,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1565366265,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 244820109,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2852721392,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 660287419,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 97432538,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 187038555,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 776529163,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 138375066,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 35,
+      "filename": "Michel472_Kris249_d8c78aee-e317-7b26-b999-800d5459a740.json",
+      "size_bytes": 1043209,
+      "padded_len": 1045001,
+      "shard_size": 522501,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 51882396,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 124461779,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 78043855,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 65145480,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 142281496,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 168999375,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 545997566,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 358094659,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1183104193,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 396250907,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 470515289,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 3283622601,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 759119005,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1800587828,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 102559966,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 36,
+      "filename": "Gregorio366_Mayert710_09453d14-7413-3a15-c4c7-feab5173a23d.json",
+      "size_bytes": 1082973,
+      "padded_len": 1084849,
+      "shard_size": 542425,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 112898246,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 105266692,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 111132614,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 323435895,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 233303597,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 174710912,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1986189386,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 276506379,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 725773980,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 811133516,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 1362170563,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 210361869,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1250622325,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2657264608,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1223985647,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 37,
+      "filename": "Trent525_Hilll811_17be080b-c922-c029-156b-cadd15c0d64f.json",
+      "size_bytes": 1118622,
+      "padded_len": 1120554,
+      "shard_size": 560277,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 129386030,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 145723449,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 182973304,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 315510667,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 169457854,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 382597839,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 74334552,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 218962625,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1129238895,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 3340776209,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 1097825942,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1038888946,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 292958369,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 409770150,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1099963993,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 38,
+      "filename": "Danny396_Botsford977_be394385-9e54-b448-001c-0f461ac7c000.json",
+      "size_bytes": 1709502,
+      "padded_len": 1712442,
+      "shard_size": 856221,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 88816145,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 81625804,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 143329851,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 64145768,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 53709520,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 2338218160,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2322709342,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 350626055,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 495190176,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 607825426,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 143459530,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 378420070,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 183084033,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 942807759,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2553347306,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 39,
+      "filename": "Hildred696_Batz141_9b846903-4c6a-3f8b-c6a7-af901171210d.json",
+      "size_bytes": 1405741,
+      "padded_len": 1408149,
+      "shard_size": 704075,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 142875824,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 233790765,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 404827896,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 230315581,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 184376450,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 829650784,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 3320222690,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1371324529,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1834847350,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1028081311,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 121772173,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 830087018,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 369630438,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 257397872,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1558608191,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 40,
+      "filename": "Lance203_Bartoletti50_763839ac-c4f9-618a-0ac3-043d0d9348f5.json",
+      "size_bytes": 27251851,
+      "padded_len": 27298443,
+      "shard_size": 13649222,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 98730629,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 180867464,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 291817239,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 222728305,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 71673631,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 679955307,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1321966371,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 73386378,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 942495854,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 886757828,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 755799365,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 7221626505,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 208075136,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1744078423,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 798233260,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 41,
+      "filename": "Maryrose226_Sage164_Trantow673_aaac98f5-dd81-342e-57e7-3e2f8f621366.json",
+      "size_bytes": 2134619,
+      "padded_len": 2138287,
+      "shard_size": 1069144,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 75597830,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 58596120,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 300953950,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 107659310,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 64990530,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 195617180,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 293373190,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2612193434,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 313804408,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 668142216,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 439873243,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 144499246,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1898064261,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1465638279,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 172665603,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 42,
+      "filename": "Hwa978_Feil794_f75f0070-2d28-0bc8-898c-86ba160f47c2.json",
+      "size_bytes": 3081851,
+      "padded_len": 3087143,
+      "shard_size": 1543572,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 97486443,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 136872955,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 183390532,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 130272136,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 323988644,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 359151253,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 686008266,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 537632664,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 207430210,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 293942245,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 58316664946,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 362045206,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 469005325,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1589156698,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 163932880,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 43,
+      "filename": "Marsha122_Karl184_Hayes766_cedec471-0830-806d-0b1e-b303bc460cf2.json",
+      "size_bytes": 3042636,
+      "padded_len": 3047844,
+      "shard_size": 1523922,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 322103175,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 137060911,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 109262260,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 404446144,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 201347699,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 189355061,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 388169781,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 150430980,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 680710311,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 260217392,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 594623610,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 3533825237,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 465126906,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 113852363,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 114364238,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 44,
+      "filename": "Eric487_Mayert710_087e3c84-6d47-527b-18ca-540d8bfaa4e2.json",
+      "size_bytes": 2002480,
+      "padded_len": 2005924,
+      "shard_size": 1002962,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 177764057,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 50789518,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 260455680,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 214513228,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 381729322,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 744812441,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 679229626,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 807076622,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 63555808,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 328048808,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 302876175,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 577575895,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 795810809,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 983389960,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 210052288,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 45,
+      "filename": "Matt836_Zieme486_52c0be88-3baf-154a-8f04-3799971159fc.json",
+      "size_bytes": 3361609,
+      "padded_len": 3367377,
+      "shard_size": 1683689,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 115666408,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 885918774,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 277276407,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 113861022,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 308844717,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 441681799,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 654271143,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 654454987,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 4304008516,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 732452496,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 3312622381,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 171434687,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 4502401829,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 492678181,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 2158049315,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 46,
+      "filename": "Norberto865_Keebler762_b080489e-1673-05a0-0f9c-9291005d866b.json",
+      "size_bytes": 2290692,
+      "padded_len": 2294612,
+      "shard_size": 1147306,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 285745378,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 308904741,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 112448593,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 87046629,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 94016440,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 1582222960,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 668372092,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 112045739,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 18404714371,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 157547444,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 1621719852,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1300007333,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 126968915,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 708372333,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 876856403,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 47,
+      "filename": "Sofia418_Tirado305_c05468fa-2523-d580-0346-a03f1c824a94.json",
+      "size_bytes": 2077301,
+      "padded_len": 2080857,
+      "shard_size": 1040429,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 129395974,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 172176452,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 163353473,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 120150267,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 113159007,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 588435839,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 669631651,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 499440605,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1221555024,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 110435025,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 2979165162,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 531999840,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1934651473,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 469982259,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 916532823,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 48,
+      "filename": "Sparkle906_Hudson301_f4228c37-4811-cff4-0720-7a2577e2b39c.json",
+      "size_bytes": 2006711,
+      "padded_len": 2010155,
+      "shard_size": 1005078,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 125296615,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 135125420,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 145051353,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 162336074,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 79582862,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 752457887,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 425051244,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 322719330,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 339782998,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1545336677,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 307223783,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1638713719,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1446699574,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 346516480,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 914523068,
+            "mode": "failure"
+          }
+        ]
+      }
+    },
+    {
+      "bundle_idx": 49,
+      "filename": "Dan465_Bernier607_7006f663-7bb6-fe33-f370-80454d20487d.json",
+      "size_bytes": 1508218,
+      "padded_len": 1510822,
+      "shard_size": 755411,
+      "mode_runs": {
+        "D0D1_lost": [
+          {
+            "latency_ns": 106664927,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 133857873,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 184421333,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 64598402,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 192506040,
+            "mode": "failure"
+          }
+        ],
+        "D0P0_lost": [
+          {
+            "latency_ns": 209771733,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 1094640543,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 382636366,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 3593259899,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 598317683,
+            "mode": "failure"
+          }
+        ],
+        "D1P0_lost": [
+          {
+            "latency_ns": 1511269863,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 363928644,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 579061777,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 271434594,
+            "mode": "failure"
+          },
+          {
+            "latency_ns": 241611100,
+            "mode": "failure"
+          }
+        ]
+      }
+    }
+  ]
+}

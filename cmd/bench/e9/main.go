@@ -54,8 +54,14 @@ import (
 	"github.com/isongjosiah/lbvr-med/internal/tiers"
 )
 
-// modes is the canonical list, in the order they appear in the JSON.
-var modes = []string{"baseline", "D0_lost", "D1_lost", "P0_lost"}
+// modesDefault is the canonical single-failure list (E9 / §8 Fig 10).
+// Extended modes for double-failure (E9-multi / §8 Fig 10b) are listed
+// after; -modes selects which subset to run. `modes` itself is the
+// active selection for this run (mutated in main after flag parse).
+var modesDefault = []string{"baseline", "D0_lost", "D1_lost", "P0_lost"}
+var modesMulti = []string{"D0D1_lost", "D0P0_lost", "D1P0_lost"}
+var modesAll = append(append([]string{}, modesDefault...), modesMulti...)
+var modes = modesDefault
 
 // Per-bundle setup cap. erasure.MaxInputBytes is 1 GiB; defensive cap
 // to avoid accidental allocator blowup if a synthesised bundle ever
@@ -124,8 +130,20 @@ func main() {
 		outDirFlag   = flag.String("out-dir", "eval/results/E9", "output directory")
 		sloMSFlag    = flag.Int("slo-ms", 2000, "fast-path SLO budget in milliseconds")
 		sizesCSVFlag = flag.String("sizes-csv", "eval/results/synthea-100000/sizes.csv", "path to validated size distribution")
+		modesFlag    = flag.String("modes", "default", "mode set: 'default' (single-failure E9), 'multi' (double-failure E9-multi), 'all', or comma-separated mode names")
 	)
 	flag.Parse()
+
+	switch *modesFlag {
+	case "default", "":
+		modes = modesDefault
+	case "multi":
+		modes = modesMulti
+	case "all":
+		modes = modesAll
+	default:
+		modes = strings.Split(*modesFlag, ",")
+	}
 
 	if err := run(*nFlag, *repsFlag, *seedFlag, *outDirFlag, *sloMSFlag, *sizesCSVFlag); err != nil {
 		log.Fatalf("bench-E9: %v", err)
@@ -305,6 +323,8 @@ func run(nBundles, reps int, seed int64, outDir string, sloMS int, sizesCSV stri
 }
 
 // applyMode flips the right simTier into Drop() for the named failure mode.
+// Double-failure modes (E9-multi) drop two tiers; the recovery state machine
+// is expected to RecoveryFailure as soon as it can prove insufficiency.
 func applyMode(mode string, sims [3]*simTier) {
 	switch mode {
 	case "baseline":
@@ -314,6 +334,15 @@ func applyMode(mode string, sims [3]*simTier) {
 	case "D1_lost":
 		sims[1].Drop()
 	case "P0_lost":
+		sims[2].Drop()
+	case "D0D1_lost":
+		sims[0].Drop()
+		sims[1].Drop()
+	case "D0P0_lost":
+		sims[0].Drop()
+		sims[2].Drop()
+	case "D1P0_lost":
+		sims[1].Drop()
 		sims[2].Drop()
 	}
 }
