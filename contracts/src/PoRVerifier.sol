@@ -221,8 +221,8 @@ contract PoRVerifier is AccessControlDefaultAdminRules {
     /// @dev    Reverts on missing/expired challenge, double-response, empty
     ///         chunkHash / blsSig, or Merkle proof that does not reconstruct
     ///         the registry's `merkleRoot` for the bundle. BLS verification is
-    ///         off-chain (see contract-level @dev): the signature is stored
-    ///         and emitted, not validated here.
+    ///         off-chain (see the contract-level dev block above); the
+    ///         signature is stored and emitted, not validated here.
     /// @param  totalChunks Required because internal/merkle's odd-width
     ///         duplication needs the tree width to recover the per-level
     ///         "duplicated tail" semantics; the responder reads it from the

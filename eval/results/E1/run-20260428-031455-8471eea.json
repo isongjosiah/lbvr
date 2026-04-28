@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "run_id": "20260428-031455-8471eea",
+  "started_at": "2026-04-28T03:14:55.060118594Z",
+  "completed_at": "2026-04-28T03:41:02.8018498Z",
+  "config": {
+    "concurrency": 8,
+    "seed": 42,
+    "scales_planned": [
+      1000,
+      10000,
+      100000
+    ],
+    "scales_run": [
+      1000,
+      10000
+    ],
+    "scales_projected": [
+      100000
+    ],
+    "tier_distributions": {
+      "cold": {
+        "family": "lognormal",
+        "mu": 20.0300718,
+        "sigma": 1.1919608,
+        "p50_ms": 500,
+        "p99_ms": 8000,
+        "calibration": "Irys/Arweave stand-in; chain-settled writes spike into the tail"
+      },
+      "hot": {
+        "family": "lognormal",
+        "mu": 18.1974681,
+        "sigma": 0.6919175,
+        "p50_ms": 80,
+        "p99_ms": 400,
+        "calibration": "Pinata dedicated-gateway stand-in; Trautwein INFOCOM 2024 + Pinata SLA range"
+      },
+      "warm": {
+        "family": "lognormal",
+        "mu": 18.6030495,
+        "sigma": 0.6919175,
+        "p50_ms": 120,
+        "p99_ms": 600,
+        "calibration": "Filebase S3 stand-in; AWS region-local typical"
+      }
+    },
+    "sampling_policy": "first corpus_size rows of seeded shuffle over eval/results/synthea-100000/sizes.csv (proportional to measured 100K distribution)",
+    "cold_tier_mechanism": "in-process simTier (lognormal); identical calibration to E9; live-tier swap deferred per docs/eval-protocol.md §3",
+    "plaintext_policy": "math/rand seeded from -seed XOR domain-tag 0xE1; entropy-source quality is irrelevant for storage-fabric throughput"
+  },
+  "scales": [
+    {
+      "corpus_size": 1000,
+      "n_bundles": 1000,
+      "total_bytes": 3833849950,
+      "wall_seconds": 139.617768576,
+      "throughput_mbps": 26.187528045759688,
+      "throughput_bundles_per_min": 429.74472813852054,
+      "stage_p50_ms": {
+        "merkle": 10.052581,
+        "seal": 1.728789,
+        "encode": 1.26508,
+        "upload": 553.767222,
+        "register": 0.003916,
+        "total": 578.049789
+      },
+      "stage_p99_ms": {
+        "merkle": 174.171932,
+        "seal": 40.454094,
+        "encode": 40.839394,
+        "upload": 8439.335352,
+        "register": 0.016663,
+        "total": 8444.119873
+      },
+      "projected": false
+    },
+    {
+      "corpus_size": 10000,
+      "n_bundles": 10000,
+      "total_bytes": 40428182970,
+      "wall_seconds": 1358.627643544,
+      "throughput_mbps": 28.378135790678773,
+      "throughput_bundles_per_min": 441.6221051081305,
+      "stage_p50_ms": {
+        "merkle": 18.472764,
+        "seal": 1.702847,
+        "encode": 1.551317,
+        "upload": 527.712832,
+        "register": 0.003918,
+        "total": 574.907071
+      },
+      "stage_p99_ms": {
+        "merkle": 272.660988,
+        "seal": 42.253005,
+        "encode": 45.707617,
+        "upload": 7471.802775,
+        "register": 0.016547,
+        "total": 7597.227413
+      },
+      "projected": false
+    },
+    {
+      "corpus_size": 100000,
+      "n_bundles": 100000,
+      "total_bytes": 404281829700,
+      "wall_seconds": 13586.276435439999,
+      "throughput_mbps": 28.378135790678773,
+      "throughput_bundles_per_min": 441.6221051081305,
+      "stage_p50_ms": {
+        "merkle": 18.472764,
+        "seal": 1.702847,
+        "encode": 1.551317,
+        "upload": 527.712832,
+        "register": 0.003918,
+        "total": 574.907071
+      },
+      "stage_p99_ms": {
+        "merkle": 272.660988,
+        "seal": 42.253005,
+        "encode": 45.707617,
+        "upload": 7471.802775,
+        "register": 0.016547,
+        "total": 7597.227413
+      },
+      "projected": true,
+      "projected_from_scale": 10000
+    }
+  ]
+}

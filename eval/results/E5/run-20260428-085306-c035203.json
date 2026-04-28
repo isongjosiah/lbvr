@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "run_id": "20260428-085306-c035203",
+  "started_at": "2026-04-28T08:53:06.458561938Z",
+  "completed_at": "2026-04-28T08:53:13.390283786Z",
+  "config": {
+    "reps_per_depth": 1000,
+    "seed": 42,
+    "forge_evm_version": "shanghai",
+    "forge_match_test": "",
+    "gas_contract": "PoRVerifierGas",
+    "gas_functions_list": "post,respond,verdict"
+  },
+  "rows": [
+    {
+      "depth": 3,
+      "num_chunks": 8,
+      "bundle_bytes": 131072,
+      "build_tree_ns": 335125,
+      "prove_time_ns": {
+        "p50": 636237,
+        "p95": 720344,
+        "p99": 1054490,
+        "min": 617655,
+        "max": 2538318
+      },
+      "merkle_proof_ns": {
+        "p50": 109,
+        "p95": 326,
+        "p99": 761,
+        "min": 0,
+        "max": 5216
+      },
+      "sign_ns": {
+        "p50": 595704,
+        "p95": 675356,
+        "p99": 992660,
+        "min": 578644,
+        "max": 1387441
+      },
+      "gas_post_challenge": 122215,
+      "gas_respond_to_challenge": 290972,
+      "gas_record_verdict": 74940
+    },
+    {
+      "depth": 5,
+      "num_chunks": 32,
+      "bundle_bytes": 524288,
+      "build_tree_ns": 1317135,
+      "prove_time_ns": {
+        "p50": 645799,
+        "p95": 802603,
+        "p99": 1099043,
+        "min": 611900,
+        "max": 1852639
+      },
+      "merkle_proof_ns": {
+        "p50": 320,
+        "p95": 870,
+        "p99": 1630,
+        "min": 0,
+        "max": 30209
+      },
+      "sign_ns": {
+        "p50": 602442,
+        "p95": 740626,
+        "p99": 1080244,
+        "min": 571841,
+        "max": 1298335
+      },
+      "gas_post_challenge": 122218,
+      "gas_respond_to_challenge": 337645,
+      "gas_record_verdict": 74944
+    },
+    {
+      "depth": 7,
+      "num_chunks": 128,
+      "bundle_bytes": 2097152,
+      "build_tree_ns": 5265567,
+      "prove_time_ns": {
+        "p50": 626535,
+        "p95": 700566,
+        "p99": 1030872,
+        "min": 608268,
+        "max": 1151158
+      },
+      "merkle_proof_ns": {
+        "p50": 214,
+        "p95": 535,
+        "p99": 855,
+        "min": 106,
+        "max": 13887
+      },
+      "sign_ns": {
+        "p50": 586796,
+        "p95": 664458,
+        "p99": 999252,
+        "min": 570344,
+        "max": 1125413
+      },
+      "gas_post_challenge": 122218,
+      "gas_respond_to_challenge": 384383,
+      "gas_record_verdict": 74942
+    },
+    {
+      "depth": 9,
+      "num_chunks": 512,
+      "bundle_bytes": 8388608,
+      "build_tree_ns": 20910466,
+      "prove_time_ns": {
+        "p50": 628351,
+        "p95": 698643,
+        "p99": 979382,
+        "min": 609657,
+        "max": 1200084
+      },
+      "merkle_proof_ns": {
+        "p50": 320,
+        "p95": 748,
+        "p99": 1602,
+        "min": 106,
+        "max": 8333
+      },
+      "sign_ns": {
+        "p50": 588932,
+        "p95": 651960,
+        "p99": 915286,
+        "min": 572481,
+        "max": 1216429
+      },
+      "gas_post_challenge": 122218,
+      "gas_respond_to_challenge": 431412,
+      "gas_record_verdict": 74924
+    },
+    {
+      "depth": 11,
+      "num_chunks": 2048,
+      "bundle_bytes": 33554432,
+      "build_tree_ns": 83970141,
+      "prove_time_ns": {
+        "p50": 630060,
+        "p95": 689776,
+        "p99": 825873,
+        "min": 609977,
+        "max": 1047750
+      },
+      "merkle_proof_ns": {
+        "p50": 427,
+        "p95": 1175,
+        "p99": 2991,
+        "min": 107,
+        "max": 8652
+      },
+      "sign_ns": {
+        "p50": 592137,
+        "p95": 653669,
+        "p99": 770537,
+        "min": 571306,
+        "max": 1636683
+      },
+      "gas_post_challenge": 122218,
+      "gas_respond_to_challenge": 479695,
+      "gas_record_verdict": 74924
+    },
+    {
+      "depth": 13,
+      "num_chunks": 8192,
+      "bundle_bytes": 134217728,
+      "build_tree_ns": 334795744,
+      "prove_time_ns": {
+        "p50": 629847,
+        "p95": 699283,
+        "p99": 871274,
+        "min": 593739,
+        "max": 1032154
+      },
+      "merkle_proof_ns": {
+        "p50": 534,
+        "p95": 1496,
+        "p99": 4166,
+        "min": 213,
+        "max": 5769
+      },
+      "sign_ns": {
+        "p50": 592137,
+        "p95": 671509,
+        "p99": 809636,
+        "min": 556137,
+        "max": 947013
+      },
+      "gas_post_challenge": 122218,
+      "gas_respond_to_challenge": 533389,
+      "gas_record_verdict": 74924
+    }
+  ]
+}
