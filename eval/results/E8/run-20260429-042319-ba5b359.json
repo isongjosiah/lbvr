@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "run_id": "20260429-030534-d0ec3bc",
-  "started_at": "2026-04-29T03:05:34.896515+00:00",
-  "completed_at": "2026-04-29T03:05:34.896515+00:00",
+  "run_id": "20260429-042319-ba5b359",
+  "started_at": "2026-04-29T04:23:19.187378+00:00",
+  "completed_at": "2026-04-29T04:23:19.187378+00:00",
   "config": {
     "stress_cell_rtt_ms": 200,
     "stress_cell_loss_rate": 0.05,
@@ -14,7 +14,7 @@
     "e1": "eval/results/E1/run-20260428-031455-8471eea.json",
     "e2": "eval/results/E2/run-20260427-071619-2828557.json",
     "e3": "eval/results/E3/run-20260427-071623-2828557.json",
-    "e4": null
+    "e4": "eval/results/E4/run-20260429-034942-ba5b359.json"
   },
   "rows": [
     {
@@ -27,8 +27,8 @@
       "retrieval_verdict": "STRETCH",
       "stress_p99_ms": 2058.472453,
       "stress_verdict": "FAIL",
-      "tta_p99_ms": null,
-      "tta_verdict": "PEND",
+      "tta_p99_ms": 510.04,
+      "tta_verdict": "STRETCH",
       "composite_verdict": "FAIL"
     },
     {
@@ -41,8 +41,8 @@
       "retrieval_verdict": "PASS",
       "stress_p99_ms": 2058.472453,
       "stress_verdict": "STRETCH",
-      "tta_p99_ms": null,
-      "tta_verdict": "PEND",
+      "tta_p99_ms": 510.04,
+      "tta_verdict": "PASS",
       "composite_verdict": "STRETCH"
     },
     {
@@ -55,8 +55,8 @@
       "retrieval_verdict": "PASS",
       "stress_p99_ms": 2058.472453,
       "stress_verdict": "PASS",
-      "tta_p99_ms": null,
-      "tta_verdict": "PEND",
+      "tta_p99_ms": 510.04,
+      "tta_verdict": "PASS",
       "composite_verdict": "PASS"
     }
   ]

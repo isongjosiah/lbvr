@@ -181,13 +181,23 @@ define bench_stub
 endef
 
 # Per-bench knobs. Override on the command line: `make bench-E5 E5_REPS=200`.
+E4_N        ?= 100
+E4_SEED     ?= 42
+E4_HOT_MODE  ?= sim
+E4_WARM_MODE ?= sim
+E4_COLD_MODE ?= sim
+E4_NOTES     ?= sim-mode scaffold (D15)
 E5_REPS ?= 1000
 E5_SEED ?= 42
 
 bench-E1:        ; $(call bench_stub,E1)
 bench-E2:        ; $(call bench_stub,E2)
 bench-E3:        ; $(call bench_stub,E3)
-bench-E4:        ; $(call bench_stub,E4)
+bench-E4:
+	@mkdir -p $(RESULTS_DIR)/E4
+	go run ./cmd/bench/e4 -n $(E4_N) -seed $(E4_SEED) \
+	  -hot-mode $(E4_HOT_MODE) -warm-mode $(E4_WARM_MODE) -cold-mode $(E4_COLD_MODE) \
+	  -notes "$(E4_NOTES)" -out-dir $(RESULTS_DIR)/E4
 bench-E5:
 	@mkdir -p $(RESULTS_DIR)/E5
 	go run ./cmd/bench/e5 -reps $(E5_REPS) -seed $(E5_SEED) -out-dir $(RESULTS_DIR)/E5

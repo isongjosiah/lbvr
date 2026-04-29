@@ -1,0 +1,3136 @@
+{
+  "schema_version": 1,
+  "run_id": "20260429-034942-ba5b359",
+  "started_at": "2026-04-29T03:49:42.042815418Z",
+  "completed_at": "2026-04-29T04:13:25.17859681Z",
+  "config": {
+    "n_bundles": 100,
+    "seed": 42,
+    "sizes_csv": "eval/results/synthea-100000/sizes.csv",
+    "hot_mode": "sim",
+    "warm_mode": "sim",
+    "cold_mode": "sim",
+    "poll_checkpoint_ms": [
+      100,
+      250,
+      500,
+      1000,
+      2000,
+      5000,
+      10000,
+      30000,
+      60000,
+      120000,
+      300000
+    ],
+    "hot_prop_p50_ms": 50,
+    "hot_prop_p99_ms": 500,
+    "warm_prop_p50_ms": 200,
+    "warm_prop_p99_ms": 3000,
+    "cold_prop_p50_ms": 5000,
+    "cold_prop_p99_ms": 60000,
+    "notes": "D15 sim-mode scaffold; live-tier swap deferred per CLAUDE.md §10 D4 (Irys funding)"
+  },
+  "samples": [
+    {
+      "bundle_idx": 0,
+      "filename": "Loyce848_Elinore878_Medhurst46_7a0113ff-8ec8-52ce-b1df-7eff96b5df55.json",
+      "size_bytes": 50747009,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1078,
+          "first_ok_at_ms": 10077,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 211,
+          "first_ok_at_ms": 168,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 158,
+          "first_ok_at_ms": 335,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 1,
+      "filename": "Shiela18_Katheryn92_Hilll811_6f6f512e-fcdd-9530-9d66-046f1792d76d.json",
+      "size_bytes": 7422779,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 62,
+          "first_ok_at_ms": 30005,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 281,
+          "first_ok_at_ms": 255,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 89,
+          "first_ok_at_ms": 256,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 2,
+      "filename": "Junior695_Moen819_5ce3042c-7195-89b5-b915-1004b2048240.json",
+      "size_bytes": 29261215,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 2031,
+          "first_ok_at_ms": 5053,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 222,
+          "first_ok_at_ms": 131,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 177,
+          "first_ok_at_ms": 138,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 3,
+      "filename": "Guadalupe206_Hernandes724_996066f6-5c89-a78f-8098-79f547a59e3c.json",
+      "size_bytes": 1130167,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 103,
+          "first_ok_at_ms": 10002,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 131,
+          "first_ok_at_ms": 106,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 84,
+          "first_ok_at_ms": 104,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 4,
+      "filename": "Birdie301_Kera17_Douglas31_25c73ffe-8a42-507c-98fc-06fca2203ef9.json",
+      "size_bytes": 3515052,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 300,
+          "first_ok_at_ms": 5020,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 87,
+          "first_ok_at_ms": 252,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 87,
+          "first_ok_at_ms": 252,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 5,
+      "filename": "Alphonso102_Prohaska837_e7e0cdf5-c452-899e-6072-7c6acab90873.json",
+      "size_bytes": 1286195,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 999,
+          "first_ok_at_ms": 30047,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 229,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 148,
+          "first_ok_at_ms": 503,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 6,
+      "filename": "Mitch821_Collier206_43332364-51d3-fca6-d47d-6287293d7f23.json",
+      "size_bytes": 1394569,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 213,
+          "first_ok_at_ms": 5032,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 195,
+          "first_ok_at_ms": 106,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 183,
+          "first_ok_at_ms": 261,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 7,
+      "filename": "Dante562_Streich926_3045cc10-569a-608f-0342-710f6ef5e79a.json",
+      "size_bytes": 473762,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 417,
+          "first_ok_at_ms": 30013,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 94,
+          "first_ok_at_ms": 104,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 56,
+          "first_ok_at_ms": 2004,
+          "first_ok_checkpoint_ms": 2000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 8,
+      "filename": "Nickole723_Moen819_8404309e-ac98-8619-51b2-979008cd79e7.json",
+      "size_bytes": 3157578,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 396,
+          "first_ok_at_ms": 5014,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 71,
+          "first_ok_at_ms": 107,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 45,
+          "first_ok_at_ms": 259,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 9,
+      "filename": "Traci329_Tommie457_Blick895_2db98e40-b97f-fe73-c35d-24ffe9fbb732.json",
+      "size_bytes": 4266180,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 134,
+          "first_ok_at_ms": 5018,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 56,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 144,
+          "first_ok_at_ms": 268,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 10,
+      "filename": "Hester117_Shelba765_Willms744_d6de2154-2f1a-bd56-02c3-45b5f6e3e112.json",
+      "size_bytes": 2196198,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 646,
+          "first_ok_at_ms": 5002,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 150,
+          "first_ok_at_ms": 110,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 391,
+          "first_ok_at_ms": 1022,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 11,
+      "filename": "Joseph689_Koss676_d8b12b67-e4b3-3256-062a-dc50c461e792.json",
+      "size_bytes": 1336809,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 2404,
+          "first_ok_at_ms": 30058,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 132,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 121,
+          "first_ok_at_ms": 514,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 12,
+      "filename": "Nita296_Swift555_21fbea2b-6307-bf12-e948-97969984786e.json",
+      "size_bytes": 4236487,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 77,
+          "first_ok_at_ms": 2060,
+          "first_ok_checkpoint_ms": 2000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 59,
+          "first_ok_at_ms": 109,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 97,
+          "first_ok_at_ms": 259,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 13,
+      "filename": "Lizzette325_McCullough561_5aa486d0-18a5-911e-2913-dd60cc1d7828.json",
+      "size_bytes": 13214590,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1203,
+          "first_ok_at_ms": 10051,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 75,
+          "first_ok_at_ms": 116,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 115,
+          "first_ok_at_ms": 117,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 14,
+      "filename": "Lacy523_Koch169_fdf888e0-0a80-06bc-3be7-803276c08f1b.json",
+      "size_bytes": 1964437,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 10914,
+          "first_ok_at_ms": 120010,
+          "first_ok_checkpoint_ms": 120000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 42,
+          "first_ok_at_ms": 106,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 69,
+          "first_ok_at_ms": 268,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 15,
+      "filename": "Sterling124_Greenholt190_d845e703-1eed-8870-b91f-c06dc82de1f8.json",
+      "size_bytes": 1260807,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1078,
+          "first_ok_at_ms": 10014,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 70,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 55,
+          "first_ok_at_ms": 107,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 16,
+      "filename": "Alita891_Dot905_Hayes766_d1c22fbb-7727-cc4a-8406-9508f6b0dc8d.json",
+      "size_bytes": 4126403,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 770,
+          "first_ok_at_ms": 30021,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 104,
+          "first_ok_at_ms": 112,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 80,
+          "first_ok_at_ms": 127,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 17,
+      "filename": "Darrel772_Turner526_3c9f616a-75b9-5d86-a80d-e5a8e8758162.json",
+      "size_bytes": 3200260,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 125,
+          "first_ok_at_ms": 5005,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 36,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 80,
+          "first_ok_at_ms": 270,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 18,
+      "filename": "Jack927_Rodriguez71_e0a95ae7-4404-8606-3258-9895442c7e1c.json",
+      "size_bytes": 3257046,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1713,
+          "first_ok_at_ms": 30047,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 220,
+          "first_ok_at_ms": 119,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 187,
+          "first_ok_at_ms": 271,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 19,
+      "filename": "Alvin56_Botsford977_7a739be2-a6d4-cdb1-a80a-fba489bce865.json",
+      "size_bytes": 4494272,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 324,
+          "first_ok_at_ms": 5019,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 73,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 137,
+          "first_ok_at_ms": 113,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 20,
+      "filename": "Annice210_Larkin917_bb37a0a1-33e0-b2ea-7b12-6571d36ef374.json",
+      "size_bytes": 1672400,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 898,
+          "first_ok_at_ms": 10011,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 56,
+          "first_ok_at_ms": 106,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 268,
+          "first_ok_at_ms": 261,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 21,
+      "filename": "Kelley882_Bartoletti50_f2c4cf39-0792-ad86-55f9-18815a9bcc26.json",
+      "size_bytes": 2176888,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1378,
+          "first_ok_at_ms": 30022,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 201,
+          "first_ok_at_ms": 514,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 175,
+          "first_ok_at_ms": 516,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 22,
+      "filename": "Hermina428_Considine820_a119c619-184d-6948-ef55-c2e4c3e83b35.json",
+      "size_bytes": 2311004,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 715,
+          "first_ok_at_ms": 5127,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 119,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 85,
+          "first_ok_at_ms": 116,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 23,
+      "filename": "Fredrick998_Gerlach374_303587b7-8f03-d1e0-76e1-f6ad8fea94a7.json",
+      "size_bytes": 820345,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1167,
+          "first_ok_at_ms": 5006,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 110,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 176,
+          "first_ok_at_ms": 505,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 24,
+      "filename": "Loreen513_Lona294_Raynor401_91e445ac-0918-70bb-cd2c-f9a0b8b06911.json",
+      "size_bytes": 2136864,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 893,
+          "first_ok_at_ms": 502,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 55,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 90,
+          "first_ok_at_ms": 264,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 25,
+      "filename": "Lavonia8_Kristan816_Kautzer186_30f24ee0-8887-a398-86d4-99c431fd22da.json",
+      "size_bytes": 1615078,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1320,
+          "first_ok_at_ms": 5025,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 100,
+          "first_ok_at_ms": 252,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 57,
+          "first_ok_at_ms": 1008,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 26,
+      "filename": "Jewell855_Koepp521_2f01e375-d1e5-d5fa-5f96-066ee5ca3598.json",
+      "size_bytes": 1472427,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 55,
+          "first_ok_at_ms": 5010,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 280,
+          "first_ok_at_ms": 110,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 276,
+          "first_ok_at_ms": 107,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 27,
+      "filename": "Darrin898_Kuhlman484_80e8da01-a1c8-5186-df73-704b157158c0.json",
+      "size_bytes": 33627176,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 289,
+          "first_ok_at_ms": 10096,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 154,
+          "first_ok_at_ms": 156,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 517,
+          "first_ok_at_ms": 155,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 28,
+      "filename": "Jeffry142_Abshire638_c3c63b6f-7fe3-12d9-a821-b3e141ca3c22.json",
+      "size_bytes": 900245,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 2603,
+          "first_ok_at_ms": 30006,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 157,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 32,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 29,
+      "filename": "Carlton317_Turner526_7980f913-d8e6-61d5-23d6-4fa8b30d306c.json",
+      "size_bytes": 2462212,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 921,
+          "first_ok_at_ms": 5008,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 28,
+          "first_ok_at_ms": 103,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 322,
+          "first_ok_at_ms": 1004,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 30,
+      "filename": "Deandra603_Nedra260_Kuvalis369_1a749231-a7fc-dd81-8bcd-5b4e0bb0a24e.json",
+      "size_bytes": 6518521,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 274,
+          "first_ok_at_ms": 10010,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 85,
+          "first_ok_at_ms": 261,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 273,
+          "first_ok_at_ms": 1023,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 31,
+      "filename": "Linh535_Priscila9_Schulist381_67ca33a8-af62-2ea3-4136-eeba33f7466e.json",
+      "size_bytes": 2427171,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 806,
+          "first_ok_at_ms": 10007,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 108,
+          "first_ok_at_ms": 114,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 124,
+          "first_ok_at_ms": 1009,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 32,
+      "filename": "Enrique929_Breitenberg711_dfb7f7bc-785c-546d-0ae0-8748ac5ef254.json",
+      "size_bytes": 1329143,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 300,
+          "first_ok_at_ms": 2006,
+          "first_ok_checkpoint_ms": 2000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 35,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 30,
+          "first_ok_at_ms": 1003,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 33,
+      "filename": "Eleonora961_Caron739_Graham902_b56ab8ab-c68e-6755-aae2-45d7b9e2c1fb.json",
+      "size_bytes": 2045176,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1380,
+          "first_ok_at_ms": 10016,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 30,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 170,
+          "first_ok_at_ms": 263,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 34,
+      "filename": "Horacio317_Leal292_ff8ec4ef-2d88-f16e-75dc-0e21df4b2365.json",
+      "size_bytes": 1820100,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 304,
+          "first_ok_at_ms": 30025,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 117,
+          "first_ok_at_ms": 111,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 114,
+          "first_ok_at_ms": 259,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 35,
+      "filename": "Niki25_Tammy740_Boyle917_b40796a6-e4fb-5871-5cfe-23fdc518a904.json",
+      "size_bytes": 26733354,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 159,
+          "first_ok_at_ms": 5048,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 137,
+          "first_ok_at_ms": 145,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 169,
+          "first_ok_at_ms": 296,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 36,
+      "filename": "Yolonda722_Dakota806_Dibbert990_065cf7fb-4ec3-7e5c-b241-deac9c3fd15e.json",
+      "size_bytes": 2624370,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 92,
+          "first_ok_at_ms": 5009,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 91,
+          "first_ok_at_ms": 257,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 280,
+          "first_ok_at_ms": 2010,
+          "first_ok_checkpoint_ms": 2000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 37,
+      "filename": "Lesley194_Runte676_9ea90050-67f2-ff12-c23d-3fef902dc924.json",
+      "size_bytes": 1698539,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 224,
+          "first_ok_at_ms": 5015,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 98,
+          "first_ok_at_ms": 108,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 247,
+          "first_ok_at_ms": 2005,
+          "first_ok_checkpoint_ms": 2000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 38,
+      "filename": "Scott935_Sawayn19_dc70e4fe-d821-afef-aca6-c16580972757.json",
+      "size_bytes": 1085079,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 477,
+          "first_ok_at_ms": 5006,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 73,
+          "first_ok_at_ms": 506,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 106,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 39,
+      "filename": "Norman647_Waters156_8869c3bc-4900-2f1c-31c3-ea95e87eca99.json",
+      "size_bytes": 102977,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 231,
+          "first_ok_at_ms": 10025,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 99,
+          "first_ok_at_ms": 104,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 581,
+          "first_ok_at_ms": 510,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 40,
+      "filename": "Milton509_Crona259_45d51504-0a29-ffe2-899c-13ef89e247a8.json",
+      "size_bytes": 5815019,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 178,
+          "first_ok_at_ms": 30007,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 113,
+          "first_ok_at_ms": 107,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 63,
+          "first_ok_at_ms": 106,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 41,
+      "filename": "Soledad678_Florencia449_Carranza218_57d0def4-c060-b93c-a0c3-e47dcbb301ea.json",
+      "size_bytes": 2570030,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 337,
+          "first_ok_at_ms": 2033,
+          "first_ok_checkpoint_ms": 2000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 62,
+          "first_ok_at_ms": 109,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 275,
+          "first_ok_at_ms": 252,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 42,
+      "filename": "Ricardo560_Botsford977_0dd9300b-d5a2-2ca7-b110-4e23736044eb.json",
+      "size_bytes": 3459381,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 367,
+          "first_ok_at_ms": 10016,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 112,
+          "first_ok_at_ms": 113,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 112,
+          "first_ok_at_ms": 113,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 43,
+      "filename": "Tony646_Gusikowski974_7c59d022-7661-3cb8-ef11-bf63f30c856e.json",
+      "size_bytes": 2207844,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 62,
+          "first_ok_at_ms": 2010,
+          "first_ok_checkpoint_ms": 2000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 208,
+          "first_ok_at_ms": 252,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 214,
+          "first_ok_at_ms": 112,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 44,
+      "filename": "Nicky270_Hartmann983_4bce2d4d-9e80-5583-d7c8-2143f6279cf2.json",
+      "size_bytes": 1300150,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1090,
+          "first_ok_at_ms": 10001,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 110,
+          "first_ok_at_ms": 110,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 60,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 45,
+      "filename": "Lester513_Ortiz186_cd368f55-9cf1-0757-94c7-dcc0620a6d4a.json",
+      "size_bytes": 4812870,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 299,
+          "first_ok_at_ms": 1007,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 82,
+          "first_ok_at_ms": 256,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 158,
+          "first_ok_at_ms": 1026,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 46,
+      "filename": "Diana207_Matos876_5a6ad10f-0dc6-b810-f01f-2befe290651c.json",
+      "size_bytes": 2211765,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 371,
+          "first_ok_at_ms": 30106,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 123,
+          "first_ok_at_ms": 111,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 736,
+          "first_ok_at_ms": 262,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 47,
+      "filename": "Estela596_Patiño436_adfb0480-27cd-b714-8b2f-cffcccb795ed.json",
+      "size_bytes": 17198085,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 126,
+          "first_ok_at_ms": 10051,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 402,
+          "first_ok_at_ms": 124,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 136,
+          "first_ok_at_ms": 516,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 48,
+      "filename": "Nohemi878_Swift555_9447ffa3-d792-a174-9f71-0fd522b6fa4a.json",
+      "size_bytes": 2566959,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 162,
+          "first_ok_at_ms": 258,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 30,
+          "first_ok_at_ms": 106,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 111,
+          "first_ok_at_ms": 1007,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 49,
+      "filename": "Marlon619_Weimann465_97bee888-28fd-c71c-c29e-88b6acd5970e.json",
+      "size_bytes": 3426445,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 4232,
+          "first_ok_at_ms": 30014,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 48,
+          "first_ok_at_ms": 117,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 338,
+          "first_ok_at_ms": 113,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 50,
+      "filename": "Jermaine675_O'Conner199_2b4aeb41-5415-1dd6-5117-be0d4c8d392b.json",
+      "size_bytes": 4220396,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 724,
+          "first_ok_at_ms": 10012,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 54,
+          "first_ok_at_ms": 124,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 53,
+          "first_ok_at_ms": 516,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 51,
+      "filename": "Ed239_Spencer878_5d301da8-1db2-84a0-1808-720b4dfd1412.json",
+      "size_bytes": 1238383,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 258,
+          "first_ok_at_ms": 5017,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 63,
+          "first_ok_at_ms": 106,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 471,
+          "first_ok_at_ms": 108,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 52,
+      "filename": "Nicholas495_Wolff180_aa0b64d0-fc10-5503-29d6-deb05197de1a.json",
+      "size_bytes": 2788149,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 490,
+          "first_ok_at_ms": 5013,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 135,
+          "first_ok_at_ms": 104,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 105,
+          "first_ok_at_ms": 267,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 53,
+      "filename": "Elisa944_Roselia779_Leannon79_ed24e993-6fee-8b10-b0f8-b8472820afa7.json",
+      "size_bytes": 4410403,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 536,
+          "first_ok_at_ms": 30040,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 103,
+          "first_ok_at_ms": 109,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 344,
+          "first_ok_at_ms": 5006,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 54,
+      "filename": "Grant908_Kautzer186_30915f1b-7a48-8405-2b87-f663084ee40e.json",
+      "size_bytes": 4385741,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 619,
+          "first_ok_at_ms": 10011,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 197,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 156,
+          "first_ok_at_ms": 107,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 55,
+      "filename": "Ricarda574_Spinka232_0bdeb193-7b7f-52f5-e885-c1e9a59dff23.json",
+      "size_bytes": 1105342,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 993,
+          "first_ok_at_ms": 30018,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 31,
+          "first_ok_at_ms": 109,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 160,
+          "first_ok_at_ms": 503,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 56,
+      "filename": "Maureen515_Douglas31_b6a318d0-cd1c-566e-06e2-932745c7129e.json",
+      "size_bytes": 1104003,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 111,
+          "first_ok_at_ms": 2010,
+          "first_ok_checkpoint_ms": 2000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 66,
+          "first_ok_at_ms": 104,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 149,
+          "first_ok_at_ms": 1001,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 57,
+      "filename": "Bernardo699_DuBuque211_f96a28b1-886e-f900-3d68-e3cd54608a2b.json",
+      "size_bytes": 656571,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 510,
+          "first_ok_at_ms": 10010,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 151,
+          "first_ok_at_ms": 103,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 187,
+          "first_ok_at_ms": 1001,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 58,
+      "filename": "Kandy733_Boyer713_cab01d9a-1610-f88b-df32-0fddbbc2ed8f.json",
+      "size_bytes": 885443,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 274,
+          "first_ok_at_ms": 10013,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 59,
+          "first_ok_at_ms": 107,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 215,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 59,
+      "filename": "Estrella224_Barton704_bedd80b2-5183-d21c-87cf-dfa64e24897f.json",
+      "size_bytes": 1430651,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 157,
+          "first_ok_at_ms": 10019,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 60,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 94,
+          "first_ok_at_ms": 255,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 60,
+      "filename": "Rubin812_Kihn564_4e334a09-f799-673f-9c2a-2beb78c92c63.json",
+      "size_bytes": 2899981,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 202,
+          "first_ok_at_ms": 5046,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 130,
+          "first_ok_at_ms": 103,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 97,
+          "first_ok_at_ms": 1017,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 61,
+      "filename": "Peter292_Thiel172_b60ef322-b8f7-ef00-7cbb-868e05b5f490.json",
+      "size_bytes": 4107941,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 2353,
+          "first_ok_at_ms": 30010,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 64,
+          "first_ok_at_ms": 110,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 88,
+          "first_ok_at_ms": 505,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 62,
+      "filename": "Elinor7_Leannon79_0222803a-5bb6-e081-a030-6ad11e56595d.json",
+      "size_bytes": 1542079,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 594,
+          "first_ok_at_ms": 1004,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 66,
+          "first_ok_at_ms": 112,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 194,
+          "first_ok_at_ms": 507,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 63,
+      "filename": "Omer483_Altenwerth646_b8f551af-f888-353f-4c41-30ccf1d2f8d1.json",
+      "size_bytes": 764156,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 662,
+          "first_ok_at_ms": 5005,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 86,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 150,
+          "first_ok_at_ms": 104,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 64,
+      "filename": "Calvin845_Cummerata161_1de551ac-642f-9fa0-2873-4e66395e991b.json",
+      "size_bytes": 1577014,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 629,
+          "first_ok_at_ms": 30020,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 125,
+          "first_ok_at_ms": 109,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 138,
+          "first_ok_at_ms": 1009,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 65,
+      "filename": "Edgar153_Quitzon246_a7fe85b1-8495-eb99-bc56-734d900fa3c4.json",
+      "size_bytes": 2894403,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1375,
+          "first_ok_at_ms": 10009,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 112,
+          "first_ok_at_ms": 113,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 248,
+          "first_ok_at_ms": 113,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 66,
+      "filename": "Ammie189_Littel644_d1ed01b6-3914-bbaf-896d-245d7bc7af0a.json",
+      "size_bytes": 752452,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 258,
+          "first_ok_at_ms": 60008,
+          "first_ok_checkpoint_ms": 60000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 223,
+          "first_ok_at_ms": 107,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 176,
+          "first_ok_at_ms": 259,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 67,
+      "filename": "Jake169_Schumm995_4a3fa722-044f-a700-6773-d31942873022.json",
+      "size_bytes": 1291574,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 521,
+          "first_ok_at_ms": 5008,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 342,
+          "first_ok_at_ms": 112,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 86,
+          "first_ok_at_ms": 110,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 68,
+      "filename": "Ryan260_Moen819_0709e21b-b08b-dd62-95b1-10ae05fabee9.json",
+      "size_bytes": 1194314,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 188,
+          "first_ok_at_ms": 5008,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 143,
+          "first_ok_at_ms": 106,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 446,
+          "first_ok_at_ms": 521,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 69,
+      "filename": "Nathanial472_McLaughlin530_3e1f81f5-6eed-800e-96d6-06c120ea6aff.json",
+      "size_bytes": 44856168,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 151,
+          "first_ok_at_ms": 30118,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 260,
+          "first_ok_at_ms": 172,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 349,
+          "first_ok_at_ms": 138,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 70,
+      "filename": "Antonia30_MacGyver246_f26cd332-defd-06ab-5916-a70b2e218f3f.json",
+      "size_bytes": 3318792,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 727,
+          "first_ok_at_ms": 5013,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 355,
+          "first_ok_at_ms": 257,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 99,
+          "first_ok_at_ms": 252,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 71,
+      "filename": "Camille85_Ondricka197_9344a23c-d516-816a-b4fb-98cd180a5a0e.json",
+      "size_bytes": 2636993,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 922,
+          "first_ok_at_ms": 5012,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 143,
+          "first_ok_at_ms": 141,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 132,
+          "first_ok_at_ms": 522,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 72,
+      "filename": "Louis204_Grady603_f13f79bc-849c-b903-27d8-5f20fd4216fe.json",
+      "size_bytes": 7984105,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 209,
+          "first_ok_at_ms": 10022,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 50,
+          "first_ok_at_ms": 510,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 1653,
+          "first_ok_at_ms": 277,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 73,
+      "filename": "Elke785_Gibson10_4a1480bd-69c8-b1df-60a5-25c762923e08.json",
+      "size_bytes": 1082037,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 672,
+          "first_ok_at_ms": 30016,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 157,
+          "first_ok_at_ms": 109,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 101,
+          "first_ok_at_ms": 257,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 74,
+      "filename": "Arthur650_Davis923_3dd1cd4b-e4cb-aec2-43fb-6cfc622ac4bd.json",
+      "size_bytes": 920769,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1311,
+          "first_ok_at_ms": 30030,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 37,
+          "first_ok_at_ms": 261,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 67,
+          "first_ok_at_ms": 257,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 75,
+      "filename": "Maryanna659_Morissette863_466f7a64-3b76-1d3e-efe9-38712e8f8ae8.json",
+      "size_bytes": 1146401,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 691,
+          "first_ok_at_ms": 10040,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 42,
+          "first_ok_at_ms": 109,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 81,
+          "first_ok_at_ms": 259,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 76,
+      "filename": "Kelvin159_Larkin917_070ef728-7a7a-5388-b8c6-2b436794609d.json",
+      "size_bytes": 2163298,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 324,
+          "first_ok_at_ms": 10018,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 151,
+          "first_ok_at_ms": 109,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 433,
+          "first_ok_at_ms": 262,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 77,
+      "filename": "Denver542_Schneider199_516dd639-0a45-d64b-9c53-f1abd7f08db3.json",
+      "size_bytes": 2255414,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 705,
+          "first_ok_at_ms": 1017,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 108,
+          "first_ok_at_ms": 109,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 153,
+          "first_ok_at_ms": 257,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 78,
+      "filename": "Issac619_Leuschke194_8a759a84-0a02-b7c2-c401-3a08784f1426.json",
+      "size_bytes": 2323802,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 578,
+          "first_ok_at_ms": 10019,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 90,
+          "first_ok_at_ms": 110,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 498,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 79,
+      "filename": "Eddy900_Hayes766_1230c733-9c79-2510-6e0b-d2b5b4fe12ba.json",
+      "size_bytes": 1433267,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 556,
+          "first_ok_at_ms": 10022,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 171,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 119,
+          "first_ok_at_ms": 259,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 80,
+      "filename": "Malvina930_Wiza601_e057ee21-a86b-eba5-86da-c4327086b8ae.json",
+      "size_bytes": 268184,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 116,
+          "first_ok_at_ms": 10019,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 99,
+          "first_ok_at_ms": 251,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 92,
+          "first_ok_at_ms": 251,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 81,
+      "filename": "Florrie453_Billi682_Parisian75_f488b134-79d0-14ac-841d-e1a7c83d6402.json",
+      "size_bytes": 1295724,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 174,
+          "first_ok_at_ms": 5040,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 174,
+          "first_ok_at_ms": 265,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 176,
+          "first_ok_at_ms": 510,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 82,
+      "filename": "Mirella222_Harris789_a438581f-a24d-5c7d-4fc4-380cccf8ff84.json",
+      "size_bytes": 1163543,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1725,
+          "first_ok_at_ms": 5011,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 68,
+          "first_ok_at_ms": 107,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 279,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 83,
+      "filename": "Ronna740_Cheryll577_Powlowski563_626e2adb-83e7-38ee-eb01-cb240b12529a.json",
+      "size_bytes": 28204810,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 452,
+          "first_ok_at_ms": 5052,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 198,
+          "first_ok_at_ms": 170,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 179,
+          "first_ok_at_ms": 2043,
+          "first_ok_checkpoint_ms": 2000,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 84,
+      "filename": "Colby655_Cruickshank494_388aa05c-32c7-e325-cfc6-090fe8599a29.json",
+      "size_bytes": 1098024,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 134,
+          "first_ok_at_ms": 5007,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 197,
+          "first_ok_at_ms": 112,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 88,
+          "first_ok_at_ms": 503,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 85,
+      "filename": "Trey250_Bechtelar572_33f69da8-2a4a-69d0-1ae3-7e4459ef7be5.json",
+      "size_bytes": 2282528,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 286,
+          "first_ok_at_ms": 5011,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 76,
+          "first_ok_at_ms": 110,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 80,
+          "first_ok_at_ms": 255,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 86,
+      "filename": "Jackie93_Kuvalis369_8849ccd4-0d9c-bdff-7780-3f03685844ba.json",
+      "size_bytes": 1526228,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 2088,
+          "first_ok_at_ms": 30145,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 146,
+          "first_ok_at_ms": 101,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 86,
+          "first_ok_at_ms": 509,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 87,
+      "filename": "Roy364_Spinka232_e686ddfa-dd2d-9355-af37-3d168fc25567.json",
+      "size_bytes": 2362436,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 263,
+          "first_ok_at_ms": 5039,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 458,
+          "first_ok_at_ms": 108,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 62,
+          "first_ok_at_ms": 107,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 88,
+      "filename": "John539_Herman763_4ab778bb-6781-95b3-f1b0-6776b28bde8a.json",
+      "size_bytes": 705533,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 1912,
+          "first_ok_at_ms": 10029,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 188,
+          "first_ok_at_ms": 104,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 184,
+          "first_ok_at_ms": 254,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 89,
+      "filename": "Casandra937_Abby752_Rutherford999_54981bda-98a0-2415-aff9-5916f81f26d5.json",
+      "size_bytes": 2936218,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 84,
+          "first_ok_at_ms": 10007,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 170,
+          "first_ok_at_ms": 269,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 87,
+          "first_ok_at_ms": 517,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 90,
+      "filename": "Kory651_Wuckert783_b95b3a75-0829-59bd-043c-647522e0c715.json",
+      "size_bytes": 892906,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 221,
+          "first_ok_at_ms": 5010,
+          "first_ok_checkpoint_ms": 5000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 47,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 50,
+          "first_ok_at_ms": 254,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 91,
+      "filename": "Raymond398_Farrell962_3e9eaefc-c3df-4a1d-90fb-3ef96f7e5561.json",
+      "size_bytes": 1038398,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 372,
+          "first_ok_at_ms": 30011,
+          "first_ok_checkpoint_ms": 30000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 82,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 49,
+          "first_ok_at_ms": 103,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 92,
+      "filename": "Micah422_O'Kon634_05f5f8f0-1f20-b0a7-e0b5-a01ade16d4b3.json",
+      "size_bytes": 3000212,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 775,
+          "first_ok_at_ms": 10016,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 65,
+          "first_ok_at_ms": 103,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 155,
+          "first_ok_at_ms": 518,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 93,
+      "filename": "Ignacio928_Ayala238_22f46188-6a61-3afd-ab20-b822a2aa1bbf.json",
+      "size_bytes": 1061491,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 509,
+          "first_ok_at_ms": 120001,
+          "first_ok_checkpoint_ms": 120000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 50,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 128,
+          "first_ok_at_ms": 254,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 94,
+      "filename": "Edie35_McClure239_d2735e63-b234-35d0-7497-278bd8c634c4.json",
+      "size_bytes": 1715425,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 748,
+          "first_ok_at_ms": 2006,
+          "first_ok_checkpoint_ms": 2000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 166,
+          "first_ok_at_ms": 261,
+          "first_ok_checkpoint_ms": 250,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 151,
+          "first_ok_at_ms": 508,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 95,
+      "filename": "Cristen212_Gary33_Legros616_90bad517-3529-0227-48e7-c7683151946f.json",
+      "size_bytes": 2255453,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 56,
+          "first_ok_at_ms": 503,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 110,
+          "first_ok_at_ms": 103,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 288,
+          "first_ok_at_ms": 112,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 96,
+      "filename": "Ethan766_Cummerata161_9f4c59d0-fec6-63da-eaf2-6303e1ce86b3.json",
+      "size_bytes": 2470080,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 853,
+          "first_ok_at_ms": 10012,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 111,
+          "first_ok_at_ms": 108,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 105,
+          "first_ok_at_ms": 506,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 97,
+      "filename": "Barrie587_Briana139_McDermott739_60eaba51-bdcc-c7fb-e7ef-d666e348c723.json",
+      "size_bytes": 2790223,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 2635,
+          "first_ok_at_ms": 1006,
+          "first_ok_checkpoint_ms": 1000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 227,
+          "first_ok_at_ms": 113,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 239,
+          "first_ok_at_ms": 102,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 98,
+      "filename": "Franklin857_Walker122_6ac28958-2096-6d3f-ecbc-fc52dfd13a7a.json",
+      "size_bytes": 3270426,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 360,
+          "first_ok_at_ms": 10012,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 89,
+          "first_ok_at_ms": 503,
+          "first_ok_checkpoint_ms": 500,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 170,
+          "first_ok_at_ms": 115,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    },
+    {
+      "bundle_idx": 99,
+      "filename": "Shanita956_Bailey598_2b5ade86-faf0-aefd-feb8-89f5570fcdc1.json",
+      "size_bytes": 2436766,
+      "tiers": {
+        "cold": {
+          "tier": "cold",
+          "put_latency_ms": 494,
+          "first_ok_at_ms": 10011,
+          "first_ok_checkpoint_ms": 10000,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "hot": {
+          "tier": "hot",
+          "put_latency_ms": 148,
+          "first_ok_at_ms": 115,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        },
+        "warm": {
+          "tier": "warm",
+          "put_latency_ms": 44,
+          "first_ok_at_ms": 105,
+          "first_ok_checkpoint_ms": 100,
+          "timed_out": false,
+          "live_mode": false
+        }
+      }
+    }
+  ]
+}

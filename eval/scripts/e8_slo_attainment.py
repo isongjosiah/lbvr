@@ -99,6 +99,25 @@ def e1_ingest_p99_ms(path: Path) -> float | None:
     return largest["stage_p99_ms"]["total"]
 
 
+def e4_tta_p99_ms(path: Path | None) -> float | None:
+    """Hot-tier first_ok_at_ms P99. Hot defines LBVR's fast-path TTA;
+    warm and cold are documented in the E4 run-*.json but not rolled into
+    the SLO verdict (the §V text explains the choice — clinician-perceived
+    TTA is bounded by the fastest tier holding a shard, which is hot)."""
+    if path is None:
+        return None
+    doc = json.loads(path.read_text())
+    hot_first_oks: list[int] = []
+    for s in doc.get("samples", []):
+        hot = s.get("tiers", {}).get("hot")
+        if not hot:
+            continue
+        hot_first_oks.append(hot["first_ok_at_ms"])
+    if not hot_first_oks:
+        return None
+    return float(np.percentile(np.array(hot_first_oks, dtype=np.int64), 99))
+
+
 def verdict(p99_ms: float, threshold_ms: float) -> str:
     if p99_ms <= threshold_ms:
         return "PASS"
@@ -164,7 +183,7 @@ def main() -> int:
         return 1
     stress_p99 = stress_cell["p99_ms"]
 
-    tta_p99 = None  # E4 not yet implemented
+    tta_p99 = e4_tta_p99_ms(e4_path)
 
     # --- per-SLO verdicts ---
     rows = []
