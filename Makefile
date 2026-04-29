@@ -172,27 +172,59 @@ plot-synthea-1k plot-synthea-10k plot-synthea-100k: $(VENV_PY)
 	  --out-dir $(RESULTS_DIR)/synthea-$(NUM) \
 	  --corpus-size $(NUM)
 
-# --- Experiment targets (stubs until D12) ---
-
-define bench_stub
-@mkdir -p $(RESULTS_DIR)/$(1)
-@echo "E$(1) not yet implemented — see CLAUDE.md §8 and D12 plan."
-@exit 1
-endef
+# --- Experiment targets (CLAUDE.md §8 reproducibility contract) ---
+# Every target writes JSON to $(RESULTS_DIR)/E{n}/ with a timestamped filename
+# + env.json fingerprint. Re-running with the same seeds is deterministic for
+# the bench harnesses; Python post-processors are deterministic by definition.
 
 # Per-bench knobs. Override on the command line: `make bench-E5 E5_REPS=200`.
-E4_N        ?= 100
-E4_SEED     ?= 42
-E4_HOT_MODE  ?= sim
-E4_WARM_MODE ?= sim
-E4_COLD_MODE ?= sim
-E4_NOTES     ?= sim-mode scaffold (D15)
-E5_REPS ?= 1000
-E5_SEED ?= 42
+# Python target uses $(PYTHON), which defaults to the eval venv but can be
+# overridden when matplotlib / numpy live in another environment. Example:
+#   make bench-E7 PYTHON=$$HOME/miniforge3/envs/fedepi/bin/python
+PYTHON          ?= $(VENV_PY)
 
-bench-E1:        ; $(call bench_stub,E1)
-bench-E2:        ; $(call bench_stub,E2)
-bench-E3:        ; $(call bench_stub,E3)
+E1_SEED         ?= 42
+E1_CONCURRENCY  ?= 8
+E1_SCALES       ?=
+E2_N            ?= 100
+E2_REPS         ?= 10
+E2_SEED         ?= 42
+E2_SLO_MS       ?= 2000
+E3_BUNDLES      ?= 50
+E3_REPS         ?= 30
+E3_SEED         ?= 42
+E3_SLO_MS       ?= 2000
+E4_N            ?= 100
+E4_SEED         ?= 42
+E4_HOT_MODE     ?= sim
+E4_WARM_MODE    ?= sim
+E4_COLD_MODE    ?= sim
+E4_NOTES        ?= sim-mode scaffold (D15)
+E5_REPS         ?= 1000
+E5_SEED         ?= 42
+E6_BUNDLES      ?= 100
+E6_REPS         ?= 10
+E6_SEED         ?= 42
+E6_SLO_MS       ?= 2000
+E9_N            ?= 100
+E9_REPS         ?= 10
+E9_SEED         ?= 42
+E9_SLO_MS       ?= 2000
+EPROV_N         ?= 1000
+EPROV_SEED      ?= 42
+
+bench-E1:
+	@mkdir -p $(RESULTS_DIR)/E1
+	go run ./cmd/bench/e1 -seed $(E1_SEED) -concurrency $(E1_CONCURRENCY) \
+	  $(if $(E1_SCALES),-scales $(E1_SCALES),) -out-dir $(RESULTS_DIR)/E1
+bench-E2:
+	@mkdir -p $(RESULTS_DIR)/E2
+	go run ./cmd/bench/e2 -n $(E2_N) -reps $(E2_REPS) -seed $(E2_SEED) \
+	  -slo-ms $(E2_SLO_MS) -out-dir $(RESULTS_DIR)/E2
+bench-E3:
+	@mkdir -p $(RESULTS_DIR)/E3
+	go run ./cmd/bench/e3 -bundles $(E3_BUNDLES) -reps $(E3_REPS) -seed $(E3_SEED) \
+	  -slo-ms $(E3_SLO_MS) -out-dir $(RESULTS_DIR)/E3
 bench-E4:
 	@mkdir -p $(RESULTS_DIR)/E4
 	go run ./cmd/bench/e4 -n $(E4_N) -seed $(E4_SEED) \
@@ -201,11 +233,31 @@ bench-E4:
 bench-E5:
 	@mkdir -p $(RESULTS_DIR)/E5
 	go run ./cmd/bench/e5 -reps $(E5_REPS) -seed $(E5_SEED) -out-dir $(RESULTS_DIR)/E5
-bench-E6:        ; $(call bench_stub,E6)
-bench-E6b:       ; $(call bench_stub,E6b)
-bench-E7:        ; $(call bench_stub,E7)
-bench-E8:        ; $(call bench_stub,E8)
-bench-E9:        ; $(call bench_stub,E9)
-bench-E9-multi:  ; $(call bench_stub,E9-multi)
-bench-E10:       ; $(call bench_stub,E10)
-bench-E-PROV:    ; $(call bench_stub,E-PROV)
+bench-E6:
+	@mkdir -p $(RESULTS_DIR)/E6
+	go run ./cmd/bench/e6 -mode uniform -bundles $(E6_BUNDLES) -reps $(E6_REPS) \
+	  -seed $(E6_SEED) -slo-ms $(E6_SLO_MS) -out-dir $(RESULTS_DIR)/E6
+bench-E6b:
+	@mkdir -p $(RESULTS_DIR)/E6
+	go run ./cmd/bench/e6 -mode tier-selective -bundles $(E6_BUNDLES) -reps $(E6_REPS) \
+	  -seed $(E6_SEED) -slo-ms $(E6_SLO_MS) -out-dir $(RESULTS_DIR)/E6
+bench-E7:
+	@mkdir -p $(RESULTS_DIR)/E7
+	$(PYTHON) eval/scripts/e7_storage_cost.py
+bench-E8:
+	@mkdir -p $(RESULTS_DIR)/E8
+	$(PYTHON) eval/scripts/e8_slo_attainment.py
+bench-E9:
+	@mkdir -p $(RESULTS_DIR)/E9
+	go run ./cmd/bench/e9 -modes default -n $(E9_N) -reps $(E9_REPS) -seed $(E9_SEED) \
+	  -slo-ms $(E9_SLO_MS) -out-dir $(RESULTS_DIR)/E9
+bench-E9-multi:
+	@mkdir -p $(RESULTS_DIR)/E9-multi
+	go run ./cmd/bench/e9 -modes multi -n $(E9_N) -reps $(E9_REPS) -seed $(E9_SEED) \
+	  -slo-ms $(E9_SLO_MS) -out-dir $(RESULTS_DIR)/E9-multi
+bench-E10:
+	@mkdir -p $(RESULTS_DIR)/E10
+	$(PYTHON) eval/scripts/e10_cross_slo_calibration.py
+bench-E-PROV:
+	@mkdir -p $(RESULTS_DIR)/E-PROV
+	go run ./cmd/bench/eprov -n $(EPROV_N) -seed $(EPROV_SEED) -out-dir $(RESULTS_DIR)/E-PROV
