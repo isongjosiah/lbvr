@@ -33,9 +33,17 @@ fi
 
 # --- Solidity: forge test ---
 if find contracts/src contracts/test -maxdepth 2 -name '*.sol' 2>/dev/null | grep -q .; then
-    if command -v forge >/dev/null 2>&1; then
-        echo "→ forge test (contracts/)"
-        if ! forge test --root contracts; then
+    # Resolution order: $FORGE_BIN env override > $PATH > Foundry's default
+    # ~/.foundry/bin install location. The default-location fallback exists
+    # because foundryup writes its PATH update to ~/.zshenv (interactive
+    # shells), but `git commit`'s subshell doesn't always inherit it.
+    forge_bin="${FORGE_BIN:-$(command -v forge 2>/dev/null || true)}"
+    if [ -z "$forge_bin" ] && [ -x "$HOME/.foundry/bin/forge" ]; then
+        forge_bin="$HOME/.foundry/bin/forge"
+    fi
+    if [ -n "$forge_bin" ]; then
+        echo "→ forge test ($forge_bin)"
+        if ! "$forge_bin" test --root contracts; then
             echo "✗ forge test failed" >&2
             fail=1
         fi

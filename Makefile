@@ -180,11 +180,17 @@ define bench_stub
 @exit 1
 endef
 
+# Per-bench knobs. Override on the command line: `make bench-E5 E5_REPS=200`.
+E5_REPS ?= 1000
+E5_SEED ?= 42
+
 bench-E1:        ; $(call bench_stub,E1)
 bench-E2:        ; $(call bench_stub,E2)
 bench-E3:        ; $(call bench_stub,E3)
 bench-E4:        ; $(call bench_stub,E4)
-bench-E5:        ; $(call bench_stub,E5)
+bench-E5:
+	@mkdir -p $(RESULTS_DIR)/E5
+	go run ./cmd/bench/e5 -reps $(E5_REPS) -seed $(E5_SEED) -out-dir $(RESULTS_DIR)/E5
 bench-E6:        ; $(call bench_stub,E6)
 bench-E6b:       ; $(call bench_stub,E6b)
 bench-E7:        ; $(call bench_stub,E7)

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "run_id": "20260429-030534-d0ec3bc",
+  "started_at": "2026-04-29T03:05:34.896515+00:00",
+  "completed_at": "2026-04-29T03:05:34.896515+00:00",
+  "config": {
+    "stress_cell_rtt_ms": 200,
+    "stress_cell_loss_rate": 0.05,
+    "verdict_stretch_factor": 2.0,
+    "composite_excludes_ingest": true,
+    "composite_treats_pending_axes_as_neutral": true
+  },
+  "sources": {
+    "e1": "eval/results/E1/run-20260428-031455-8471eea.json",
+    "e2": "eval/results/E2/run-20260427-071619-2828557.json",
+    "e3": "eval/results/E3/run-20260427-071623-2828557.json",
+    "e4": null
+  },
+  "rows": [
+    {
+      "slo_id": "iec60601-cdss",
+      "label": "Clinical chart-pull",
+      "threshold_ms": 500,
+      "ingest_p99_ms": 7597.227413,
+      "ingest_verdict": "FAIL",
+      "retrieval_p99_ms": 565.1688884099999,
+      "retrieval_verdict": "STRETCH",
+      "stress_p99_ms": 2058.472453,
+      "stress_verdict": "FAIL",
+      "tta_p99_ms": null,
+      "tta_verdict": "PEND",
+      "composite_verdict": "FAIL"
+    },
+    {
+      "slo_id": "iec60601-pacs",
+      "label": "Clinical radiology open",
+      "threshold_ms": 2000,
+      "ingest_p99_ms": 7597.227413,
+      "ingest_verdict": "FAIL",
+      "retrieval_p99_ms": 565.1688884099999,
+      "retrieval_verdict": "PASS",
+      "stress_p99_ms": 2058.472453,
+      "stress_verdict": "STRETCH",
+      "tta_p99_ms": null,
+      "tta_verdict": "PEND",
+      "composite_verdict": "STRETCH"
+    },
+    {
+      "slo_id": "iec60601-alarm",
+      "label": "IEC 60601-1-8 alarm",
+      "threshold_ms": 10000,
+      "ingest_p99_ms": 7597.227413,
+      "ingest_verdict": "PASS",
+      "retrieval_p99_ms": 565.1688884099999,
+      "retrieval_verdict": "PASS",
+      "stress_p99_ms": 2058.472453,
+      "stress_verdict": "PASS",
+      "tta_p99_ms": null,
+      "tta_verdict": "PEND",
+      "composite_verdict": "PASS"
+    }
+  ]
+}
