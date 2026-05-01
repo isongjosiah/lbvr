@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/isongjosiah/lbvr-med/internal/config"
 	"github.com/isongjosiah/lbvr-med/internal/tiers"
 )
 
@@ -133,18 +134,31 @@ func TestWriteJSON_Smoke(t *testing.T) {
 	}
 }
 
-// TestMakeTier_LiveModeNotImplemented: scaffold contract — live mode
-// returns a clear error until D15+ wires real clients.
-func TestMakeTier_LiveModeNotImplemented(t *testing.T) {
-	_, err := makeTier("hot", tiers.TierHot, "live", hotPut, hotProp, 0)
+// TestMakeTier_LiveModeRequiresCfg: live mode without a config is a
+// clear error (avoids accidental nil-deref against pinata.New /
+// filebase.New).
+func TestMakeTier_LiveModeRequiresCfg(t *testing.T) {
+	_, err := makeTier("hot", tiers.TierHot, "live", hotPut, hotProp, 0, nil)
 	if err == nil {
-		t.Fatal("expected live mode to return error at D15")
+		t.Fatal("expected live mode with nil cfg to return error")
+	}
+}
+
+// TestMakeTier_LiveColdNotYetWired: cold tier live mode still errors
+// because Irys/Sepolia funding hasn't landed.
+func TestMakeTier_LiveColdNotYetWired(t *testing.T) {
+	// Construct a non-empty cfg so we don't trip the nil-check above —
+	// we want to confirm the cold-specific error fires.
+	cfg := &config.Config{PinataJWT: "x", FilebaseAccessKey: "y", FilebaseSecretKey: "z", FilebaseBucket: "b"}
+	_, err := makeTier("cold", tiers.TierCold, "live", coldPut, coldProp, 0, cfg)
+	if err == nil {
+		t.Fatal("expected cold-tier live mode to return Sepolia-pending error")
 	}
 }
 
 // TestMakeTier_UnknownMode: rejects bogus modes loudly.
 func TestMakeTier_UnknownMode(t *testing.T) {
-	_, err := makeTier("hot", tiers.TierHot, "magic", hotPut, hotProp, 0)
+	_, err := makeTier("hot", tiers.TierHot, "magic", hotPut, hotProp, 0, nil)
 	if err == nil {
 		t.Fatal("expected unknown-mode error")
 	}

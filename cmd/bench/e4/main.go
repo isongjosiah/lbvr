@@ -43,7 +43,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/isongjosiah/lbvr-med/internal/config"
 	"github.com/isongjosiah/lbvr-med/internal/tiers"
+	"github.com/isongjosiah/lbvr-med/internal/tiers/filebase"
+	"github.com/isongjosiah/lbvr-med/internal/tiers/pinata"
 )
 
 type runRecord struct {
@@ -130,15 +133,27 @@ func run(n int, seed int64, sizesCSV, outDir, hotModeStr, warmModeStr, coldModeS
 	}
 	log.Printf("bench-E4: sampled %d bundles from %s (seed=%d)", len(picked), sizesCSV, seed)
 
-	hotClient, err := makeTier("hot", tiers.TierHot, hotModeStr, hotPut, hotProp, seed+1)
+	// Load .env only if any tier is live. Sim-only runs are deliberately
+	// not gated on .env presence — useful for CI where keys aren't
+	// provisioned.
+	var liveCfg *config.Config
+	if hotModeStr == "live" || warmModeStr == "live" || coldModeStr == "live" {
+		cfg, err := config.Load(".env")
+		if err != nil {
+			return fmt.Errorf("load .env: %w", err)
+		}
+		liveCfg = cfg
+	}
+
+	hotClient, err := makeTier("hot", tiers.TierHot, hotModeStr, hotPut, hotProp, seed+1, liveCfg)
 	if err != nil {
 		return fmt.Errorf("hot tier: %w", err)
 	}
-	warmClient, err := makeTier("warm", tiers.TierWarm, warmModeStr, warmPut, warmProp, seed+2)
+	warmClient, err := makeTier("warm", tiers.TierWarm, warmModeStr, warmPut, warmProp, seed+2, liveCfg)
 	if err != nil {
 		return fmt.Errorf("warm tier: %w", err)
 	}
-	coldClient, err := makeTier("cold", tiers.TierCold, coldModeStr, coldPut, coldProp, seed+3)
+	coldClient, err := makeTier("cold", tiers.TierCold, coldModeStr, coldPut, coldProp, seed+3, liveCfg)
 	if err != nil {
 		return fmt.Errorf("cold tier: %w", err)
 	}
@@ -270,22 +285,40 @@ func run(n int, seed int64, sizesCSV, outDir, hotModeStr, warmModeStr, coldModeS
 	return nil
 }
 
-// makeTier returns a tiers.Client for the requested mode. Sim returns
-// the calibrated stand-in; live is left unimplemented at D15 (returns
-// an error if requested), with the integration plan documented in the
-// comment.
-func makeTier(name string, class uint8, mode string, putDist, propDist lnPair, seed int64) (tiers.Client, error) {
+// makeTier returns a tiers.Client for the requested mode.
+//
+// Sim mode returns the calibrated lognormal stand-in (sim_tier.go) —
+// the cfg argument is ignored.
+//
+// Live mode returns a real client backed by the corresponding
+// internal/tiers/{pinata,filebase,arweave} package. The cold tier (Irys)
+// stays "live not yet wired" until the Irys/Sepolia funding round
+// completes (CLAUDE.md §10 D4); we return a clear error rather than
+// silently downgrading.
+//
+// Semantic note (§V footnote material): Pinata's Get hits the
+// dedicated gateway and Filebase's Get hits the S3-compatible API,
+// so live-mode TTA measures *source-side reachability* — what an LBVR
+// production deployment would observe. This is intentionally distinct
+// from Trautwein 2024's public-IPFS-gateway TTA. Public-gateway
+// measurement is journal-scope.
+func makeTier(name string, class uint8, mode string, putDist, propDist lnPair, seed int64, cfg *config.Config) (tiers.Client, error) {
 	switch mode {
 	case "sim", "":
 		return NewSimTTA(name, class, putDist, propDist, seed), nil
 	case "live":
-		// Live integration plan: instantiate the corresponding
-		// internal/tiers/{pinata,filebase,arweave} client from .env,
-		// then wrap with a thin TTA-flavored decorator that captures
-		// (put_latency, polling-Get latencies). The decorator should
-		// preserve the tiers.Client interface so the per-bundle loop
-		// in runOneBundleTier stays tier-agnostic.
-		return nil, fmt.Errorf("e4: live mode not wired at D15 — see internal/tiers/%s/ for the client; bind it from .env once funding lands", name)
+		if cfg == nil {
+			return nil, fmt.Errorf("e4: live mode requires a loaded config; got nil")
+		}
+		switch class {
+		case tiers.TierHot:
+			return pinata.New(cfg)
+		case tiers.TierWarm:
+			return filebase.New(cfg)
+		case tiers.TierCold:
+			return nil, fmt.Errorf("e4: cold-tier live mode requires IRYS_PRIVATE_KEY funding (Sepolia ETH); not yet wired")
+		}
+		return nil, fmt.Errorf("e4: unknown tier class %d", class)
 	default:
 		return nil, fmt.Errorf("e4: unknown mode %q (want sim|live)", mode)
 	}
