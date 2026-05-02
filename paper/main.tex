@@ -1,0 +1,63 @@
+%% LBVR-Med — IEEE ICUFN 2026 submission (Track 3: Safety-Critical Networks)
+%% Hard limit: 6 pages, double-column, 10pt IEEEtran conference style.
+%% See docs/pending.md for the section-by-section drafting punch list.
+
+\documentclass[conference,10pt]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+% --- packages ----------------------------------------------------------
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[capitalise]{cleveref}
+\usepackage{url}
+
+\graphicspath{{figures/}}
+
+% Drop-in BibTeX text per IEEEtran convention.
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% --- title block --------------------------------------------------------
+\title{LBVR-Med: A Latency-Bounded Verifiable Retrieval Fabric for Safety-Critical Federated Systems}
+
+\author{
+  \IEEEauthorblockN{Josiah Ayoola Isong}
+  \IEEEauthorblockA{
+    Network Systems Laboratory\\
+    Kumoh National Institute of Technology\\
+    Gumi, Republic of Korea\\
+    \texttt{isongjosiah@gmail.com}
+  }
+}
+
+% --- document -----------------------------------------------------------
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\input{sections/00-abstract}
+\end{abstract}
+
+\begin{IEEEkeywords}
+verifiable storage; decentralized fabric; clinical SLOs; Byzantine resilience; provenance; W3C PROV; BLS signatures; safety-critical systems; erasure coding; proof of retrievability
+\end{IEEEkeywords}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-system-model}
+\input{sections/04-protocol}
+\input{sections/05-evaluation}
+\input{sections/06-discussion}
+\input{sections/07-conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
