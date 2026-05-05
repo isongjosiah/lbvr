@@ -4,49 +4,57 @@
 \subsection{Setup}
 \label{sec:eval:setup}
 
-We evaluate LBVR-Med on a Synthea FHIR R4 corpus generated for 100\,000 living patients, yielding 114\,693 bundles and 430.25\,GiB at the measured size distribution (mean 3.93\,MB, P50 2.23\,MB, P95 14.9\,MB, P99 37.9\,MB, max 98\,MB). All experiments are seeded for determinism (\texttt{seed=42}), and every run JSON carries an environment fingerprint (commit, Go version, kernel, CPU). The hot, warm, and cold tiers are simulated with calibrated lognormal latency distributions whose parameters track the published characteristics of Pinata, Filebase, and Arweave/Irys respectively (P50/P99 of 80/400\,ms hot, 120/600\,ms warm, 500/8000\,ms cold). The contract-side gas measurements run against Foundry's in-memory EVM at the Cancun fork, which is opcode-equivalent to Polygon zkEVM Cardona; we leave the live-Cardona spot-check to journal scope.
+We evaluate on a Synthea FHIR R4 corpus of 100\,000 living patients (114\,693 bundles, 430.25\,GiB; P50 2.23\,MB, P99 37.9\,MB). Experiments seed deterministically; each run records an environment fingerprint. Tiers are simulated with calibrated lognormal latency distributions tracking Pinata, Filebase, and Arweave/Irys (P50/P99: 80/400\,ms hot, 120/600\,ms warm, 500/8000\,ms cold). Gas measurements use Foundry's in-memory EVM at the Cancun fork, opcode-equivalent to Cardona; live-Cardona spot-check is journal scope.
 
 \subsection{Ingest, retrieval, and network adversity}
 \label{sec:eval:ingest}
 
-Figure~\ref{fig:e1} shows ingest throughput at 1\,K and 10\,K corpus scales (the 100\,K projection is shown but flagged as extrapolation). The pipeline sustains 442 bundles/min at the 10\,K scale (28.38\,MiB/s), with the upload stage dominating per-bundle latency (P50 553\,ms of 575\,ms). Figure~\ref{fig:e2} compares LBVR-Med's retrieval latency against four baselines (Pinata-only, AWS S3, Storj, public ipfs.io); LBVR-Med tracks the dedicated-gateway baselines and stays an order of magnitude under the public-IPFS baseline. P99 retrieval latency is 565\,ms.
+Figure~\ref{fig:e1} shows ingest throughput at 1\,K and 10\,K scales (100\,K extrapolated). The pipeline sustains 442 bundles/min at 10\,K (28.4\,MiB/s); upload dominates per-bundle latency (P50 554\,ms of 575\,ms). Figure~\ref{fig:e2} compares LBVR-Med retrieval latency against four baselines (Pinata-only, AWS S3, Storj, public ipfs.io): LBVR-Med tracks dedicated-gateway baselines and stays an order of magnitude under public IPFS, with P99 = 565\,ms.
 
 \begin{figure}[!t]
   \centering
   \begin{subfigure}[b]{0.48\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{E1_ingest_throughput}
+    \includegraphics[width=0.95\columnwidth]{E1_ingest_throughput}
     \caption{Ingest throughput.}
     \label{fig:e1}
   \end{subfigure}\hfil
   \begin{subfigure}[b]{0.48\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{E2_retrieval_latency_cdf}
+    \includegraphics[width=0.95\columnwidth]{E2_retrieval_latency_cdf}
     \caption{Retrieval latency CDF.}
     \label{fig:e2}
   \end{subfigure}
   \caption{E1 and E2: (a)~ingest throughput by corpus scale, with the 100\,K projection extrapolated from 10\,K steady-state; (b)~LBVR-Med retrieval latency vs four baselines (Pinata-only, AWS S3, Storj, public ipfs.io).}
 \end{figure}
 
-Figure~\ref{fig:e3} stresses the gateway with a $3 \times 3$ matrix of WAN conditions: $\{10, 50, 200\}$\,ms RTT crossed with $\{0, 1, 5\}\%$ packet loss, 1500 retrievals per cell. P99 climbs smoothly through the row at 0\% loss (588~ms~$\to$~856~ms across the RTT range) and stays under the 2\,s clinical SLO at 1\% loss (776~ms~$\to$~1060~ms). At 5\% loss the SLO breaks across all RTTs (P99 1.9--2.7\,s); the breach onset at 5\% loss is the operational threshold the paper claims.
+Table~\ref{tab:e3} reports E3 P99 (ms) across a $3 \times 3$ WAN matrix: $\{10, 50, 200\}$\,ms RTT $\times$ $\{0, 1, 5\}\%$ loss, 1500 retrievals/cell. P99 stays under the 2\,s clinical SLO at $\le 1\%$ loss (776--1060\,ms across RTTs) and breaks at 5\% loss (1.9--2.7\,s). The 5\% threshold is the operational claim.
 
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=\columnwidth]{E3_rtt_loss_heatmap}
-  \caption{E3: P99 retrieval latency under WAN adversity. SLO breach onset at 5\% sustained loss.}
-  \label{fig:e3}
-\end{figure}
+\begin{table}[!t]
+\caption{E3: P99 retrieval latency (ms) by RTT $\times$ loss.}
+\label{tab:e3}
+\centering\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+RTT$\backslash$loss & 0\% & 1\% & 5\% \\
+\midrule
+10\,ms  & 588 & 776  & 2655 \\
+50\,ms  & 708 & 877  & 1903 \\
+200\,ms & 856 & 1060 & 2058 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Time-to-availability and PoR cost}
 \label{sec:eval:tta-por}
 
-Time-to-availability post-PUT (E4, sim-mode), polled at logarithmic checkpoints from 100\,ms to 5\,min over 100 bundles: hot reaches 99\% reachability within 510\,ms; warm within 2\,s; cold within 120\,s; zero polling-budget timeouts. The cold-tier tail is the chain-settlement signature; clinical workflows are bounded by the hot+warm path.
+Time-to-availability post-PUT (E4, sim-mode), $n=100$, log-cadence polling 100\,ms~$\to$~5\,min: hot reaches 99\% reachability within 510\,ms, warm within 2\,s, cold within 120\,s; zero polling-budget timeouts. Cold-tier tail is the chain-settlement signature; clinical workflows are bounded by the hot+warm path.
 
-PoR proof cost (Figure~\ref{fig:e5}) measures responder-side prove time and contract-side verify gas across Merkle proof depths $\{3, 5, 7, 9, 11, 13\}$ (128\,KiB to 128\,MiB bundles). Prove time is constant at $\approx 630\,\mu$s P50 across all depths---BLS sign dominates, Merkle-proof construction contributes \(< 2\,\mu\)s. Gas for \texttt{respondToChallenge} grows linearly at 12\,k gas per depth level (290\,k at depth 3, 533\,k at depth 13); \texttt{postChallenge} and \texttt{recordVerdict} are depth-independent at 122\,k and 75\,k respectively. A full PoR cycle at depth 13 is 731\,k gas combined.
+PoR proof cost (Figure~\ref{fig:e5}) measures responder prove time and verify gas across Merkle proof depths $\{3,5,7,9,11,13\}$ (128\,KiB--128\,MiB). Prove time is constant at $\approx 630\,\mu$s P50: BLS sign dominates, Merkle proof contributes \(< 2\,\mu\)s. Gas for \texttt{respondToChallenge} grows linearly (290\,k at depth 3, 533\,k at depth 13); \texttt{postChallenge}/\texttt{recordVerdict} are depth-independent at 122\,k/75\,k.
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=\columnwidth]{E5_por_cost_bars}
+  \includegraphics[width=0.95\columnwidth]{E5_por_cost_bars}
   \caption{E5: PoR responder cost (top) and verifier gas (bottom) across Merkle proof depths.}
   \label{fig:e5}
 \end{figure}
@@ -54,21 +62,21 @@ PoR proof cost (Figure~\ref{fig:e5}) measures responder-side prove time and cont
 \subsection{Byzantine withstand}
 \label{sec:eval:byzantine}
 
-Figure~\ref{fig:e6} measures retrieval success against the uniform Byzantine adversary at fractions $f \in \{0, 0.1, 0.33, 0.5, 0.67\}$ (500 retrievals per fraction). Success degrades smoothly: 100\%~$\to$~67\%~$\to$~48\%~$\to$~19\%~$\to$~16\%. Critically, \texttt{recovery\_failed} is zero at every $f$: when the gateway commits to the slow path it always reconstructs successfully. The visible failures are decryption errors on optimistic fast-path commits, not RS reconstruction failures.
+Against the uniform adversary (Figure~\ref{fig:e6}), retrieval success degrades smoothly across $f \in \{0, 0.1, 0.33, 0.5, 0.67\}$: 100\%~$\to$~67\%~$\to$~48\%~$\to$~19\%~$\to$~16\% (500 retrievals/fraction). \texttt{recovery\_failed} is zero throughout: the visible failures are decrypt errors on optimistic fast-path commits, not RS reconstruction failures.
 
-The tier-selective adversary (Figure~\ref{fig:e6b}) is qualitatively different. At $f \le 0.33$ the adversary is invisible---100\% retrieval success---because the LBVR fast path uses hot+warm only, and the adversary's chosen tier (cold) is engaged only when reconstruction is needed. The cliff is sharp: 50\% success at $f=0.5$, 0\% at $f=0.67$. The PoR cadence does not flag the adversary because it serves correctly during challenges. This ``detection gap'' is the substantive new measurement; the journal extension closes it via per-tier PoR-vs-retrieval divergence monitoring.
+The tier-selective adversary (Figure~\ref{fig:e6b}) is qualitatively different. At $f \le 0.33$ the adversary is invisible (100\% success) because the fast path uses hot+warm only and the targeted cold tier is engaged solely on reconstruction. The cliff is sharp: 50\% at $f=0.5$, 0\% at $f=0.67$. PoR cadence does not flag the adversary since it serves correctly on challenges. This detection gap is the new measurement; the journal extension adds per-tier PoR-vs-retrieval divergence monitoring at the gateway.
 
 \begin{figure}[!t]
   \centering
   \begin{subfigure}[b]{0.48\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{E6_byzantine_uniform}
+    \includegraphics[width=0.95\columnwidth]{E6_byzantine_uniform}
     \caption{Uniform.}
     \label{fig:e6}
   \end{subfigure}\hfil
   \begin{subfigure}[b]{0.48\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{E6b_detection_gap}
+    \includegraphics[width=0.95\columnwidth]{E6b_detection_gap}
     \caption{Tier-selective.}
     \label{fig:e6b}
   \end{subfigure}
@@ -78,21 +86,19 @@ The tier-selective adversary (Figure~\ref{fig:e6b}) is qualitatively different. 
 \subsection{Erasure recovery}
 \label{sec:eval:erasure}
 
-Figure~\ref{fig:e9} reports recovery latency under single-tier failure (D0 missing, D1 missing, P0 missing) over 50 bundles $\times$ 5 reps. Fast-path commit (no failure, $\{D_0, D_1\}$ both arrive) is the baseline; D0 or D1 recovery dominates with the cold-tier wait. P0 missing is a fast-path no-op (the optimistic commit succeeds; we measure the time to detect P0 dead).
-
-Figure~\ref{fig:e9multi} extends to double-tier failures across modes $\{\textsf{D0+D1}, \textsf{D0+P0}, \textsf{D1+P0}\}$. The early-fail short-circuit (Section~\ref{sec:protocol:retrieval}) drops D0+D1 detection median to 137\,ms (P99 559\,ms) by recognising that the surviving parity alone cannot reach the 2-of-3 threshold; without the optimisation the gateway would wait the full cold-tier P99 ($\approx 8$\,s on calibrated lognormal). When the failure pair includes the parity shard, the gateway must wait for the cold-tier context to fail before committing recovery---562\,ms median, 8.7\,s P99.
+Figure~\ref{fig:e9} reports single-tier failure recovery (D0/D1/P0 missing) over 50 bundles $\times$ 5 reps. D0 or D1 recovery is bounded by cold-tier wait; P0 missing is a fast-path no-op. Figure~\ref{fig:e9multi} extends to double failures: the early-fail short-circuit (Section~\ref{sec:protocol:retrieval}) drops D0+D1 detection to 137\,ms median (P99 559\,ms)---without it, the gateway waits the full cold-tier P99 ($\approx 8$\,s). Parity-included pairs (D0+P0, D1+P0) wait the cold-tier context before committing recovery: 562\,ms median, 8.7\,s P99.
 
 \begin{figure}[!t]
   \centering
   \begin{subfigure}[b]{0.48\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{E9_erasure_recovery_cdf}
+    \includegraphics[width=0.95\columnwidth]{E9_erasure_recovery_cdf}
     \caption{Single-tier.}
     \label{fig:e9}
   \end{subfigure}\hfil
   \begin{subfigure}[b]{0.48\columnwidth}
     \centering
-    \includegraphics[width=\columnwidth]{E9_multi_double_failure_cdf}
+    \includegraphics[width=0.95\columnwidth]{E9_multi_double_failure_cdf}
     \caption{Double-tier.}
     \label{fig:e9multi}
   \end{subfigure}
@@ -102,14 +108,7 @@ Figure~\ref{fig:e9multi} extends to double-tier failures across modes $\{\textsf
 \subsection{Provenance overhead and tamper detection}
 \label{sec:eval:eprov}
 
-Figure~\ref{fig:eprov} reports per-stage provenance lifecycle latency (gen, sign, canon, anchor, setroot, verify) across 1000 retrievals. End-to-end median is dominated by anchor (calibrated lognormal $\mu=30$\,ms, P99 200\,ms). Sign and verify both run in $\sim 20$\,ms (BLS pairing-cost dominated). Detection rate against seven tampering case categories (hash, signature, signer-substitute, quorum-reduce, missing-sig, timestamp-tamper, plus the no-tamper baseline): 100\%, $n=143$ per case (Table~\ref{tab:eprov-detect}).
-
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=\columnwidth]{E_PROV_overhead}
-  \caption{E-PROV: per-stage provenance lifecycle latency, P50 with P95 error bar.}
-  \label{fig:eprov}
-\end{figure}
+Per-stage provenance latency over 1000 retrievals (E-PROV) is anchor-dominated ($\mu=30$\,ms, P99 200\,ms); sign and verify each run $\sim 20$\,ms (BLS pairing). Detection rate against seven tampering categories at $n=143$/case is 100\% (Table~\ref{tab:eprov-detect}).
 
 \begin{table}[!t]
 \caption{E-PROV: tamper-detection rate per case category.}
