@@ -1,24 +1,37 @@
 \section{Protocol Design}
 \label{sec:protocol}
 
-% TODO: P1.4 — ~1.5 pages (~1.4k words). Compress from
-% docs/erasure-design.md and docs/provenance-spec.md. Must contain:
-%
-%   \subsection{Tiered placement}: hot/warm/cold mapping; placement
-%     policy.
-%
-%   \subsection{Erasure coding (RS(2,3))}: ~0.4 pages. Compress from
-%     erasure-design.md \S3-\S4. Why RS(2,3) and not higher parity.
-%
-%   \subsection{Cryptographic provenance}: ~0.4 pages. Compress from
-%     provenance-spec.md \S2-\S3. PROV-JSON extension; BLS quorum;
-%     JCS canonicalization; on-chain anchoring.
-%
-%   \subsection{PoR challenge/response/verdict}: contract API; nonce
-%     binding; auto-migration after k consecutive failures.
-%
-%   \subsection{Quorum retrieval}: parallel-3 fetch + first-2 wins;
-%     SLO budget; cross-tier reconstruction; circuit breaker.
-%
-%   \subsection{Registry schema}: BundleRecord shape; on-chain
-%     numChunks binding; bundleId derivation.
+\subsection{Tiered placement}
+\label{sec:protocol:placement}
+
+Three tier classes---hot, warm, cold---are populated with one shard each. The hot tier is sized for sub-second retrieval (Pinata-class dedicated gateway), the warm tier balances cost and latency (Filebase-class S3), and the cold tier provides chain-settled archival (Arweave/Irys). Placement is fixed at ingest: \(D_0 \to\) hot, \(D_1 \to\) warm, \(P_0 \to\) cold. The fast retrieval path fetches \(\{D_0, D_1\}\) in parallel and skips the cold tier entirely; cold is engaged only when one of \(\{D_0, D_1\}\) is unreachable, at which point the gateway reconstructs from \(\{P_0\} \cup\{D_0 \mid D_1\}\). This design isolates the cold-tier settlement tail (P99 \(\approx\) 60\,s for chain-settled providers) from the clinical critical path.
+
+\subsection{Erasure coding}
+\label{sec:protocol:erasure}
+
+We use Reed--Solomon~\cite{plank1997erasure} \(\textsf{RS}(2,3)\) over GF(\(2^8\)): two data shards \(D_0, D_1\) plus one parity shard \(P_0\), reconstructable from any 2-of-3. \(\textsf{RS}(2,3)\) is the \emph{minimum meaningful} configuration for a three-tier substrate: it tolerates exactly one tier outage at 1.5\(\times\) storage overhead, versus 3\(\times\) for naive replication. Higher-parity schemes (\(\textsf{RS}(3,5)\), \(\textsf{RS}(4,7)\)) are explicit journal-scope choices; they would smooth the tier-selective adversary cliff (Section~\ref{sec:eval}) at the cost of additional independent providers. We implement encode/decode via \texttt{klauspost/reedsolomon} v1.12, padded so all shards are equal size; the per-shard Merkle root is integrated into the bundle root \(M = \text{SHA-256}(M_{D_0} \mathbin{\|} M_{D_1} \mathbin{\|} M_{P_0})\) so PoR challenges can target a single shard without requiring full bundle reconstruction. The tree width \(N = \lceil |b| / 16\,\text{KiB} \rceil\) is bound on chain in \texttt{BundleRecord.numChunks}, blocking CVE-2012-2459-class second-preimage attacks.
+
+\subsection{Cryptographic provenance}
+\label{sec:protocol:provenance}
+
+Every successful retrieval produces a JCS-canonical~\cite{rfc8785} W3C PROV-JSON~\cite{w3cprov} document. We extend PROV-DM additively with a signature block on every \texttt{Activity}, \texttt{Entity}, and \texttt{Agent} of interest:
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize,frame=single]
+{ "algorithm": "BLS12-381-G2",
+  "signers": ["did:lbvr:gw-1","did:lbvr:gw-2"],
+  "quorum_threshold": 2,
+  "signature": "0x...",
+  "attestation_type": "retrieval_quorum" }
+\end{lstlisting}
+A document signed by \(k = 2\) distinct gateway nodes is considered authoritative. BLS12-381 G2 signatures aggregate to a single 96-byte envelope that verifies against the aggregated public key of the signers. The gateway computes \(h = \text{SHA-256}(\text{JCS-canonical bytes})\) and submits \(h\) to the on-chain \texttt{AuditorLog.anchorProvenance(bundleId, retrievalId, h)}; the document itself is stored off-chain on the same fabric (typically the hot tier) so storage cost stays \(O(1)\) per retrieval at the chain layer. Verification is deterministic: parse the document, re-derive the canonical hash, compare against the on-chain anchor, then verify each signature block against the named signers. The extension is strictly additive---a PROV-JSON consumer that ignores the signature blocks still parses the document validly---so LBVR-Med is interoperable with the yProv ecosystem~\cite{manzi2025intertwin}.
+
+\subsection{Proof of retrievability}
+\label{sec:protocol:por}
+
+The auditor contract \texttt{PoRVerifier} hosts a three-step protocol per shard, on a 30-day cadence. \emph{Post}: the auditor selects \((\text{shardIdx}, \text{chunkIdx}, \text{nonce})\) and calls \texttt{postChallenge}, which derives a deterministic challenge ID from \texttt{keccak256}\((\text{bundleId}, \text{shardIdx}, \text{chunkIdx}, \text{nonce}, \text{postedAt})\). \emph{Respond}: the responding storage replica reads the challenged chunk, builds the Merkle proof against the on-chain root, BLS-signs \(\textsf{SHA-256}(\text{chunk} \mathbin{\|} \text{nonce})\), and submits the tuple to \texttt{respondToChallenge}, which verifies the proof on-chain (BLS verification stays off-chain to keep gas bounded). \emph{Verdict}: the auditor verifies the BLS signature off-chain and posts a one-bit verdict via \texttt{recordVerdict}. \(k = 3\) consecutive failures emit a \texttt{ShardMigrationRequired} event, which the placement orchestrator handles by issuing \texttt{updateShardLayout} against \texttt{CIDRegistry} to retarget that shard to a healthier provider. Per-challenge nonces and the deterministic challenge ID block replay attacks (validated by Foundry test \texttt{test\_respond\_revertsOnDoubleResponse}). Gas is bounded: \(\textsf{postChallenge}\) at \(\approx 122\,\text{k}\), \(\textsf{respondToChallenge}\) growing linearly with proof depth from 290\,k (depth 3) to 533\,k (depth 13), and \(\textsf{recordVerdict}\) at \(\approx 75\,\text{k}\) (Section~\ref{sec:eval}).
+
+\subsection{Quorum retrieval}
+\label{sec:protocol:retrieval}
+
+The retrieval gateway's state machine is a parallel-3 fetcher with first-2-wins semantics and an early-fail short-circuit. On a \texttt{GET} request, the gateway issues fetches against all three shards concurrently. Each fetch races its own context with a per-tier P99 budget. As shards return, the gateway maintains \texttt{gotOK}, \texttt{gotErr}, and \texttt{outstanding} counts; the fast path commits as soon as 2 of \(\{D_0, D_1, P_0\}\) succeed AND the resulting Merkle proofs reconstruct the bundle root. The early-fail optimisation triggers when \(\textsf{gotOK} + \textsf{outstanding} < 2\), recovering a definitive \texttt{RecoveryFailure} verdict in $\sim 100$--$200$\,ms instead of waiting the full cold-tier P99 (Section~\ref{sec:eval}, E9-multi). The slow path engages on any single-shard failure: the gateway awaits the third shard, decodes via Reed--Solomon, and serves the reconstructed bundle. A circuit breaker on per-tier failure rate retargets traffic away from a tier whose error rate breaches a configurable threshold; this is orthogonal to the on-chain auto-migration (which fires on PoR cadence).
+
+The on-chain registry schema is minimal: \texttt{BundleRecord} holds \((\textsf{merkleRoot}, \textsf{numChunks}, \textsf{shardLayout}[3], \textsf{policyId}, \textsf{owner})\) where each \texttt{ShardPlacement} carries \((\textsf{cid}, \textsf{tier})\). Bundle IDs derive deterministically as \(\textsf{keccak256}(\textsf{clientAddr} \mathbin{\|} \textsf{merkleRoot})\), salting the index by the writer's address so cross-bundle deduplication is opt-in (and never automatic across consortium members).
