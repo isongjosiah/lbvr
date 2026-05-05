@@ -13,16 +13,19 @@ Figure~\ref{fig:e1} shows ingest throughput at 1\,K and 10\,K corpus scales (the
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=\columnwidth]{E1_ingest_throughput}
-  \caption{E1: ingest throughput by corpus scale. 100\,K projection extrapolates 10\,K steady-state.}
-  \label{fig:e1}
-\end{figure}
-
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=\columnwidth]{E2_retrieval_latency_cdf}
-  \caption{E2: retrieval latency CDF for LBVR-Med vs four baselines.}
-  \label{fig:e2}
+  \begin{subfigure}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\columnwidth]{E1_ingest_throughput}
+    \caption{Ingest throughput.}
+    \label{fig:e1}
+  \end{subfigure}\hfil
+  \begin{subfigure}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\columnwidth]{E2_retrieval_latency_cdf}
+    \caption{Retrieval latency CDF.}
+    \label{fig:e2}
+  \end{subfigure}
+  \caption{E1 and E2: (a)~ingest throughput by corpus scale, with the 100\,K projection extrapolated from 10\,K steady-state; (b)~LBVR-Med retrieval latency vs four baselines (Pinata-only, AWS S3, Storj, public ipfs.io).}
 \end{figure}
 
 Figure~\ref{fig:e3} stresses the gateway with a $3 \times 3$ matrix of WAN conditions: $\{10, 50, 200\}$\,ms RTT crossed with $\{0, 1, 5\}\%$ packet loss, 1500 retrievals per cell. P99 climbs smoothly through the row at 0\% loss (588~ms~$\to$~856~ms across the RTT range) and stays under the 2\,s clinical SLO at 1\% loss (776~ms~$\to$~1060~ms). At 5\% loss the SLO breaks across all RTTs (P99 1.9--2.7\,s); the breach onset at 5\% loss is the operational threshold the paper claims.
@@ -37,16 +40,9 @@ Figure~\ref{fig:e3} stresses the gateway with a $3 \times 3$ matrix of WAN condi
 \subsection{Time-to-availability and PoR cost}
 \label{sec:eval:tta-por}
 
-Figure~\ref{fig:e4} measures time-to-availability post-PUT, polled at logarithmic checkpoints (100\,ms~$\to$~5\,min). Hot reaches 99\% reachability within 510\,ms; warm within 2\,s; cold within 120\,s. All bundles eventually reachable (zero polling-budget timeouts at $n=100$). The cold-tier tail is the chain-settlement signature; clinical workflows are bounded by the hot+warm path.
+Time-to-availability post-PUT (E4, sim-mode), polled at logarithmic checkpoints from 100\,ms to 5\,min over 100 bundles: hot reaches 99\% reachability within 510\,ms; warm within 2\,s; cold within 120\,s; zero polling-budget timeouts. The cold-tier tail is the chain-settlement signature; clinical workflows are bounded by the hot+warm path.
 
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=\columnwidth]{E4_tta_curves}
-  \caption{E4: time-to-availability post-PUT, by tier (sim-mode calibration).}
-  \label{fig:e4}
-\end{figure}
-
-PoR proof cost (Figure~\ref{fig:e5}) measures responder-side prove time and contract-side verify gas across Merkle proof depths $\{3, 5, 7, 9, 11, 13\}$ (covering 128\,KiB to 128\,MiB bundles). Prove time is constant at $\approx 630\,\mu$s P50 across all depths---BLS sign dominates, Merkle-proof construction contributes \(< 2\,\mu\)s. Gas for \texttt{respondToChallenge} grows linearly at 12\,k gas per depth level (290\,k at depth 3, 533\,k at depth 13); \texttt{postChallenge} and \texttt{recordVerdict} are depth-independent at 122\,k and 75\,k respectively. A full PoR cycle at depth 13 is 731\,k gas combined.
+PoR proof cost (Figure~\ref{fig:e5}) measures responder-side prove time and contract-side verify gas across Merkle proof depths $\{3, 5, 7, 9, 11, 13\}$ (128\,KiB to 128\,MiB bundles). Prove time is constant at $\approx 630\,\mu$s P50 across all depths---BLS sign dominates, Merkle-proof construction contributes \(< 2\,\mu\)s. Gas for \texttt{respondToChallenge} grows linearly at 12\,k gas per depth level (290\,k at depth 3, 533\,k at depth 13); \texttt{postChallenge} and \texttt{recordVerdict} are depth-independent at 122\,k and 75\,k respectively. A full PoR cycle at depth 13 is 731\,k gas combined.
 
 \begin{figure}[!t]
   \centering
@@ -64,16 +60,19 @@ The tier-selective adversary (Figure~\ref{fig:e6b}) is qualitatively different. 
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=\columnwidth]{E6_byzantine_uniform}
-  \caption{E6 uniform Byzantine: smooth degradation as adversary fraction $f$ increases.}
-  \label{fig:e6}
-\end{figure}
-
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=\columnwidth]{E6b_detection_gap}
-  \caption{E6b tier-selective Byzantine: detection-gap up to $f=0.33$, sharp cliff to 0\% at $f=0.67$.}
-  \label{fig:e6b}
+  \begin{subfigure}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\columnwidth]{E6_byzantine_uniform}
+    \caption{Uniform.}
+    \label{fig:e6}
+  \end{subfigure}\hfil
+  \begin{subfigure}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\columnwidth]{E6b_detection_gap}
+    \caption{Tier-selective.}
+    \label{fig:e6b}
+  \end{subfigure}
+  \caption{Byzantine adversary withstand. (a)~Smooth degradation under uniform behaviour. (b)~Detection gap up to $f=0.33$, cliff to 0\% at $f=0.67$, under tier-selective behaviour.}
 \end{figure}
 
 \subsection{Erasure recovery}
@@ -85,16 +84,19 @@ Figure~\ref{fig:e9multi} extends to double-tier failures across modes $\{\textsf
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=\columnwidth]{E9_erasure_recovery_cdf}
-  \caption{E9: single-tier failure recovery CDF. Cold-tier wait dominates D0/D1 recovery.}
-  \label{fig:e9}
-\end{figure}
-
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=\columnwidth]{E9_multi_double_failure_cdf}
-  \caption{E9-multi: double-tier failure detection. Early-fail shorts D0+D1 to ~137\,ms median.}
-  \label{fig:e9multi}
+  \begin{subfigure}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\columnwidth]{E9_erasure_recovery_cdf}
+    \caption{Single-tier.}
+    \label{fig:e9}
+  \end{subfigure}\hfil
+  \begin{subfigure}[b]{0.48\columnwidth}
+    \centering
+    \includegraphics[width=\columnwidth]{E9_multi_double_failure_cdf}
+    \caption{Double-tier.}
+    \label{fig:e9multi}
+  \end{subfigure}
+  \caption{Erasure recovery latency. (a)~Single-tier failure --- cold-tier wait dominates D0/D1 recovery. (b)~Double-tier failure --- early-fail shorts D0+D1 to ${\sim}137$\,ms median while parity-included pairs wait the cold-tier P99.}
 \end{figure}
 
 \subsection{Provenance overhead and tamper detection}
@@ -132,29 +134,8 @@ timestamp\_tamper            & 142 & 100.0\% \\
 \subsection{Storage cost, end-to-end SLO compliance, and cross-SLO calibration}
 \label{sec:eval:slo}
 
-Figure~\ref{fig:e7} compares monthly storage cost across five architectures at the 100\,K-corpus scale (430.25\,GiB). LBVR-Med's RS(2,3) layout costs \$50.55/month, 5.1$\times$ cheaper than naive 3$\times$ Pinata replication (\$258/mo) and within 1.7$\times$ of S3 3-region replication while delivering decentralized governance, on-chain provenance, and Byzantine withstand the latter lacks.
+Storage cost (E7, analytical) at the 100\,K-corpus scale (430.25\,GiB) is \$50.55/mo for LBVR-Med's RS(2,3) layout, 5.1$\times$ cheaper than naive 3$\times$ Pinata replication (\$258/mo) and within 1.7$\times$ of S3 3-region replication (\$29.69/mo) while delivering decentralized governance, on-chain provenance, and Byzantine withstand the latter lacks.
 
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=\columnwidth]{E7_storage_cost}
-  \caption{E7: monthly storage cost by architecture, 100\,K-corpus scale.}
-  \label{fig:e7}
-\end{figure}
+The end-to-end SLO attainment synthesis (E8) composes Sections~\ref{sec:eval:ingest}--\ref{sec:eval:tta-por}: IEC~60601-1-8 alarm (10\,s) is PASS with margin; clinical radiology open (2\,s) is STRETCH under WAN adversity; chart-pull (500\,ms) FAILS at 5\% loss and lands at the SLO boundary at baseline. The composite per SLO ignores ingest (decouplable via pre-staging) and rolls up retrieval-baseline + stress + TTA via strictest-wins.
 
-The end-to-end SLO attainment table (Figure~\ref{fig:e8}) synthesises Sections~\ref{sec:eval:ingest}--\ref{sec:eval:tta-por}: the IEC~60601-1-8 alarm SLO (10\,s) PASSES with margin; clinical radiology open (2\,s) lands in STRETCH territory under WAN adversity; chart-pull (500\,ms) FAILS under WAN stress and lands at the SLO boundary at baseline. The composite verdict per SLO ignores ingest (decouplable via pre-staging) and rolls up retrieval-baseline + stress + TTA via strictest-wins.
-
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=\columnwidth]{E8_slo_attainment}
-  \caption{E8: end-to-end SLO attainment with verdict per axis.}
-  \label{fig:e8}
-\end{figure}
-
-Cross-SLO calibration (Figure~\ref{fig:e10}) places the LBVR-Med retrieval distribution against five domain SLO thresholds spanning four orders of magnitude. Power-grid GOOSE (4\,ms, IEC~61850) is 0.0\% feasible---no decentralized verifiable storage configuration meets a sub-10\,ms budget when even AES-GCM open + Merkle re-verify costs $\sim$5\,ms on commodity x86. The clinical and scientific-DT regimes (radiology open 2\,s and the interTwin notional 5\,s budget) are met at 100\%. The chart-pull 500\,ms boundary sits at 98.2\% feasibility; this is the limiting clinical workflow and the load-bearing finding for Section~\ref{sec:discussion}.
-
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=\columnwidth]{E10_cross_slo_calibration}
-  \caption{E10: cross-domain SLO calibration. Power-grid GOOSE infeasible; clinical/DT met.}
-  \label{fig:e10}
-\end{figure}
+Cross-SLO calibration (E10, post-processed from E2) places the LBVR-Med retrieval distribution against five domain SLO thresholds spanning four orders of magnitude. Power-grid GOOSE (4\,ms, IEC~61850) is 0.0\% feasible---no decentralized verifiable storage configuration meets a sub-10\,ms budget when even AES-GCM open + Merkle re-verify costs $\sim$5\,ms on commodity x86. The clinical and scientific-DT regimes (radiology open 2\,s and the interTwin notional 5\,s budget) are met at 100\%. The chart-pull 500\,ms boundary sits at 98.2\% feasibility; this is the limiting clinical workflow and the load-bearing finding for Section~\ref{sec:discussion}.

@@ -1,12 +1,11 @@
 % LBVR-Med — references.bib
-% Per CLAUDE.md §14. Verify each entry's metadata against the cited
-% venue's official record at the D19 reference-check pass (pending.md
-% P1.11). Entries flagged with `% TODO verify` need attention before
-% submission — the title and author surnames are confirmed but the
-% page numbers / DOI / month may be approximate.
+% Per CLAUDE.md §14. Per-entry "VERIFY" comments live alongside each
+% entry in this file (LaTeX comments with `%`); they do NOT enter
+% the rendered bibliography.
 
 % --- 1. Storage / IPFS / decentralized substrate -----------------------
 
+% VERIFY pages/DOI before submission.
 @inproceedings{trautwein2024ipfs,
   author    = {Trautwein, Dennis and Raman, Aravindh and Tyson, Gareth and Castro, Ignacio and Scott, Will and Schubotz, Moritz and Gipp, Bela and Psaras, Yiannis},
   title     = {{IPFS} in the Fast Lane: Accelerating a Decentralized Web},
@@ -14,56 +13,55 @@
   year      = {2024},
   publisher = {IEEE},
   address   = {Vancouver, BC, Canada},
-  month     = may,
-  note      = {TODO verify pages/DOI}
+  month     = may
 }
 
+% VERIFY volume/issue/pages/DOI before submission.
 @article{fang2024metaverse,
   author  = {Fang, Liming and others},
   title   = {Distributed Medical Data Storage Mechanism Based on Proof of Retrievability and Vector Commitment},
   journal = {IEEE Journal of Biomedical and Health Informatics},
-  year    = {2024},
-  note    = {TODO verify volume/issue/pages/DOI}
+  year    = {2024}
 }
 
+% PMC12534302; VERIFY volume/issue/pages/DOI.
 @article{li2025trl,
   author  = {Li, Hao and Lohachab, Ankur and Dumontier, Michel and Urovi, Visara},
   title   = {Privacy preservation in blockchain-based healthcare data sharing: A systematic review},
   journal = {Peer-to-Peer Networking and Applications},
-  year    = {2025},
-  note    = {PMC12534302; TODO verify volume/issue/pages/DOI}
+  year    = {2025}
 }
 
+% VERIFY volume/issue/pages/DOI.
 @article{mazzocca2025ssi,
   author  = {Mazzocca, Carlo and Acar, Abbas and Uluagac, Selcuk and Montanari, Rebecca and Bellavista, Paolo and Conti, Mauro},
   title   = {Self-Sovereign Identity for Decentralized Networks: A Comprehensive Survey},
   journal = {IEEE Communications Surveys \& Tutorials},
-  year    = {2025},
-  note    = {TODO verify volume/issue/pages/DOI}
+  year    = {2025}
 }
 
+% VERIFY volume/issue/pages/DOI.
 @article{manzi2025intertwin,
   author  = {Manzi, Andrea and others},
   title   = {{interTwin}: Advancing Scientific Digital Twins through {AI}, Federated Computing and Data},
   journal = {Future Generation Computer Systems},
-  year    = {2025},
-  note    = {TODO verify volume/issue/pages/DOI}
+  year    = {2025}
 }
 
+% VERIFY volume/issue/pages/DOI.
 @article{thwe2025dtps,
   author  = {Thwe, Eaint Phyu and {\c{S}}tefanov, Alexandru and Rajkumar, Vetrivel S. and Palensky, Peter},
   title   = {Digital Twins for Power Systems: Review of Current Practices, Requirements, Enabling Technologies, Data Federation, and Challenges},
   journal = {IEEE Access},
-  year    = {2025},
-  note    = {TODO verify volume/issue/pages/DOI}
+  year    = {2025}
 }
 
+% VERIFY volume/issue/pages/DOI.
 @article{savoia2026fcldt,
   author  = {Savoia, Filippo and Annunziata, Andrea and Thakur, Naba Krushna and Fortino, Giancarlo and Piccialli, Francesco},
   title   = {Federated continual learning meets digital twins: Architectures, algorithms, and open challenges},
   journal = {Neurocomputing},
-  year    = {2026},
-  note    = {TODO verify volume/issue/pages/DOI}
+  year    = {2026}
 }
 
 % --- 2. Regulatory frameworks -------------------------------------------
@@ -72,46 +70,42 @@
   author       = {{European Parliament and Council}},
   title        = {Regulation (EU) 2025/327 on the European Health Data Space},
   howpublished = {Official Journal of the European Union},
-  year         = {2025},
-  note         = {Establishes the {EHDS}; secondary-use chapter Articles 44--50.}
+  year         = {2025}
 }
 
 @misc{aiact2024,
   author       = {{European Parliament and Council}},
   title        = {Regulation (EU) 2024/1689 Laying Down Harmonised Rules on Artificial Intelligence ({AI} Act)},
   howpublished = {Official Journal of the European Union},
-  year         = {2024},
-  note         = {Article 12: record-keeping for high-risk {AI} systems.}
+  year         = {2024}
 }
 
 @misc{hipaanprm2025,
   author       = {{U.S. Department of Health and Human Services}},
   title        = {{HIPAA} Security Rule -- Notice of Proposed Rulemaking},
   howpublished = {90 FR 898 (6 Jan 2025)},
-  year         = {2025},
-  note         = {Proposed updates to 45 CFR \S\S~164.308--164.312.}
+  year         = {2025}
 }
 
 % --- 3. Clinical / cross-domain SLO standards ---------------------------
 
 @misc{iec60601-1-8,
   author       = {{International Electrotechnical Commission}},
-  title        = {{IEC} 60601-1-8:2006+A2:2020 Medical electrical equipment -- Part 1-8: General requirements, tests and guidance for alarm systems in medical electrical equipment and medical electrical systems},
+  title        = {{IEC} 60601-1-8:2006+A2:2020 Medical electrical equipment -- Part 1-8: General requirements, tests and guidance for alarm systems},
   year         = {2020},
   howpublished = {IEC standard}
 }
 
 @misc{iec61850goose,
   author       = {{International Electrotechnical Commission}},
-  title        = {{IEC} 61850-8-1:2011 Communication networks and systems for power utility automation -- Part 8-1: Specific communication service mapping (SCSM) -- Mappings to {MMS} and to {ISO/IEC} 8802-3},
+  title        = {{IEC} 61850-8-1:2011 Communication networks and systems for power utility automation, Part 8-1 ({GOOSE} mapping)},
   year         = {2011},
-  howpublished = {IEC standard; defines GOOSE},
-  note         = {Cited for the 4-ms substation-trip latency budget.}
+  howpublished = {IEC standard}
 }
 
 @misc{ieee11073-10700,
   author       = {{IEEE}},
-  title        = {{IEEE} 11073-10700-2022: Health informatics -- Device interoperability -- Part 10700: Service-oriented Device Connectivity (SDC) plug-and-play},
+  title        = {{IEEE} 11073-10700-2022 Health informatics -- Device interoperability -- {SDC} plug-and-play},
   year         = {2022},
   howpublished = {IEEE standard}
 }
@@ -120,30 +114,28 @@
 
 @misc{w3cprov,
   author       = {{World Wide Web Consortium}},
-  title        = {{PROV}-{DM}: The {PROV} Data Model and {PROV}-{JSON} Recommendations},
+  title        = {{PROV-DM} and {PROV-JSON} Recommendations},
   howpublished = {W3C Recommendation},
-  year         = {2013},
-  note         = {Provenance interchange standard underlying yProv and LBVR-Med L5.}
+  year         = {2013}
 }
 
 @misc{rfc8785,
-  author = {Rundgren, A. and Jordan, B. and Erdtman, S.},
-  title  = {{JSON} Canonicalization Scheme ({JCS})},
-  series = {Request for Comments},
-  number = {8785},
+  author    = {Rundgren, A. and Jordan, B. and Erdtman, S.},
+  title     = {{JSON} Canonicalization Scheme ({JCS})},
+  series    = {Request for Comments},
+  number    = {8785},
   publisher = {IETF},
-  year   = {2020},
-  doi    = {10.17487/RFC8785}
+  year      = {2020},
+  doi       = {10.17487/RFC8785}
 }
 
 @article{plank1997erasure,
-  author  = {Plank, James S.},
-  title   = {A Tutorial on {Reed-Solomon} Coding for Fault-Tolerance in {RAID}-like Systems},
-  journal = {Software: Practice and Experience},
-  volume  = {27},
-  number  = {9},
-  pages   = {995--1012},
-  year    = {1997},
-  publisher = {Wiley},
-  doi     = {10.1002/(SICI)1097-024X(199709)27:9<995::AID-SPE111>3.0.CO;2-6}
+  author    = {Plank, James S.},
+  title     = {A Tutorial on {Reed-Solomon} Coding for Fault-Tolerance in {RAID}-like Systems},
+  journal   = {Software: Practice and Experience},
+  volume    = {27},
+  number    = {9},
+  pages     = {995--1012},
+  year      = {1997},
+  publisher = {Wiley}
 }
