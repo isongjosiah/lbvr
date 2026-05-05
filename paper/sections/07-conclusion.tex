@@ -1,10 +1,8 @@
-\section{Conclusion}
+\section{Conclusion and Roadmap}
 \label{sec:conclusion}
 
-% TODO: P1.7 — ~0.25 page (~250 words). Three short paragraphs:
-%   1. Summary: four contributions delivered, headline numbers.
-%   2. Journal extension (FL-DT): full Filecoin tier, MIMIC-IV / DICOM,
-%      C2PA medical-imaging provenance, federated retrieval-quorum
-%      attestation.
-%   3. Third paper (cross-domain evaluation): real datasets in
-%      scientific-DT and power-grid-DT regimes.
+LBVR-Med delivers a verifiable storage fabric for safety-critical federated systems with four measured contributions: cross-tier RS(2,3) erasure with single- and double-tier failure recovery, BLS-quorum-signed provenance with 100\% tamper detection across seven attack categories, cross-SLO calibration positioning the fabric against clinical and cross-domain SLO regimes, and a tier-selective Byzantine adversary class that surfaces a previously unmeasured detection gap. The fabric meets the IEC~60601-1-8 alarm SLO with margin, sits in the stretch band for chart-pull and radiology-open under WAN adversity, and is fundamentally unsuitable for sub-10\,ms power-grid GOOSE messaging.
+
+The journal extension targets IEEE JBHI and adds three components: an expanded five-tier substrate (introducing local Kubo and Filecoin FVM alongside the conference's three tiers), a re-wrapped NIH ChestX-ray14 corpus as synthetic DICOM workload to exercise the imaging path, and a verifiable retrieval-quorum attestation layer in which federated-learning clients emit quorum-signed receipts proving they consumed only EHDS-permitted shards. The C2PA medical-imaging profile augments the PROV-JSON extension for the DICOM half of the workload.
+
+A third paper, targeting IEEE Transactions on Smart Grid or Future Generation Computer Systems, applies the fabric to scientific-DT and power-grid-DT regimes with real domain datasets, validating cross-SLO calibration's predictive value beyond the conference's healthcare-instantiated motivation. The chart-pull stretch boundary identified in this work is the natural axis for an edge-caching / gateway-placement study in that follow-on.
