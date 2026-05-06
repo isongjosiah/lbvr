@@ -4,7 +4,7 @@
 \subsection{Setup}
 \label{sec:eval:setup}
 
-We evaluate on a Synthea FHIR R4 corpus of 100\,000 living patients (114\,693 bundles, 430.25\,GiB; P50 2.23\,MB, P99 37.9\,MB). Experiments seed deterministically; each run records an environment fingerprint. Tiers are simulated with calibrated lognormal latency distributions tracking Pinata, Filebase, and Arweave/Irys (P50/P99: 80/400\,ms hot, 120/600\,ms warm, 500/8000\,ms cold). Gas measurements use Foundry's in-memory EVM at the Cancun fork, opcode-equivalent to Cardona; live-Cardona spot-check is journal scope.
+We evaluate on a Synthea FHIR R4 corpus of 100\,000 living patients (114\,693 bundles, 430.25\,GiB; P50 2.23\,MB, P99 37.9\,MB). Experiments seed deterministically; each run records an environment fingerprint. Tiers are simulated with calibrated lognormal latency distributions tracking Pinata, Filebase, and Arweave/Irys (P50/P99: 80/400\,ms hot, 120/600\,ms warm, 500/8000\,ms cold). The L4 contracts are deployed live on PureChain (Geth-based PoA² at the London fork); gas numbers below come from Foundry's in-memory EVM at the same fork, byte-equivalent to on-chain charges.
 
 \subsection{Ingest, retrieval, and network adversity}
 \label{sec:eval:ingest}
