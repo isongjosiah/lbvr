@@ -18,10 +18,19 @@ fuzz = { runs = 1000 }
 invariant = { runs = 256 }
 
 [rpc_endpoints]
-cardona = "${CARDONA_RPC_URL}"
+# Generic CHAIN_RPC_URL is the canonical entry going forward; named
+# aliases (cardona, purechain) preserved so prior deploy scripts still
+# resolve. The paper references "an EVM-compatible chain" with the
+# specific deployment chain stated in §V-A as a footnote.
+chain     = "${CHAIN_RPC_URL}"
+cardona   = "${CARDONA_RPC_URL}"
+purechain = "${PURECHAIN_RPC_URL}"
 
 [etherscan]
 cardona = { key = "${POLYGONSCAN_API_KEY}", chain = 2442, url = "https://api-cardona-zkevm.polygonscan.com/api" }
+# PureChain (PoA², Chain ID 900520900520, on-demand block time) — no
+# Etherscan-style verifier as of D22; tx hashes verified manually via
+# block explorer.
 
 [fmt]
 line_length = 120

@@ -15,19 +15,23 @@ import {PoRVerifier} from "../src/PoRVerifier.sol";
 ///         per-bundle Merkle params on every response), so the registry must
 ///         be deployed first.
 ///
-/// @dev Invocation:
+/// @dev Invocation (chain-agnostic, e.g. PureChain via foundry.toml alias):
+///      forge script contracts/script/Deploy.s.sol:Deploy \
+///          --rpc-url purechain --broadcast
+///
+///      Or with explicit RPC + Etherscan-style verifier (e.g. Cardona):
 ///      forge script contracts/script/Deploy.s.sol:Deploy \
 ///          --rpc-url $CARDONA_RPC_URL --broadcast --verify \
 ///          --etherscan-api-key $POLYGONSCAN_API_KEY
 ///
-/// @dev Required env:
-///      CARDONA_PRIVATE_KEY  — deployer key (becomes default admin +
-///                             MIGRATOR_ROLE on CIDRegistry, ANCHOR_ROLE on
-///                             AuditorLog, AUDITOR_ROLE + RESPONDER_ROLE on
-///                             PoRVerifier; revoke responder/auditor on the
-///                             deployer key before promoting the gateway).
-///      CARDONA_RPC_URL      — RPC endpoint (also read via foundry.toml [rpc_endpoints]).
-///      POLYGONSCAN_API_KEY  — for --verify.
+/// @dev Required env (resolution order):
+///      CHAIN_PRIVATE_KEY    — generic deployer key (preferred).
+///      CARDONA_PRIVATE_KEY  — fallback for backward compat with the
+///                             D5 deploy convention.
+///      Either one becomes default admin + MIGRATOR_ROLE on CIDRegistry,
+///      ANCHOR_ROLE on AuditorLog, AUDITOR_ROLE + RESPONDER_ROLE on
+///      PoRVerifier; revoke responder/auditor on the deployer key
+///      before promoting the gateway.
 ///
 ///      Optional:
 ///      ADMIN_TRANSFER_DELAY — default-admin handover delay (seconds); defaults to 3 days.
@@ -37,7 +41,12 @@ contract Deploy is Script {
     uint48 internal constant DEFAULT_ADMIN_TRANSFER_DELAY = 3 days;
 
     function run() external returns (CIDRegistry registry, AuditorLog auditor, PoRVerifier por) {
-        uint256 pk = vm.envUint("CARDONA_PRIVATE_KEY");
+        // Prefer CHAIN_PRIVATE_KEY (chain-agnostic); fall back to
+        // CARDONA_PRIVATE_KEY so prior workflows keep working.
+        uint256 pk = vm.envOr("CHAIN_PRIVATE_KEY", uint256(0));
+        if (pk == 0) {
+            pk = vm.envUint("CARDONA_PRIVATE_KEY");
+        }
         address admin = vm.addr(pk);
         uint48 delay = uint48(vm.envOr("ADMIN_TRANSFER_DELAY", uint256(DEFAULT_ADMIN_TRANSFER_DELAY)));
 
