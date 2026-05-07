@@ -6,6 +6,36 @@ import (
 	"testing"
 )
 
+// TestPubkeyFromPrivate_MatchesGenerateKey: the helper used by callers
+// that load BLS keys from .env (gateway main loop) must produce the
+// exact pubkey that GenerateKey would have stored alongside the
+// private key. A drift here would make every signature we produce
+// from .env-loaded keys silently fail downstream verification.
+func TestPubkeyFromPrivate_MatchesGenerateKey(t *testing.T) {
+	for i := 0; i < 16; i++ {
+		kp, err := GenerateKey()
+		if err != nil {
+			t.Fatalf("genkey[%d]: %v", i, err)
+		}
+		got, err := PubkeyFromPrivate(kp.PrivateBytes)
+		if err != nil {
+			t.Fatalf("PubkeyFromPrivate[%d]: %v", i, err)
+		}
+		if !bytes.Equal(got[:], kp.PublicBytes[:]) {
+			t.Fatalf("iter %d: derived pubkey diverges from GenerateKey pubkey", i)
+		}
+	}
+}
+
+// TestPubkeyFromPrivate_RejectsZero: a zero scalar would produce the
+// identity element and silently accept any signature.
+func TestPubkeyFromPrivate_RejectsZero(t *testing.T) {
+	var zero [PrivateKeySize]byte
+	if _, err := PubkeyFromPrivate(zero); err == nil {
+		t.Fatal("expected error on zero scalar")
+	}
+}
+
 // TestGenerateKey_Distinct: 100 successive keys, all unique. A
 // duplicate would imply broken entropy or a shared internal scratch
 // buffer — both are silent and devastating, so this is worth a real

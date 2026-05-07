@@ -171,7 +171,7 @@ func runServe(args []string) int {
 		logger.Info("sidecar ready", slog.String("dir", manifestDir))
 	}
 
-	provBundle, err := buildProvenance(logger)
+	provBundle, err := buildProvenance(logger, cfg)
 	if err != nil {
 		logger.Error("provenance setup failed", slog.String("err", err.Error()))
 		return 1
@@ -287,9 +287,10 @@ func installSignalHandler(ctx context.Context, cancel context.CancelFunc, logger
 }
 
 // provenanceBundle bundles the per-process provenance dependencies built
-// at gateway startup. Conference-scope keys are ephemeral (generated
-// fresh per process); production loads them from .env via configured
-// GATEWAY_BLS_SK_{1,2} (TODO when those env vars are wired up).
+// at gateway startup. If GATEWAY_BLS_SK_{1,2} are present in the loaded
+// config, the keys are parsed and used directly (production / persistent
+// quorum identity); otherwise we fall back to ephemeral keygen so a
+// dev/test gateway can boot without provisioning anything.
 type provenanceBundle struct {
 	signerKeys      [][32]byte
 	signerDIDs      []string
@@ -300,31 +301,66 @@ type provenanceBundle struct {
 	anchorContract  string
 }
 
-// buildProvenance generates 2 ephemeral BLS keypairs and constructs the
-// matching gateway agents + a mock anchor client. The on-chain anchor
-// path (chainAnchor against AuditorLog) is wired in D12 once forge
-// build + abigen have produced the contract bindings.
-func buildProvenance(logger *slog.Logger) (provenanceBundle, error) {
+// buildProvenance constructs the per-process BLS quorum + anchor bundle.
+//
+// Key resolution:
+//   - If both GATEWAY_BLS_SK_1 and GATEWAY_BLS_SK_2 are set in cfg
+//     (hex-encoded, 0x-prefixed or not), parse them and derive matching
+//     pubkeys via provenance.PubkeyFromPrivate.
+//   - Otherwise, generate fresh ephemeral keypairs (the default in dev
+//     and unit tests where no .env is present).
+//
+// The on-chain anchor path (chainAnchor against AuditorLog) remains
+// stubbed; mockAnchor is always returned. The chain wiring lands in
+// the journal extension via abigen-bound bindings.
+func buildProvenance(logger *slog.Logger, cfg *config.Config) (provenanceBundle, error) {
 	const numSigners = 2
 	keys := make([][32]byte, numSigners)
 	dids := make([]string, numSigners)
 	agents := make([]provenance.GatewayAgent, numSigners)
+
+	envKeys := []string{cfg.GatewayBLSSK1, cfg.GatewayBLSSK2}
+	useEnv := envKeys[0] != "" && envKeys[1] != ""
+
 	for i := 0; i < numSigners; i++ {
-		kp, err := provenance.GenerateKey()
-		if err != nil {
-			return provenanceBundle{}, fmt.Errorf("buildProvenance: keygen %d: %w", i, err)
+		var (
+			priv [provenance.PrivateKeySize]byte
+			pub  [provenance.PublicKeySize]byte
+		)
+		if useEnv {
+			privBytes, err := decodeHexKey(envKeys[i], provenance.PrivateKeySize)
+			if err != nil {
+				return provenanceBundle{}, fmt.Errorf("buildProvenance: parse SK_%d: %w", i+1, err)
+			}
+			copy(priv[:], privBytes)
+			pub, err = provenance.PubkeyFromPrivate(priv)
+			if err != nil {
+				return provenanceBundle{}, fmt.Errorf("buildProvenance: derive PK_%d: %w", i+1, err)
+			}
+		} else {
+			kp, err := provenance.GenerateKey()
+			if err != nil {
+				return provenanceBundle{}, fmt.Errorf("buildProvenance: keygen %d: %w", i, err)
+			}
+			priv = kp.PrivateBytes
+			pub = kp.PublicBytes
 		}
-		keys[i] = kp.PrivateBytes
+		keys[i] = priv
 		// DID convention: did:lbvr:gw- + first 8 hex chars of pubkey.
-		dids[i] = "did:lbvr:gw-" + hex.EncodeToString(kp.PublicBytes[:4])
+		dids[i] = "did:lbvr:gw-" + hex.EncodeToString(pub[:4])
 		agents[i] = provenance.GatewayAgent{
 			ProvType:  "prov:SoftwareAgent",
 			Role:      "retrieval_gateway",
 			Version:   "lbvr-gateway-0.1.0",
-			PublicKey: "0x" + hex.EncodeToString(kp.PublicBytes[:]),
+			PublicKey: "0x" + hex.EncodeToString(pub[:]),
 		}
 	}
-	logger.Info("provenance keys generated (ephemeral)",
+	source := "ephemeral"
+	if useEnv {
+		source = "env"
+	}
+	logger.Info("provenance keys configured",
+		slog.String("source", source),
 		slog.Int("signers", numSigners),
 		slog.String("did1", dids[0]),
 		slog.String("did2", dids[1]))
@@ -343,4 +379,23 @@ func buildProvenance(logger *slog.Logger) (provenanceBundle, error) {
 		anchor:          newMockAnchor(),
 		anchorContract:  "0xMockAuditorLog0000000000000000000000000000",
 	}, nil
+}
+
+// decodeHexKey parses a hex-encoded BLS key (with or without `0x`
+// prefix) into a fixed-length byte slice. Returns an error if the
+// decoded length does not match expectedLen, so a misconfigured .env
+// fails loud rather than silently zero-padding.
+func decodeHexKey(s string, expectedLen int) ([]byte, error) {
+	t := s
+	if len(t) >= 2 && (t[:2] == "0x" || t[:2] == "0X") {
+		t = t[2:]
+	}
+	b, err := hex.DecodeString(t)
+	if err != nil {
+		return nil, fmt.Errorf("decode hex: %w", err)
+	}
+	if len(b) != expectedLen {
+		return nil, fmt.Errorf("decoded length %d, want %d", len(b), expectedLen)
+	}
+	return b, nil
 }

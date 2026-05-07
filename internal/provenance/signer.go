@@ -100,6 +100,29 @@ func generateKeyFrom(r io.Reader) (*KeyPair, error) {
 	return kp, nil
 }
 
+// PubkeyFromPrivate derives the 48-byte compressed G1 public key for a
+// given private key, matching the relationship pk = g1 * sk used by
+// GenerateKey. Use when keys are loaded from persistent config (e.g.,
+// .env GATEWAY_BLS_SK_*) and the caller needs to reconstruct the
+// matching pubkey + DID.
+func PubkeyFromPrivate(priv [PrivateKeySize]byte) ([PublicKeySize]byte, error) {
+	var out [PublicKeySize]byte
+	sk := bls.NewFr().FromBytes(priv[:])
+	if sk.IsZero() {
+		return out, errors.New("provenance: pubkey-from-private: zero private key")
+	}
+	pkPoint := g1.New()
+	g1Lock.Lock()
+	g1.MulScalar(pkPoint, g1Gen, sk)
+	pkBytes := g1.ToCompressed(pkPoint)
+	g1Lock.Unlock()
+	if len(pkBytes) != PublicKeySize {
+		return out, fmt.Errorf("provenance: pubkey-from-private: unexpected pk size %d", len(pkBytes))
+	}
+	copy(out[:], pkBytes)
+	return out, nil
+}
+
 // Sign signs message under priv and returns the 96-byte compressed G2
 // signature. The hash-to-curve uses DomainSeparationTag.
 //
