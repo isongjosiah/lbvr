@@ -4,7 +4,7 @@
 \subsection{Setup}
 \label{sec:eval:setup}
 
-We evaluate on a Synthea FHIR R4 corpus of 100\,000 living patients (114\,693 bundles, 430.25\,GiB; P50 2.23\,MB, P99 37.9\,MB). Experiments seed deterministically; each run records an environment fingerprint. Tiers are simulated with calibrated lognormal latency distributions tracking Pinata, Filebase, and Arweave/Irys (P50/P99: 80/400\,ms hot, 120/600\,ms warm, 500/8000\,ms cold). The L4 contracts are deployed live on PureChain (Geth-based PoA² at the London fork); gas numbers below come from Foundry's in-memory EVM at the same fork, byte-equivalent to on-chain charges. A spot-check anchor (tx \texttt{0xdadd5280}, block 1\,124\,295) used 108\,264 gas vs.\ Foundry's predicted ${\approx}106$\,k --- within 2\%.
+We evaluate on a 100\,000-patient Synthea FHIR R4 corpus (114\,693 bundles, 430.25\,GiB; P50 2.23\,MB, P99 37.9\,MB). Deterministic seeding and per-run environment fingerprints support reproducibility. Storage-tier latencies are modelled by lognormal distributions calibrated to the published characteristics of Pinata, Filebase, and Arweave/Irys (P50/P99: 80/400\,ms hot, 120/600\,ms warm, 500/8000\,ms cold). The L4 contracts run live on PureChain (Geth-based PoA² at the London fork); gas costs reported below come from Foundry's in-memory EVM at the matching fork, which produces bytecode-identical execution. A spot-check anchor on the deployed AuditorLog (tx \texttt{0xdadd5280}, block 1\,124\,295) consumed 108\,264 gas --- within 2\% of the Foundry prediction (${\approx}106$\,k) --- empirically validating this equivalence.
 
 \subsection{Ingest, retrieval, and network adversity}
 \label{sec:eval:ingest}

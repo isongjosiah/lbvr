@@ -10,10 +10,10 @@ This paper presents LBVR-Med, a \emph{verifiable storage fabric for safety-criti
 We make four contributions:
 
 \begin{itemize}
-  \item \textbf{Cross-tier erasure-coded redundancy.} An RS(2,3) protocol spanning three heterogeneous decentralized backends with measured recovery under single- and double-tier failures at 100K-patient scale.
-  \item \textbf{Cryptographically-attested provenance.} An additive PROV-JSON extension with BLS-signed retrieval receipts, hash-anchored on chain via JCS canonicalization~\cite{rfc8785}, supporting the EU AI Act Art.\ 12 logging obligation.
-  \item \textbf{Cross-SLO calibration.} The first P99 latency measurement for decentralized verifiable storage placed against clinical (IEC~60601-1-8~\cite{iec60601-1-8}), scientific-DT, and power-grid (IEC~61850 GOOSE~\cite{iec61850goose}) SLO regimes.
-  \item \textbf{Tier-aware Byzantine withstand.} Measured resilience under uniform and tier-selective adversarial behaviour, surfacing a ``detection gap'' wherein an adversary that targets one tier and serves correctly during PoR challenges remains invisible until the per-tier quorum collapses.
+  \item \textbf{Cross-tier erasure recovery at scale.} The first published measurement of single- and double-tier failure recovery for an RS(2,3) layout spanning three heterogeneous decentralized backends, at 100K-patient corpus scale, including an early-fail short-circuit that drops double-data-shard detection to 137\,ms median.
+  \item \textbf{Tamper-evident provenance for high-risk AI.} An additive PROV-JSON extension with BLS-quorum signatures, JCS-canonicalised~\cite{rfc8785} and on-chain hash-anchored, validating EU AI Act Art.\ 12 logging at $\sim$\$0.20/day for 10K retrievals/day with 100\% tamper detection across seven attack categories.
+  \item \textbf{Cross-SLO calibration across safety-critical regimes.} P99 retrieval latency mapped against five domain thresholds spanning four orders of magnitude, delineating where decentralized verifiable storage is feasible (clinical alarm IEC~60601-1-8~\cite{iec60601-1-8}, scientific-DT) and where it is fundamentally unsuitable (power-grid GOOSE IEC~61850~\cite{iec61850goose}, 4\,ms).
+  \item \textbf{A novel tier-selective Byzantine adversary class.} The first measurement of an adversary that discriminates on tier metadata and serves correctly during PoR challenges, exposing a ``detection gap'' wherein the adversary holds 100\% retrieval success at $f \le 0.33$ despite controlling a third of the targeted tier's replicas.
 \end{itemize}
 
 \S\ref{sec:related} positions LBVR-Med against prior work; \S\ref{sec:model} states the system and threat models; \S\ref{sec:protocol} describes the protocol; \S\ref{sec:eval} presents 13 experiments at 100K-patient scale; \S\ref{sec:discussion} maps results to EHDS, EU AI Act, and HIPAA NPRM; \S\ref{sec:conclusion} closes with the journal extension.
