@@ -49,6 +49,8 @@ Everything in the paper serves these four contributions. If a feature doesn't su
 
 ### 3.2 Journal extension (IEEE JBHI, post-June 2026)
 
+> **Phased plan:** see `docs/journal-roadmap.md` for the month-by-month execution plan, open decisions, risk register, and target submission date (2027-06-15).
+
 | Decision | Value |
 |---|---|
 | Workload | **Synthea + re-wrapped NIH ChestX-ray14 as synthetic DICOM** |
