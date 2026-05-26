@@ -31,9 +31,13 @@ type Config struct {
 	IrysNodeURL    string
 	IrysPrivateKey string
 
-	// Polygon zkEVM Cardona testnet
-	CardonaRPCURL     string
-	CardonaPrivateKey string
+	// L4 chain (generic; per .env.example, deploy scripts pick a named
+	// network via foundry aliases while Go reads the CHAIN_* variables).
+	// Originally CardonaRPCURL/CardonaPrivateKey before the D23
+	// PureChain pivot — kept generic so future chain swaps don't need
+	// another rename.
+	ChainRPCURL       string
+	ChainPrivateKey   string
 	PolygonscanAPIKey string
 
 	// Deployed contract addresses (populated after D5 deployment)
@@ -75,8 +79,8 @@ func Load(path string) (*Config, error) {
 		IrysNodeURL:    os.Getenv("IRYS_NODE_URL"),
 		IrysPrivateKey: os.Getenv("IRYS_PRIVATE_KEY"),
 
-		CardonaRPCURL:     os.Getenv("CARDONA_RPC_URL"),
-		CardonaPrivateKey: os.Getenv("CARDONA_PRIVATE_KEY"),
+		ChainRPCURL:       os.Getenv("CHAIN_RPC_URL"),
+		ChainPrivateKey:   os.Getenv("CHAIN_PRIVATE_KEY"),
 		PolygonscanAPIKey: os.Getenv("POLYGONSCAN_API_KEY"),
 
 		CIDRegistryAddress: os.Getenv("CID_REGISTRY_ADDRESS"),

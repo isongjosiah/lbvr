@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/hex"
 	"errors"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -273,35 +274,32 @@ func TestValidateShards(t *testing.T) {
 	}
 }
 
-func TestNewChain_StubReturnsErr(t *testing.T) {
+// TestNewChain_RejectsBadInputs covers the input-validation paths in
+// NewChain that don't require an RPC dial. The happy path lives in
+// chain_integration_test.go (build tag `integration`) so it only runs
+// when CHAIN_RPC_URL + contracts are reachable.
+func TestNewChain_RejectsBadInputs(t *testing.T) {
 	t.Parallel()
-	c, err := NewChain(context.Background(), "http://x", "0xabc", "0xkey")
-	if err != nil {
-		t.Fatalf("NewChain: %v", err)
+	cases := []struct {
+		name                          string
+		rpcURL, contractAddr, privKey string
+		wantErrContains               string
+	}{
+		{"empty rpcURL", "", "0x06002e97243b844c9ba06bdf4cdf9302691a9cb7", "0xkey", "rpcURL is empty"},
+		{"empty contractAddr", "http://x", "", "0xkey", "contractAddr is empty"},
+		{"empty privKey", "http://x", "0x06002e97243b844c9ba06bdf4cdf9302691a9cb7", "", "privKey is empty"},
+		{"bad hex address", "http://x", "0xabc", "0xkey", "not a valid hex address"},
 	}
-	if err := c.RegisterBundle(context.Background(), [32]byte{}, newRecord()); !errors.Is(err, ErrChainNotImplemented) {
-		t.Fatalf("RegisterBundle stub err = %v, want ErrChainNotImplemented", err)
-	}
-	if _, err := c.GetRecord(context.Background(), [32]byte{}); !errors.Is(err, ErrChainNotImplemented) {
-		t.Fatalf("GetRecord stub err = %v", err)
-	}
-	if _, err := c.GetShardLayout(context.Background(), [32]byte{}); !errors.Is(err, ErrChainNotImplemented) {
-		t.Fatalf("GetShardLayout stub err = %v", err)
-	}
-	if err := c.UpdateShardLayout(context.Background(), [32]byte{}, newRecord().Shards); !errors.Is(err, ErrChainNotImplemented) {
-		t.Fatalf("UpdateShardLayout stub err = %v", err)
-	}
-}
-
-func TestNewChain_RejectsEmptyArgs(t *testing.T) {
-	t.Parallel()
-	if _, err := NewChain(context.Background(), "", "0xabc", "0xkey"); err == nil {
-		t.Fatal("expected error for empty rpcURL")
-	}
-	if _, err := NewChain(context.Background(), "http://x", "", "0xkey"); err == nil {
-		t.Fatal("expected error for empty contractAddr")
-	}
-	if _, err := NewChain(context.Background(), "http://x", "0xabc", ""); err == nil {
-		t.Fatal("expected error for empty privKey")
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			_, err := NewChain(context.Background(), tc.rpcURL, tc.contractAddr, tc.privKey)
+			if err == nil {
+				t.Fatalf("expected error for %s, got nil", tc.name)
+			}
+			if !strings.Contains(err.Error(), tc.wantErrContains) {
+				t.Fatalf("err %q does not contain %q", err.Error(), tc.wantErrContains)
+			}
+		})
 	}
 }

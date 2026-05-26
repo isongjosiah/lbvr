@@ -352,9 +352,9 @@ func buildTierClients(cfg *config.Config, dryRun bool) (tiers.Client, tiers.Clie
 // ErrChainNotImplemented is the loudest possible signal that further
 // wiring is needed; otherwise we silently use Mock.
 func buildRegistry(cfg *config.Config, dryRun bool) (registry.Client, string, error) {
-	if cfg.CIDRegistryAddress != "" && cfg.CardonaRPCURL != "" && cfg.CardonaPrivateKey != "" && !dryRun {
+	if cfg.CIDRegistryAddress != "" && cfg.ChainRPCURL != "" && cfg.ChainPrivateKey != "" && !dryRun {
 		c, err := registry.NewChain(context.Background(),
-			cfg.CardonaRPCURL, cfg.CIDRegistryAddress, cfg.CardonaPrivateKey)
+			cfg.ChainRPCURL, cfg.CIDRegistryAddress, cfg.ChainPrivateKey)
 		if err != nil {
 			return nil, "", err
 		}

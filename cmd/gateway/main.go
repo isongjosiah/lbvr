@@ -171,7 +171,7 @@ func runServe(args []string) int {
 		logger.Info("sidecar ready", slog.String("dir", manifestDir))
 	}
 
-	provBundle, err := buildProvenance(logger, cfg)
+	provBundle, err := buildProvenance(context.Background(), logger, cfg)
 	if err != nil {
 		logger.Error("provenance setup failed", slog.String("err", err.Error()))
 		return 1
@@ -246,9 +246,9 @@ func buildTierClients(cfg *config.Config) (tiers.Client, tiers.Client, tiers.Cli
 // in-memory Mock with a loud warning. Mock-mode gateway is useful for
 // local smoke tests but will obviously not see any real on-chain ingests.
 func buildRegistry(cfg *config.Config) (registry.Client, string, error) {
-	if cfg.CIDRegistryAddress != "" && cfg.CardonaRPCURL != "" && cfg.CardonaPrivateKey != "" {
+	if cfg.CIDRegistryAddress != "" && cfg.ChainRPCURL != "" && cfg.ChainPrivateKey != "" {
 		c, err := registry.NewChain(context.Background(),
-			cfg.CardonaRPCURL, cfg.CIDRegistryAddress, cfg.CardonaPrivateKey)
+			cfg.ChainRPCURL, cfg.CIDRegistryAddress, cfg.ChainPrivateKey)
 		if err != nil {
 			return nil, "", err
 		}
@@ -310,10 +310,14 @@ type provenanceBundle struct {
 //   - Otherwise, generate fresh ephemeral keypairs (the default in dev
 //     and unit tests where no .env is present).
 //
-// The on-chain anchor path (chainAnchor against AuditorLog) remains
-// stubbed; mockAnchor is always returned. The chain wiring lands in
-// the journal extension via abigen-bound bindings.
-func buildProvenance(logger *slog.Logger, cfg *config.Config) (provenanceBundle, error) {
+// Anchor resolution:
+//   - If CHAIN_RPC_URL + CHAIN_PRIVATE_KEY + AUDITOR_LOG_ADDRESS are all
+//     set, build a chainAnchor against the AuditorLog binding so
+//     retrievals anchor on-chain.
+//   - Otherwise fall back to mockAnchor (dev/test default; matches the
+//     buildRegistry contract). The log line names which path is active
+//     so operators can confirm at startup.
+func buildProvenance(ctx context.Context, logger *slog.Logger, cfg *config.Config) (provenanceBundle, error) {
 	const numSigners = 2
 	keys := make([][32]byte, numSigners)
 	dids := make([]string, numSigners)
@@ -365,6 +369,14 @@ func buildProvenance(logger *slog.Logger, cfg *config.Config) (provenanceBundle,
 		slog.String("did1", dids[0]),
 		slog.String("did2", dids[1]))
 
+	anchor, anchorContract, anchorKind, err := buildAnchor(ctx, cfg)
+	if err != nil {
+		return provenanceBundle{}, fmt.Errorf("buildProvenance: anchor setup: %w", err)
+	}
+	logger.Info("anchor configured",
+		slog.String("kind", anchorKind),
+		slog.String("contract", anchorContract))
+
 	return provenanceBundle{
 		signerKeys:    keys,
 		signerDIDs:    dids,
@@ -376,9 +388,25 @@ func buildProvenance(logger *slog.Logger, cfg *config.Config) (provenanceBundle,
 			AuthzPolicy: "EHDS-Art44-primary-use",
 		},
 		quorumThreshold: 2,
-		anchor:          newMockAnchor(),
-		anchorContract:  "0xMockAuditorLog0000000000000000000000000000",
+		anchor:          anchor,
+		anchorContract:  anchorContract,
 	}, nil
+}
+
+// buildAnchor returns the chainAnchor when the operator has configured
+// CHAIN_RPC_URL + CHAIN_PRIVATE_KEY + AUDITOR_LOG_ADDRESS, otherwise
+// the in-memory mockAnchor. The string contract address returned is
+// the actual on-chain address for chain mode and a stable placeholder
+// for mock mode (so verifier-side log fields stay non-empty).
+func buildAnchor(ctx context.Context, cfg *config.Config) (AnchorClient, string, string, error) {
+	if cfg.ChainRPCURL != "" && cfg.ChainPrivateKey != "" && cfg.AuditorLogAddress != "" {
+		ca, err := newChainAnchor(ctx, cfg.ChainRPCURL, cfg.AuditorLogAddress, cfg.ChainPrivateKey)
+		if err != nil {
+			return nil, "", "", err
+		}
+		return ca, cfg.AuditorLogAddress, "chain", nil
+	}
+	return newMockAnchor(), "0xMockAuditorLog0000000000000000000000000000", "mock", nil
 }
 
 // decodeHexKey parses a hex-encoded BLS key (with or without `0x`
