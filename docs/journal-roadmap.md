@@ -38,15 +38,15 @@
 
 Closes conference debt so the journal work doesn't inherit it. Also de-risks every chain-touching experiment downstream.
 
-| ID | Item | Owner | Effort | Acceptance |
+| ID | Item | Owner | Effort | Status |
 |---|---|---|---|---|
-| A1 | Tag conference submission, open `journal/jbhi` branch | Either | 30 min | `git tag icufn2026-submission`; `journal/jbhi` exists with first commit |
-| A2 | **J5.1 — abigen-bound chain client** (see `docs/pending.md` §J5.1 for full criteria) | Claude | 2–3 h | `ErrChainNotImplemented` stubs replaced; integration test against PureChain devnet passes; full ingest → register → retrieve → anchor cycle through live code path |
-| A3 | P2.1 — deterministic sim-tier under `t.Short()` (replace lognormal flake source) | Claude | 1–2 h | `go test -race -count=1 ./cmd/bench/...` passes consistently |
-| A4 | P2.2 — Filebase Put timeout root-cause + fix | Claude | half-day | Live-mode 3-bundle smoke completes <60s |
-| A5 | P2.4 — Irys/Sepolia wallet funding | Josiah | 1 h + wait | `IRYS_PRIVATE_KEY` funded; live E4 cold-tier smoke succeeds |
-| A6 | **MIMIC-IV credentialing application** (decision pending O2) | Josiah | half-day to apply, ~3 months to land | Application submitted to PhysioNet; receipt logged here |
-| A7 | This doc + CLAUDE.md §3.2 pointer to it | Claude | 30 min | `CLAUDE.md` §3.2 cites `docs/journal-roadmap.md` |
+| A1 | Tag conference submission (`icufn2026-submission` at 011937f), open `journal/jbhi` branch | Either | 30 min | **✅ DONE 2026-05-26** — commits `f4ee65c` (camera-ready on main), `c6b44ae` (roadmap on journal/jbhi); tag + branch pushed to origin |
+| A2 | **J5.1 — abigen-bound chain client** | Claude | done in ~3 h | **✅ DONE 2026-05-27** — commits `fb83d3f` (bindings + go-ethereum dep + Go 1.22→1.24 bump), `1ddb19a` (chain.go + anchor.go wiring + Cardona→Chain config rename), `feb3943` (integration test). Live PureChain smoke: anchor tx `0xaa8c158a18a234aa23b77b88cabd86dc7316bbf310aeec52d47b2ab8ee669a9c` at block 1,237,482, gasUsed=108,264 (matches paper §V-A spot-check exactly) |
+| A3 | P2.1 — deterministic sim-tier under `t.Short()` (replace lognormal flake source) | Claude | 1–2 h | pending |
+| A4 | P2.2 — Filebase Put timeout root-cause + fix | Claude | half-day | pending |
+| A5 | P2.4 — Irys/Sepolia wallet funding | Josiah | 1 h + wait | pending |
+| A6 | **MIMIC-IV credentialing application** (per O2 resolution) | Josiah | half-day to apply, ~3 months to land | pending |
+| A7 | This doc + CLAUDE.md §3.2 pointer to it | Claude | 30 min | **✅ DONE 2026-05-26** — commit `c6b44ae` |
 
 **Phase A exit criterion:** All conference debt closed; chain client live; `journal/jbhi` branch is the working trunk.
 
@@ -213,4 +213,4 @@ Lightweight data captures that prime the third (cross-domain) paper without doin
 
 Update this doc at the end of every session that closes or opens an item. Items move from `pending` to done by being struck through OR moved to a Closed section. New items get appended to the appropriate phase. If a new contribution candidate emerges, it goes into Risk Register's "scope creep" mitigation flow — explicit promotion required.
 
-**Last updated:** 2026-05-26 (post-conference, Phase A planning).
+**Last updated:** 2026-05-27 (Phase A1 + A2 complete; A3–A6 still open).
