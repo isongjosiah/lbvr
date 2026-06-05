@@ -1,6 +1,5 @@
-%% LBVR-Med — IEEE ICUFN 2026 submission (Track 3: Safety-Critical Networks)
+%% Pure-LBVR — IEEE ICUFN 2026 submission (Track 3: Safety-Critical Networks)
 %% Hard limit: 6 pages, double-column, 10pt IEEEtran conference style.
-%% See docs/pending.md for the section-by-section drafting punch list.
 
 \documentclass[conference,10pt]{IEEEtran}
 \IEEEoverridecommandlockouts
@@ -19,23 +18,20 @@
 \usepackage{listings}
 \usepackage{subcaption}
 
-\graphicspath{{figures/}}
+\graphicspath{{figures/}{images/}}
 
 % Drop-in BibTeX text per IEEEtran convention.
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 % --- title block --------------------------------------------------------
-\title{LBVR-Med: A Latency-Bounded Verifiable Retrieval Fabric for Safety-Critical Federated Systems}
+\title{Pure-LBVR: A PureChain-Anchored Storage Fabric with Latency-Bounded Verifiable Retrieval for Safety-Critical Federated Systems}
 
-\author{
-  \IEEEauthorblockN{Josiah Ayoola Isong}
-  \IEEEauthorblockA{
-    Network Systems Laboratory\\
-    Kumoh National Institute of Technology\\
-    Gumi, Republic of Korea\\
-    \texttt{isongjosiah@gmail.com}
-  }
+\author{\IEEEauthorblockN{
+Josiah Ayoola Isong\href{https://orcid.org/0000-0002-6151-1950}{\includegraphics[width=8pt]{images/ORCID.png}}, Oroceo Paul Angelo\href{https://orcid.org/0000-0002-9305-6278}{\includegraphics[width=8pt]{images/ORCID.png}}, Jae-Min Lee\href{https://orcid.org/0000-0001-6885-5185}{\includegraphics[width=8pt]{images/ORCID.png}}, Dong-Seong Kim(SMIEEE)\href{https://orcid.org/0000-0002-2977-5964}{\includegraphics[width=8pt]{images/ORCID.png}}
+}
+\IEEEauthorblockA{\textit{Department of IT Convergence Engineering, Kumoh National Institute of Technology, Gumi, South Korea} \\
+isongjosiah@gmail.com, (paporoceo, ljmpaul, dskim)@kumoh.ac.kr}
 }
 
 % --- document -----------------------------------------------------------
@@ -48,18 +44,17 @@
 \end{abstract}
 
 \begin{IEEEkeywords}
-verifiable storage; decentralized fabric; clinical SLOs; Byzantine resilience; provenance; W3C PROV; BLS signatures; safety-critical systems; erasure coding; proof of retrievability
+Verifiable storage, decentralized fabric, clinical SLOs, Byzantine resilience, provenance, W3C PROV, BLS signatures, erasure coding, proof of retrievability
 \end{IEEEkeywords}
 
 \input{sections/01-introduction}
 \input{sections/02-related-work}
-\input{sections/03-system-model}
-\input{sections/04-protocol}
+\input{sections/03-methodology}
 \input{sections/05-evaluation}
 \input{sections/06-discussion}
-\input{sections/07-conclusion}
+\input{sections/06b-acknowledgement}
 
-\enlargethispage{12\baselineskip}
+\renewcommand{\baselinestretch}{0.97}\selectfont
 {\footnotesize
 \bibliographystyle{IEEEtran}
 \bibliography{references}

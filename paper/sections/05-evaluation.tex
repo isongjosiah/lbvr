@@ -4,12 +4,12 @@
 \subsection{Setup}
 \label{sec:eval:setup}
 
-We evaluate on a 100\,000-patient Synthea FHIR R4 corpus (114\,693 bundles, 430.25\,GiB; P50 2.23\,MB, P99 37.9\,MB). Deterministic seeding and per-run environment fingerprints support reproducibility. Storage-tier latencies are modelled by lognormal distributions calibrated to the published characteristics of Pinata, Filebase, and Arweave/Irys (P50/P99: 80/400\,ms hot, 120/600\,ms warm, 500/8000\,ms cold). The L4 contracts run live on PureChain (Geth-based PoA² at the London fork); gas costs reported below come from Foundry's in-memory EVM at the matching fork, which produces bytecode-identical execution. A spot-check anchor on the deployed AuditorLog (tx \texttt{0xdadd5280}, block 1\,124\,295) consumed 108\,264 gas --- within 2\% of the Foundry prediction (${\approx}106$\,k) --- empirically validating this equivalence.
+We evaluate on a Synthea FHIR R4 corpus of 100\,000 living patients (114\,693 bundles, 430.25\,GiB; P50 2.23\,MB, P99 37.9\,MB). Experiments seed deterministically; each run records an environment fingerprint. Tiers are simulated with calibrated lognormal latency distributions tracking Pinata, Filebase, and Arweave/Irys (P50/P99: 80/400\,ms hot, 120/600\,ms warm, 500/8000\,ms cold). The L4 contracts are deployed live on PureChain (Geth-based PoA\textsuperscript{2} at the London fork); gas numbers below come from Foundry's in-memory EVM at the same fork, byte-equivalent to on-chain charges. A spot-check anchor (tx \texttt{0xdadd5280}, block 1\,124\,295) used 108\,264 gas vs.\ Foundry's predicted ${\approx}106$\,k --- within 2\%.
 
 \subsection{Ingest, retrieval, and network adversity}
 \label{sec:eval:ingest}
 
-Figure~\ref{fig:e1} shows ingest throughput at 1\,K and 10\,K scales (100\,K extrapolated). The pipeline sustains 442 bundles/min at 10\,K (28.4\,MiB/s); upload dominates per-bundle latency (P50 554\,ms of 575\,ms). Figure~\ref{fig:e2} compares LBVR-Med retrieval latency against four baselines (Pinata-only, AWS S3, Storj, public ipfs.io): LBVR-Med tracks dedicated-gateway baselines and stays an order of magnitude under public IPFS, with P99 = 565\,ms.
+Figure~\ref{fig:e1} shows ingest throughput at 1\,K and 10\,K scales (100\,K extrapolated). The pipeline sustains 442 bundles/min at 10\,K (28.4\,MiB/s); upload dominates per-bundle latency (P50 554\,ms of 575\,ms). Figure~\ref{fig:e2} compares Pure-LBVR retrieval latency against four baselines (Pinata-only, AWS S3, Storj, public ipfs.io): Pure-LBVR tracks dedicated-gateway baselines and stays an order of magnitude under public IPFS, with P99 = 565\,ms.
 
 \begin{figure}[!t]
   \centering
@@ -25,7 +25,7 @@ Figure~\ref{fig:e1} shows ingest throughput at 1\,K and 10\,K scales (100\,K ext
     \caption{Retrieval latency CDF.}
     \label{fig:e2}
   \end{subfigure}
-  \caption{E1 and E2: (a)~ingest throughput by corpus scale, with the 100\,K projection extrapolated from 10\,K steady-state; (b)~LBVR-Med retrieval latency vs four baselines (Pinata-only, AWS S3, Storj, public ipfs.io).}
+  \caption{E1 and E2: (a)~ingest throughput by corpus scale, with the 100\,K projection extrapolated from 10\,K steady-state; (b)~Pure-LBVR retrieval latency vs four baselines (Pinata-only, AWS S3, Storj, public ipfs.io).}
 \end{figure}
 
 Table~\ref{tab:e3} reports E3 P99 (ms) across a $3 \times 3$ WAN matrix: $\{10, 50, 200\}$\,ms RTT $\times$ $\{0, 1, 5\}\%$ loss, 1500 retrievals/cell. P99 stays under the 2\,s clinical SLO at $\le 1\%$ loss (776--1060\,ms across RTTs) and breaks at 5\% loss (1.9--2.7\,s). The 5\% threshold is the operational claim.
@@ -86,7 +86,7 @@ The tier-selective adversary (Figure~\ref{fig:e6b}) is qualitatively different. 
 \subsection{Erasure recovery}
 \label{sec:eval:erasure}
 
-Figure~\ref{fig:e9} reports single-tier failure recovery (D0/D1/P0 missing) over 50 bundles $\times$ 5 reps. D0 or D1 recovery is bounded by cold-tier wait; P0 missing is a fast-path no-op. Figure~\ref{fig:e9multi} extends to double failures: the early-fail short-circuit (Section~\ref{sec:protocol:retrieval}) drops D0+D1 detection to 137\,ms median (P99 559\,ms)---without it, the gateway waits the full cold-tier P99 ($\approx 8$\,s). Parity-included pairs (D0+P0, D1+P0) wait the cold-tier context before committing recovery: 562\,ms median, 8.7\,s P99.
+Figure~\ref{fig:e9} reports single-tier failure recovery (D0/D1/P0 missing) over 50 bundles $\times$ 5 reps. D0 or D1 recovery is bounded by cold-tier wait; P0 missing is a fast-path no-op. Figure~\ref{fig:e9multi} extends to double failures: the early-fail short-circuit (Section~\ref{sec:method:retrieval}) drops D0+D1 detection to 137\,ms median (P99 559\,ms)---without it, the gateway waits the full cold-tier P99 ($\approx 8$\,s). Parity-included pairs (D0+P0, D1+P0) wait the cold-tier context before committing recovery: 562\,ms median, 8.7\,s P99.
 
 \begin{figure}[!t]
   \centering
@@ -133,8 +133,8 @@ timestamp\_tamper            & 142 & 100.0\% \\
 \subsection{Storage cost, end-to-end SLO compliance, and cross-SLO calibration}
 \label{sec:eval:slo}
 
-Storage cost (E7, analytical) at the 100\,K-corpus scale (430.25\,GiB) is \$50.55/mo for LBVR-Med's RS(2,3) layout, 5.1$\times$ cheaper than naive 3$\times$ Pinata replication (\$258/mo) and within 1.7$\times$ of S3 3-region replication (\$29.69/mo) while delivering decentralized governance, on-chain provenance, and Byzantine withstand the latter lacks.
+Storage cost (E7, analytical) at the 100\,K-corpus scale (430.25\,GiB) is \$50.55/mo for Pure-LBVR's RS(2,3) layout, 5.1$\times$ cheaper than naive 3$\times$ Pinata replication (\$258/mo) and within 1.7$\times$ of S3 3-region replication (\$29.69/mo) while delivering decentralized governance, on-chain provenance, and Byzantine withstand the latter lacks.
 
 The end-to-end SLO attainment synthesis (E8) composes Sections~\ref{sec:eval:ingest}--\ref{sec:eval:tta-por}: IEC~60601-1-8 alarm (10\,s) is PASS with margin; clinical radiology open (2\,s) is STRETCH under WAN adversity; chart-pull (500\,ms) FAILS at 5\% loss and lands at the SLO boundary at baseline. The composite per SLO ignores ingest (decouplable via pre-staging) and rolls up retrieval-baseline + stress + TTA via strictest-wins.
 
-Cross-SLO calibration (E10, post-processed from E2) places the LBVR-Med retrieval distribution against five domain SLO thresholds spanning four orders of magnitude. Power-grid GOOSE (4\,ms, IEC~61850) is 0.0\% feasible---no decentralized verifiable storage configuration meets a sub-10\,ms budget when even AES-GCM open + Merkle re-verify costs $\sim$5\,ms on commodity x86. The clinical and scientific-DT regimes (radiology open 2\,s and the interTwin notional 5\,s budget) are met at 100\%. The chart-pull 500\,ms boundary sits at 98.2\% feasibility; this is the limiting clinical workflow and the load-bearing finding for Section~\ref{sec:discussion}.
+Cross-SLO calibration (E10, post-processed from E2) places the Pure-LBVR retrieval distribution against five domain SLO thresholds spanning four orders of magnitude. Power-grid GOOSE (4\,ms, IEC~61850) is 0.0\% feasible---no decentralized verifiable storage configuration meets a sub-10\,ms budget when even AES-GCM open + Merkle re-verify costs $\sim$5\,ms on commodity x86. The clinical and scientific-DT regimes (radiology open 2\,s and the interTwin notional 5\,s budget) are met at 100\%. The chart-pull 500\,ms boundary sits at 98.2\% feasibility; this is the limiting clinical workflow and the load-bearing finding for Section~\ref{sec:discussion}.

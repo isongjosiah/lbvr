@@ -1,0 +1,81 @@
+\section{Methodology}
+\label{sec:method}
+
+\subsection{System architecture}
+\label{sec:method:arch}
+
+Pure-LBVR organises a verifiable retrieval path across five layers (Fig.~\ref{fig:arch}). The encrypting client (L1) reads each FHIR bundle, splits it into 16~KiB chunks, builds a SHA-256 Merkle tree over the chunk vector, and seals every chunk with AES-256-GCM under a per-bundle data-encryption key (DEK) wrapped by a consortium key-management service. The placement orchestrator (L2) applies an RS(2,3) erasure code over the sealed payload and emits two data shards $D_0, D_1$ and one parity shard $P_0$, each independently addressable. The retrieval gateway (L3) fetches all three shards in parallel and reconstructs the bundle from any 2-of-3 survivors inside a P99 SLO budget. The auditor chaincode (L4), deployed on PureChain (an EVM-compatible PoA chain), records bundle metadata in \texttt{CIDRegistry}, runs the PoR challenge/response/verdict cycle in \texttt{PoRVerifier}, and anchors per-retrieval provenance hashes in \texttt{AuditorLog}. The provenance layer (L5) generates a W3C PROV-JSON~\cite{w3cprov} document on every retrieval, signs it with a BLS12-381 quorum, and JCS-canonicalises~\cite{rfc8785} the bytes that the on-chain anchor binds.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=0.92\textwidth]{architecture.png}
+  \caption{Pure-LBVR five-layer architecture. L1 seals FHIR bundles; L2 emits RS(2,3) shards $D_0, D_1, P_0$ across hot/warm/cold tiers; L3 reconstructs from any 2-of-3 survivors under a P99 SLO budget; L4 on PureChain hosts \texttt{CIDRegistry}, \texttt{PoRVerifier}, and \texttt{AuditorLog}; L5 signs and JCS-canonicalises a PROV-JSON document per retrieval and anchors its hash on chain.}
+  \label{fig:arch}
+\end{figure*}
+
+\subsection{Trust and adversary model}
+\label{sec:method:threat}
+
+Inside the trusted boundary sit the L1 client (open-source and deterministic), the consortium key-management service (assumed HSM-class), the L4 chaincode together with PureChain finality, and the L5 verifier. Outside it sit the storage backends, the network paths between client, gateway, and backends, and any individual gateway node below the quorum threshold $k=2$ of $N$. KMS hardening, post-quantum resistance for the BLS12-381 component, and TEE-attested clients are deferred and revisited in Section~\ref{sec:discussion}.
+
+Three adversary capabilities are in scope. A \emph{storage Byzantine} adversary controls a fraction $f$ of pinning replicas and may refuse to serve, return corrupted bytes, or disappear. Within this class we distinguish a \emph{uniform} adversary, whose behaviour is independent of bundle, shard, and caller, from a \emph{tier-selective} adversary that targets a single tier and serves correctly during PoR challenges while degrading silently during ordinary retrievals; the latter, to our knowledge, has not been measured in prior decentralized-storage work. A \emph{network attacker} can drop, delay, or partition traffic on the transport but cannot decrypt sealed payloads or forge BLS signatures, and may at most correlate timing across requests. A \emph{curious auditor} reads the on-chain artefacts---bundle hashes, shard CIDs, Merkle roots, PoR verdicts, and provenance anchors---and tries to correlate access patterns with patient identities.
+
+Several threats sit explicitly outside the conference scope: compromised clinician endpoints, addressed by TEE attestation in future work; side-channel attacks against the HSM-hardened KMS; the long-term post-quantum security of BLS12-381; collusion across two or more tiers, which by definition exceeds the RS(2,3) erasure budget; and post-retrieval data misuse beyond the cryptographic record of access. Section~\ref{sec:discussion} returns to each.
+
+\subsection{Tiered placement and erasure coding}
+\label{sec:method:placement}
+
+Shards land one per tier so the fast retrieval path $\{D_0, D_1\}$ avoids the cold-tier settlement tail. The hot tier sits behind Pinata's dedicated IPFS gateway for low-latency reads. Filebase serves the warm tier through an S3-compatible front backed by IPFS. Arweave, accessed via Irys, holds the parity shard with chain-settled durability at the cost of higher settling latency (P99 $\approx 60$\,s). Placement is fixed at ingest: $D_0 \to$ hot, $D_1 \to$ warm, $P_0 \to$ cold; the cold tier is engaged only when one of $\{D_0, D_1\}$ is unreachable. Each tier has an independent operator, independent failure correlation, and an independent commercial agreement, so no single-operator incident can remove more than one shard.
+
+We use Reed--Solomon~\cite{plank1997erasure} $\textsf{RS}(2,3)$ over GF($2^8$): two data shards plus one parity shard, reconstructable from any 2-of-3. $\textsf{RS}(2,3)$ is the \emph{minimum meaningful} configuration for a three-tier substrate---it tolerates exactly one tier outage at $1.5\times$ storage overhead, versus $3\times$ for naive replication. Higher-parity schemes ($\textsf{RS}(3,5)$, $\textsf{RS}(4,7)$) are explicit journal-scope choices; they would smooth the tier-selective adversary cliff (Section~\ref{sec:eval}) at the cost of additional independent providers. We implement encode/decode via \texttt{klauspost/reedsolomon} v1.12, padded so all shards are equal size; the per-shard Merkle root is integrated into the bundle root $M = \text{SHA-256}(M_{D_0} \mathbin{\|} M_{D_1} \mathbin{\|} M_{P_0})$ so PoR challenges can target a single shard without requiring full bundle reconstruction. The tree width $N = \lceil |b|/16\,\text{KiB} \rceil$ is bound on chain in \texttt{BundleRecord.numChunks}, blocking CVE-2012-2459-class second-preimage attacks.
+
+\subsection{Cryptographic provenance}
+\label{sec:method:prov}
+
+Every successful retrieval produces a JCS-canonical~\cite{rfc8785} W3C PROV-JSON~\cite{w3cprov} document. We extend PROV-DM additively with a signature block on every \texttt{Activity}, \texttt{Entity}, and \texttt{Agent} of interest:
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize,frame=single]
+{ "algorithm": "BLS12-381-G2",
+  "signers": ["did:lbvr:gw-1","did:lbvr:gw-2"],
+  "quorum_threshold": 2,
+  "signature": "0x...",
+  "attestation_type": "retrieval_quorum" }
+\end{lstlisting}
+A document signed by $k = 2$ distinct gateway nodes is considered authoritative. BLS12-381 G2 signatures aggregate to a single 96-byte envelope that verifies against the aggregated public key of the signers. The gateway computes $h = \text{SHA-256}(\text{JCS-canonical bytes})$ and submits $h$ to the on-chain \texttt{AuditorLog.anchorProvenance(bundleId, retrievalId, h)}; the document itself is stored off-chain on the same fabric (typically the hot tier) so storage cost stays $O(1)$ per retrieval at the chain layer. Verification is deterministic: parse the document, re-derive the canonical hash, compare against the on-chain anchor, then verify each signature block against the named signers. The extension is strictly additive---a PROV-JSON consumer that ignores the signature blocks still parses the document validly---so Pure-LBVR is interoperable with the yProv ecosystem~\cite{manzi2025intertwin}.
+
+\subsection{Proof of retrievability}
+\label{sec:method:por}
+
+The auditor contract \texttt{PoRVerifier} hosts a three-step protocol per shard, on a 30-day cadence. \emph{Post}: the auditor selects $(\text{shardIdx}, \text{chunkIdx}, \text{nonce})$ and calls \texttt{postChallenge}, which derives a deterministic challenge ID from $\texttt{keccak256}(\text{bundleId}, \text{shardIdx}, \text{chunkIdx}, \text{nonce}, \text{postedAt})$. \emph{Respond}: the responding storage replica reads the challenged chunk, builds the Merkle proof against the on-chain root, BLS-signs $\textsf{SHA-256}(\text{chunk} \mathbin{\|} \text{nonce})$, and submits the tuple to \texttt{respondToChallenge}, which verifies the proof on-chain (BLS verification stays off-chain to keep gas bounded). \emph{Verdict}: the auditor verifies the BLS signature off-chain and posts a one-bit verdict via \texttt{recordVerdict}. $k = 3$ consecutive failures emit a \texttt{ShardMigrationRequired} event, which the placement orchestrator handles by issuing \texttt{updateShardLayout} against \texttt{CIDRegistry} to retarget that shard to a healthier provider. Per-challenge nonces and the deterministic challenge ID block replay attacks (validated by Foundry test \texttt{test\_respond\_revertsOnDoubleResponse}). Gas is bounded: \textsf{postChallenge} at $\approx 122$\,k, \textsf{respondToChallenge} growing linearly with proof depth from 290\,k (depth 3) to 533\,k (depth 13), and \textsf{recordVerdict} at $\approx 75$\,k (Section~\ref{sec:eval}).
+
+\subsection{Quorum retrieval}
+\label{sec:method:retrieval}
+
+The retrieval gateway's state machine is a parallel-3 fetcher with first-2-wins semantics and an early-fail short-circuit. On a \texttt{GET} request, the gateway issues fetches against all three shards concurrently. Each fetch races its own context with a per-tier P99 budget. As shards return, the gateway maintains \texttt{gotOK}, \texttt{gotErr}, and \texttt{outstanding} counts; the fast path commits as soon as 2 of $\{D_0, D_1, P_0\}$ succeed AND the resulting Merkle proofs reconstruct the bundle root. The early-fail optimisation triggers when $\textsf{gotOK} + \textsf{outstanding} < 2$, recovering a definitive \texttt{RecoveryFailure} verdict in $\sim 100$--$200$\,ms instead of waiting the full cold-tier P99 (Section~\ref{sec:eval}, E9-multi). The slow path engages on any single-shard failure: the gateway awaits the third shard, decodes via Reed--Solomon, and serves the reconstructed bundle. A circuit breaker on per-tier failure rate retargets traffic away from a tier whose error rate breaches a configurable threshold; this is orthogonal to the on-chain auto-migration (which fires on PoR cadence).
+
+The on-chain registry schema is minimal: \texttt{BundleRecord} holds $(\textsf{merkleRoot}, \textsf{numChunks}, \textsf{shardLayout}[3], \textsf{policyId}, \textsf{owner})$ where each \texttt{ShardPlacement} carries $(\textsf{cid}, \textsf{tier})$. Bundle IDs derive deterministically as $\textsf{keccak256}(\textsf{clientAddr} \mathbin{\|} \textsf{merkleRoot})$, salting the index by the writer's address so cross-bundle deduplication is opt-in (and never automatic across consortium members).
+
+\subsection{Attack coverage}
+\label{sec:method:attacks}
+
+Table~\ref{tab:attacks} maps each in-scope attack to the layer that defends against it and the experiment that validates the defense. Defense is layered. AES-GCM seals at L1 keep encrypted bytes opaque to anyone but the DEK holder. RS(2,3) reconstruction at L3 absorbs the loss of any single shard or tier. The PoR cadence and auto-migration logic at L4 surface persistent unavailability before quorum collapses. The BLS-quorum signature anchored on chain at L5 makes any post-hoc rewriting of the access record detectable.
+
+\begin{table}[!t]
+\caption{In-scope attacks and validating experiments.}
+\label{tab:attacks}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Attack & Defense layer & Evidence \\
+\midrule
+Uniform Byzantine pinning  & L3 reconstruction & Fig.~\ref{fig:e6} \\
+Tier-selective Byzantine   & L3 + future L2/L4 monitor & Fig.~\ref{fig:e6b} \\
+Network drops / latency    & L3 quorum + SLO budget & Tab.~\ref{tab:e3}, Fig.~\ref{fig:e9} \\
+CID enumeration            & Private pinning + hashed bundle IDs & Architectural (\S\ref{sec:method:retrieval}) \\
+PoR-receipt replay         & Per-challenge nonce binding & \texttt{PoRVerifier} test \\
+Provenance forgery         & BLS quorum + on-chain anchor & Tab.~\ref{tab:eprov-detect} \\
+Provenance tampering       & JCS canonical hash anchor & Tab.~\ref{tab:eprov-detect} \\
+\bottomrule
+\end{tabular}
+\end{table}
